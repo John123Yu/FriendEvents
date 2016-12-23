@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html ng-app='myApp'>
+  <head>
+    <title></title>
+    <script src="jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css"></script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Annie+Use+Your+Telescope" rel="stylesheet">
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script src="angular/angular.js"></script>
+    <script src="angular-route/angular-route.js"></script>
+    <script src="angular-cookies/angular-cookies.js"></script>
+    <script src="angular-cookies/angular-cookies.js"></script>
+    <script src="ng-file-upload/ng-file-upload.js"></script>
+    <script src="/ngmap/build/scripts/ng-map.min.js"></script>
+    <script type="text/javascript">
+        var myApp = angular.module('myApp', ['ngRoute', 'ngCookies', 'ngFileUpload', 'ngMap']);
+    </script>
+    <script type="text/javascript" src = 'assets/factories/eventFriendsFactory.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/logAndRegController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/dashboardController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/userController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/eventController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/chatController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/privateChatController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/chatListController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/oneEventController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/editUserController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/editEventController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/adminEventsController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/adminUsersController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/distanceCalc.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/resetEmailController.js'></script>
+<script>
+    myApp.config(function ($routeProvider) {
+      $routeProvider
+        .when('/login',{
+            templateUrl: 'partials/logAndReg.html',
+        })
+        .when('/',{
+            templateUrl: 'partials/dashboard.html',
+        })
+        .when('/user/:id', {
+            templateUrl: 'partials/showUser.html'
+        })
+        .when('/editUser/:id', {
+            templateUrl: 'partials/user.html'
+        })
+        .when('/event/', {
+            templateUrl: 'partials/event.html'
+        })
+        .when('/event/:id', {
+            templateUrl: 'partials/editevent.html'
+        })
+        .when('/showEvent/:id', {
+            templateUrl: 'partials/showEvent.html'
+        })
+        .when('/allEvents/', {
+            templateUrl: 'partials/allEvents.html'
+        })
+        .when('/groupChat/:id', {
+            templateUrl: 'partials/groupChat.html'
+        })
+        .when('/privateChat/:id', {
+            templateUrl: 'partials/privateChat.html'
+        })
+        .when('/chatLists/', {
+            templateUrl: 'partials/chatLists.html'
+        })
+        .when('/admin/', {
+            templateUrl: 'partials/adminUsers.html'
+        })
+        .when('/resetEmail/', {
+            templateUrl: 'partials/forgotEmail.html'
+        })
+        .otherwise({
+          redirectTo: '/'
+        });
+    });
+
+myApp.controller('indexController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval ){
+
+    $scope.check = ""
+    var loginId = $cookies.get('loginId')
+    $scope.loginId = $cookies.get('loginId')
+    $scope.$watch('check', function(newValue, oldValue) {
+        eventFriendsFactory.getOneUser(loginId, function(data){
+          $scope.user = data.data
+        })
+    })
+
+    }])
+    </script>
+<style type="text/css">
+    * {
+        color: rgb(214, 247, 255);
+        font-family: 'Annie Use Your Telescope', cursive;
+        font-weight: 600;
+        font-size: 1.03em;
+    }
+    * a {
+        color: rgb(214, 247, 255);
+        font-family: 'Annie Use Your Telescope', cursive;
+        font-weight: 600;
+    }
+    * a:hover {
+        color: rgb(242, 109, 0);
+        text-decoration: none; 
+        font-weight: 600;
+    }
+    body {
+        text-align: center;
+        background-size: cover;
+        background-image: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, .3)), url('/event1.jpg');
+        /*background-repeat: no-repeat;*/
+        color: white;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+    .header {
+        text-align: left;
+        background-color: black;
+        height: 3em;
+        font-size: 1.9em;
+        padding-top: .7em;
+        font-weight: 700;
+    }      
+    .header li {
+        margin-left: 1em;
+        display: inline-block;
+        text-align: center;
+    }
+     .info {
+      color: black;
+      font-size: 1.2em;
+     }
+    img {
+        margin-bottom: 2%;
+        border: 2px solid rgb(188, 242, 255);
+    }
+    footer {
+        height: 3em;
+    }
+    h1 {
+        font-size: 3.3em;
+        color: rgb(242, 109, 0);
+    }
+    h1 a {
+        color: rgb(242, 109, 0);
+    }
+    h4 a {
+        color: rgb(242, 109, 0);
+    }
+    .map {
+        border: 2px solid rgb(188, 242, 255);
+    }
+    table  tr th {
+        text-align: center;
+        border: none !important;
+        font-size: 1.1em;
+        color: rgb(242, 109, 0);
+    }
+    tr td {
+        text-align: center;
+        border: none !important;
+    }
+    table {
+        border-collapse: initial;
+    }
+    span {
+/*        text-decoration: underline;
+*/       color: orange;
+         font-size: 1.3em;
+    }
+    footer {
+        /*margin-top: 3%;*/
+        background-color: none;
+        height:30px;
+    }
+    .footerChat {
+        background: linear-gradient(rgba(188, 242, 255, .9), rgba(188, 242, 255, .9));
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        text-align: left;
+        width: 200px;
+        height: 300px;
+        left: 70%;
+        position: fixed;
+        padding: 10px;
+        /*position: relative;*/
+    }
+    .footerChat ul {
+        margin: 0px;
+        padding: 0px;
+    }
+    .footerChat li {
+        color: black;
+        list-style-type: none;
+        margin: 0px;
+        margin-bottom: -5px;
+        margin-top: -5px;
+    }
+    .footerChat a {
+        color: rgb(242, 109, 0);
+    }
+    .chatContainer {
+        height: 250px;
+        width: 100%;
+        display: inline-block;
+        text-align: left;
+        color: black;
+        padding: 10px;
+        word-wrap: break-word;
+        padding-bottom: 20px;
+        display: block;
+        overflow-y: scroll;
+        /*overflow-x: initial;*/
+        /*margin-bottom: 40px;*/
+    }
+    .chatContainer ul {
+        display: block;
+    }
+    .chatContainer ul li{
+        display: block;
+    }
+    .chat-bottom {
+        bottom: 0;
+        /*left: 50%;*/
+        /*transform: translateX(-50%);*/
+        width: auto;
+        z-index: 99;
+        display: block;
+        position: relative;
+    }
+    .footerChatList {
+        background: linear-gradient(rgba(188, 242, 255, .9), rgba(188, 242, 255, .9));
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        width: 180px;
+        height: 85%;
+        display: inline-block;
+        text-align: center;
+        color: black;
+        left: 1%;
+        padding: 10px;
+        overflow-y: scroll;
+    }
+    .footerChatList tr td {
+        text-align: right;
+        color: black;
+    }
+    .footerChatList table .orange {
+        color: rgb(242, 109, 0);
+    }
+    .footerChatList a {
+        color: black;
+    }
+    .danger {
+        color: red;
+        font-size: .9em;
+    }
+    .footer-nav {
+        text-align: right;
+    }
+    .chatButton {
+        margin-right: 3%;
+    }
+
+    @media all and (max-width: 1080px) {
+    .header {
+        height: 4.5em;
+    }
+    }
+</style>
+  </head>
+  <body>
+    <div ng-controller = "indexController" class = "header">
+      <ul>
+        <li><span>FriendEvents!</span></li>
+        <li><a href="#!/">Dashboard</a></li>
+        <li><a href="#!/allEvents/">Your Events</a></li>
+        <li><a href="#!/chatLists/">Chats</a></li>
+        <li><a href="#!/user/{{loginId}}">Profile</a></li>
+        <li><a href="#!/event">Create Event</a></li>
+        <li><a href="#!/login">Log Out</a></li>
+        <li ng-if= "user.admin == 'true'"><a href="#!/admin">Admin</a></li>
+      </ul>
+    </div>
+    <div class = "main" ng-app='myApp'>
+        <div ng-view="">
+        </div>
+    </div>
+  </body>
+</html>

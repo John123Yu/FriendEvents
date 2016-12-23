@@ -1,0 +1,38 @@
+<style type="text/css">
+ table {
+  margin-top: 4%;
+  /*border-bottom: 1px solid white !important;*/
+ }
+ span {
+  color: orange;
+  margin-left: -50px;
+ }
+</style>
+<div ng-controller = "chatListController">
+	<div class = "container">
+	<div class = "col-sm-6">
+	<table class = "table table-bordered">
+        <tr>
+          <th class = "info">Private Chats</th>
+        </tr>
+        <tr ng-repeat="chat in chatList">
+          <td ng-if="chat.block != 'true'"><a href="#!/privateChat/{{chat._id}}"> <span ng-if="chat.news.indexOf(loginId) < 0" class = "btn btn-danger">NEW!</span> {{chat._friend.firstName}} {{chat._friend.lastName}}</a></td>
+        </tr>
+        <tr ng-repeat = "chat in chatList2">
+          <td ng-if="chat.block != 'true' "><a href="#!/privateChat/{{chat._id}}"><span ng-if="chat.news.indexOf(loginId) < 0" class = "btn btn-danger">NEW!</span> {{chat._user.firstName}} {{chat._user.lastName}}</a></td>
+        </tr>
+    </table>
+	</div>
+	<div class = "col-sm-6">
+	<table class = "table table-bordered">
+        <tr>
+          <th class = "info">Group Chats</th>
+        </tr>
+        <tr ng-repeat="userEvent in user.userEvents">
+          <td ng-if="userEvent._event"><a href="#!/groupChat/{{userEvent._event._id}}"><span ng-if="userEvent._event.news.indexOf(loginId) < 0" class = "btn btn-danger">NEW!</span> {{userEvent._event.title}}</a></td>
+        </tr>
+    </table>
+	</div>
+    </div>
+
+</div>

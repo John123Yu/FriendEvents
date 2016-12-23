@@ -1,0 +1,59 @@
+<style type="text/css">
+body {
+  text-align: left;
+}
+ label {
+  margin-top: .5%;
+ }
+ p {
+  display: inline;
+  color: red;
+ }
+ .orange {
+  color: orange;
+ }
+</style>
+<div ng-controller = "resetEmailController">
+  <div class = "container">
+  <form  ng-submit = "resetPassword()" class = "form-horizontal">
+  <h2>Reset Password</h2>
+    <div class = "form-group">
+      <label for = "email" class = "col-sm-2 control-label">Enter Your Email:</label>
+      <p ng-hide ="noEmailError">{{noEmail}}</p>
+      <div class = "col-sm-6">
+        <input type ='text' name ='email' id = "email" class = "form-control" placeholder = "Email" ng-model = 'user.email'>
+        <br>
+        <input type='submit' value='Send' class = "btn btn-primary last-btn">
+        <br>
+        <p class = "orange" ng-hide ="passcodeMessage">{{passcodeMessageMessage}}</p>
+      </div>
+    </div>
+  </form>
+
+  <form  ng-submit = "finalReset()" class = "form-horizontal">
+    <div class = "form-group">
+      <label for = "passcode" class = "col-sm-2 control-label">Temporary Passcode:</label>
+      <p ng-hide ="passcodeError">{{passcode}}</p>
+      <div class = "col-sm-6">
+        <input type ='text' name ='passcode' id = "passcode" class = "form-control" placeholder = "passcode" ng-model = 'user.passcode'>
+      </div>
+    </div>
+    <div class = "form-group">
+      <label for = "password" class = "col-sm-2 control-label">New Password:</label>
+      <p ng-hide ="PError">{{passwordError}}</p>
+      <div class = "col-sm-6">
+        <input type='password' name='password' id = "password" class = "form-control" placeholder = "Password" ng-model = 'user.password'>
+      </div>
+    </div>
+    <div class = "form-group">
+      <label for = "confirmPassword" class = "col-sm-2 control-label">Confirm Password:</label>
+      <p ng-hide ="CPError">{{confirmPasswordError}}</p>
+      <div class = "col-sm-6">
+        <input type='password' name='confirmPassword' id = "confirmPassword" class = "form-control" placeholder = "Password" ng-model = 'user.confirmPassword'>
+        <br>
+        <input type='submit' value='Reset and Login' class = "btn btn-primary last-btn">
+      </div>
+    </div>
+  </form>
+</div>
+</div>

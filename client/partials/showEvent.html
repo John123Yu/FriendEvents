@@ -1,0 +1,80 @@
+<style type="text/css">
+ h1 {
+  display: inline-block;
+  margin-left: 60px;
+ }
+ .btn {
+  margin-top: -20px;
+  margin-left: 10px;
+ }
+ .btn-info {
+  color: black;
+  font-weight: 700;
+ }
+ .host {
+  margin: 0px;
+ }
+</style>
+<div ng-controller='oneEventController'>
+      <div class = "container-fluid">
+      <h1><a href="">{{eventInfo.title}}</h1></a>
+      <button class = "btn btn-success"  ng-click = "joinEvent()">Join!</button>
+      <a class = "btn btn-warning" ng-if="eventInfo.creater[0]._id == loginId" href="#!/event/{{eventInfo._id}}">Edit</a>
+      <h4><a href="">Description: {{eventInfo.description}}</a></h4>
+      <table class = "table ">
+        <tr class = "">
+          <th>Event Host</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Category</th>
+          <th>Desired Number of Participants</th>
+          <th>Distance</th>
+        </tr>
+        <tr class = "thin">
+          <td><a class = "btn btn-warning host" href="#!/user/{{eventInfo.creater[0]._id}}">{{eventInfo.creater[0].firstName}} {{eventInfo.creater[0].lastName}}</a></td>
+          <td>{{eventInfo.date | date:'short'}}</td>
+          <td>{{eventInfo.streetAddress}} {{eventInfo.city}}, {{eventInfo.state}}. {{eventInfo.zipcode}}</td>
+          <td>{{eventInfo.category}}</td>
+          <td>{{eventInfo.participants}}</td>
+          <td><span>{{distance | number: 0}} miles</span></td>
+        </tr>
+      </table>
+      <div class = "row">
+        <div class = "col-md-6 col-md-offset-0 col-xs-offset-1 col-xs-10">
+          <img ng-show="photo1" class = "photo" src="{{eventInfo.Photo1.file.path}}" width="100%"/>
+          <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
+        </div>
+        <div class = "col-md-6 col-md-offset-0 col-xs-offset-1 col-xs-10">
+          <img  ng-show="photo2" class = "photo" src="{{eventInfo.Photo2.file.path}}" width="100%"/>
+          <img ng-hide = "photo2" class = "photo" src="/Upload.png" width="50%">
+        </div>
+      </div>
+      <br>
+      <div class = "row">
+      <div class = "col-sm-6">
+      <table class = "table left table-bordered">
+        <tr class = "">
+          <th class = "info">Interested Friends</th>
+        </tr>
+        <tr class = "" ng-repeat= "userEvent in eventInfo.userEvents">
+          <td><a class = "" href="#!/user/{{userEvent._user._id}}">{{userEvent._user.firstName}} {{userEvent._user.lastName}}</a></td>
+        </tr>
+      </table>
+    </div>
+    <div class = "col-sm-6">
+    <div class = "map" map-lazy-load="https://maps.google.com/maps/api/js">
+      <ng-map center="{{lat}},{{lng}}" zoom="14">
+      <marker position="{{lat}},{{lng}}"></marker>
+       <directions
+          draggable="true"
+          travel-mode="DRIVING"
+          origin="current-location"
+          destination="{{lat}},{{lng}}">
+        </directions>
+    </ng-map>
+    </div>
+
+    </div>
+    </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<style type="text/css">
+  table {
+    text-align: left;
+    font-size: 1.2em;
+  }
+</style>
+<div ng-controller='eventController'>
+      <div class = "container-fluid">
+      <h1>Your Events</h1>
+      <table class = "table table-bordered">
+        <tr >
+          <th class = "info">Event Title</th>
+          <th class = "info">Description</th>
+          <th class = "info">Group Chat</th>
+          <th class = "info"></th>
+          <th class = "info"></th>
+        </tr>
+        <tr ng-repeat="event in user.userEvents | filter:searchText track by $index ">
+          <td ng-if="event._event"><a href="#!/showEvent/{{event._event._id}}">{{ event._event.title }}</a></td>
+          <td ng-if="event._event"><a href="#!/showEvent/{{event._event._id}}">{{event._event.description}}</a></td>
+          <th ng-if="event._event"><a class = "btn btn-success" href="#!/groupChat/{{event._event._id}}">Be Social</a></th>
+          <td ng-if="event._event"><button class = "btn btn-danger" ng-click = "leaveEvent(event._id)">Leave</button></td>
+          <td ng-if="event._event"><a class = "btn btn-warning" ng-if="event._event.creater[0] == loginId" href="#!/event/{{event._event._id}}">Edit</a></td>
+        </tr>
+      </table>
+    </div>
+</div>

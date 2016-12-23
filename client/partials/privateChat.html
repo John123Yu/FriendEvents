@@ -1,0 +1,62 @@
+<style type="text/css">
+  li {
+    list-style-type: none;
+  }
+  .col-sm-12 {
+    background-color: rgb(219, 241, 255);
+    border: 3px solid lightgrey;
+    padding: 25px;
+    overflow-y: scroll;
+    height: 250px;
+    padding-bottom: 65px;
+    font: sans-serif;
+    }
+  .col-sm-12 li{
+    color: black;
+    text-align: left;
+    margin-bottom: -5px;
+    margin-top: -5px;
+    font-family: serif;
+    font-weight: 300;
+  }
+  .col-sm-12 a {
+    color: orange;
+    text-align: left;
+    font-weight: 500;
+    font-family: serif;
+  }
+  .col-sm-9 {
+    text-align: right;
+  }
+  h1 {
+    display: inline-block;
+  }
+  button, a{
+    margin-top: -20px;
+    margin-left: 10px;
+  }
+</style>
+<div ng-controller = "privateChatController">
+	<div class = "container">
+		<h1>Private Chat</h1>
+    <a class= "btn btn-success" ng-if = "privateChats._user != loginId" href="#!/user/{{privateChats._user}}">Friend's Profile</a>
+    <a class = "btn btn-success" ng-if = "privateChats._friend != loginId" href="#!/user/{{privateChats._friend}}">Friend's Profile</a>
+    <button ng-click = "deleteChat()" class = "btn btn-warning">Delete Chat</button>
+    <button ng-click="blockUser()" class = "btn btn-danger">Block User</button>
+    <div id = "chat" class = "col-sm-12">
+      <ul class = "list" ng-repeat="post in privateChats.posts track by $index">
+          <li class = ""> <a href="#!/user/{{post._user._id}}">{{post._user.firstName}} {{post._user.lastName}}: </a></li>
+          <li>{{post.created_at | date:'short'}}</li>
+          <li class = "">{{ post.post }}</li>
+      </ul>
+  </div>
+		<form class = "newform" name = "newform">
+       <div class = "form-group col-sm-offset-3 col-sm-9">
+        <div class = "">
+           </br> <textarea id = "chat" class = "form-control" ng-model = "privateChat.post"></textarea><br>
+          <input type='submit' value='Chat' class = "btn btn-success">
+        </div>
+      </div>
+	 </form>
+  </div>
+ </div>

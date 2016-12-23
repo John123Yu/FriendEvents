@@ -1,0 +1,63 @@
+<style type="text/css">
+  .btn-danger, .btn-success {
+    padding: 20px 40px;
+    font-size: 2em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+  }
+  form {
+    display: inline-block;
+  }
+  .btn-primary {
+    display: inline-block;
+  }
+  form {
+    text-align: left;
+  }
+  input {
+    color: black;
+    /*margin-left: 0px;*/
+  }
+</style>
+<div ng-controller='dashboardController'>
+      <div class = "container-fluid">
+      <div class = "col-sm-12">
+      <h1><a href="#!/showEvent/{{event._id}}">{{ event.title }}</a></h1>
+      <h4><a href="#!/showEvent/{{event._id}}">{{ event.description }}<a></h4>
+      <table class = "table ">
+        <tr>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Category</th>
+          <th>Desired Number</th>
+          <th>Distance</th>
+          <th>Max ({{distanceSetting.distance}} mi.)</th>
+        </tr>
+        <tr>
+          <td>{{ event.date | date: 'short' }}</td>
+          <td>{{ event.streetAddress }} {{event.city}}, {{event.state}}. {{event.zipcode}}</td>
+          <td>{{ event.category }}</td>
+          <td>{{ event.participants }}</td>
+          <td>{{ distance | number:0 }} miles</td>
+          <td><form class = "form-horizontal">
+            <input type = "number" ng-model = "setting.distance" style="width:30%">
+            <button ng-click = "setDistance()" class = "btn btn-primary" >Distance</button>
+          </form></td>
+        </tr>
+      </table>
+    <div>
+        <div class = "row">
+        <div class = "col-sm-6">
+          <a ng-show= "photo1" href="#!/showEvent/{{event._id}}"><img class = "photo" src="{{event.Photo1.file.path}}" width="100%" /></a>
+          <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
+          <br>
+          <button ng-click = "joinEvent()" class = "btn btn-success">Interested!</button>
+        </div>
+        <div class = "col-sm-6">
+          <a ng-show= "photo2" href="#!/showEvent/{{event._id}}"><img class = "photo" src="{{event.Photo2.file.path}}" width="100%" /></a>
+          <img ng-hide = "photo2" class = "photo" src="/Upload.png" width="50%">
+          <br>
+          <button ng-click = "passEvent()" class = "btn btn-danger">Pass!</button>
+        </div>
+    </div>
+</div>

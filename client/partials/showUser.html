@@ -1,0 +1,57 @@
+<style type="text/css">
+.green {
+  font-size: 2em;
+  color: orange;
+}
+</style>
+<div ng-controller='userController'>
+      <h1>{{user.firstName}} {{user.lastName}}</h1>  
+      <div class = "container-fluid">
+      <div class = "col-sm-4 col-sm-offset-1">
+        <!-- /Users/john123yu/Documents/MEAN/FriendEvents -->
+        <img ng-show = "photo1" src="{{user.Photo.file.path}}" style="width:100%"/>
+        <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
+        <form ng-if="loginId == user._id"ng-app="fileUpload" width = "90%" name="form">
+          <input class = "" type="file" ngf-select ng-model="picFile" name="file"  width = "90%" accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
+          <br>
+          <button type="submit" class = "btn button btn-warning" ng-click="uploadPic(picFile)">submit</button>
+      </form>
+      </div>
+      <div class = "col-sm-7">
+      <table class = "table table-bordered">
+        <tr>
+          <th class = "info">Likes</th>
+          <th class = "info">Email</th>
+          <th class = "info">Birthday</th>
+          <th class = "info">Gender</th>
+        </tr>
+        <tr>
+          <td class = "green">{{user.likeCount}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.birthday | date:'short'}}</td>
+          <td>{{user.gender}}</td>
+        </tr>
+      </table>
+            <table class = "table table-bordered">
+        <tr>
+          <th class = "info">Work</th>
+          <th class = "info">School</th>
+          <th class = "info">Truth or Lie</th>
+          <th class = "info">Truth or Lie</th>
+          <th class = "info">Truth or Lie</th>
+        </tr>
+        <tr>
+          <td>{{user.work}}</td>
+          <td>{{user.school}}</td>
+          <td>{{user.truth1}}</td>
+          <td>{{user.truth2}}</td>
+          <td>{{user.lie}}</td>
+        </tr>
+      </table>
+
+      <button ng-if="loginId != user._id" ng-click = "createPrivate()" class = "btn button btn-warning">Chat</button>
+      <button ng-if="loginId != user._id" ng-click = "likeUser()" class = "btn button btn-success">Like User!</button>
+      <a ng-if="loginId == user._id"class = "btn button btn-warning" href="#!/editUser/{{user._id}}">Edit</a>
+    </div>
+  </div>
+</div>

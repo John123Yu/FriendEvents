@@ -1,0 +1,43 @@
+<style type="text/css">
+  table {
+    margin-top: 6%;
+  }
+  input {
+    color: black;
+    margin-top: 3%;
+  }
+</style>
+<div ng-controller = "adminUsersController">
+	<div class = "container">
+  <div class = "col-sm-12">
+    <form>
+      <label>Search: <input ng-model="searchText"></label>
+    </form>
+  </div>
+	<div class = "col-sm-6">
+  	<table class = "table table-bordered">
+          <tr>
+            <th class = "info">All Users</th>
+            <th class = "info"></th>
+          </tr>
+          <tr ng-repeat="user in allUsers | filter:searchText">
+            <td><a href="#!/user/{{user._id}}">{{user.firstName}} {{user.lastName}}: {{user.email}}</a></td>
+            <td><button class = "btn btn-danger" ng-click = "deleteUser(user._id)">Delete</button></td>
+          </tr>
+    </table>
+	</div>
+  <div class = "col-sm-6">
+    <table class = "table table-bordered">
+          <tr>
+            <th class = "info">All Events</th>
+            <th class = "info"></th>
+          </tr>
+          <tr ng-repeat="event in allEvents | filter:searchText">
+            <td><a href="#!/showEvent/{{event._id}}">{{event.title}} {{event.created_at | date:"short"}}</a></td>
+            <td><button class = "btn btn-danger" ng-click = "deleteEvent(event._id)">Delete</button></td>
+          </tr>
+    </table>
+  </div>
+  </div>
+
+</div>

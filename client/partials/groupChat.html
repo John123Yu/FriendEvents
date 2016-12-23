@@ -1,0 +1,53 @@
+<style type="text/css">
+  li {
+    list-style-type: none;
+  }
+  .list {
+    text-align: right;
+  }
+  .col-sm-12 {
+    background-color: rgb(219, 241, 255);
+    border: 3px solid lightgrey;
+    padding: 25px;
+    padding-bottom: 80px;
+    overflow-y: scroll;
+    height: 250px;
+    font-family: serif;
+    font-weight: 300;
+  }
+  .col-sm-9 {
+    text-align: right;
+  }
+  .col-sm-12 li {
+    color: black;
+    text-align: left;
+    margin-bottom: -5px;
+    margin-top: -5px;
+    font-weight: 500;
+    font-family: serif;
+  }
+  .col-sm-12 a {
+    color: orange;
+  }
+ </style>
+<div ng-controller = "chatController">
+	<div class = "container">
+		<h1> Event Chat: {{eventInfo.title}}</h1>
+    <h4>{{eventInfo.description}}</h4>
+    <div id = "chat" class = "col-sm-12">
+      <ul class = "list" ng-repeat="post in eventInfo.posts track by $index">
+          <li class = ""> <a href="#!/user/{{post._user._id}}">{{post._user.firstName}} {{post._user.lastName}}:</a></li>
+          <li>{{post.created_at | date:'short'}}</li>
+          <li class = "">{{ post.post }}</li>
+      </ul>
+  </div>
+		<form class = "newform" name = "postForm">
+       <div class = "form-group col-sm-offset-3 col-sm-9">
+        <div class = "">
+           </br> <textarea id = "message" class = "form-control" ng-model = "post.post"></textarea><br>
+          <input type='submit' value='Chat' class = "btn btn-success">
+        </div>
+      </div>
+   </form>
+  </div>
+ </div>

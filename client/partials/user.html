@@ -1,0 +1,66 @@
+<style type="text/css">
+</style>
+<div ng-controller = "editUserController">
+<div class = "container-fluid">
+ <h1>{{user.firstName}} {{user.lastName}}</h1>
+ <br>
+  <div class = "col-sm-4 col-sm-offset-1">
+    <img ng-show= "photo1" src="{{user.Photo.file.path}}" style="width:100%"/>
+    <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
+    <form ng-app="fileUpload" name="form">
+      <input class = "btn btn-primary" type="file" ngf-select ng-model="picFile" name="file" 
+      accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
+      <br>
+      <button type="submit" class = "btn btn-primary" ng-click="uploadPic(picFile)">submit</button>
+  </form>
+  </div>
+
+ <div class = "col-sm-6">
+ <form  ng-submit = "editUser()" class = "form-horizontal">
+     <div class = "form-group">
+        <label for = "truth1" class = "col-sm-4 control-label">One Truth:</label>
+        <div class = "col-sm-8">
+          <input type ='text' name ='truth1' id = "truth1" class = "form-control" placeholder = "Truth" ng-model = 'user.truth1'>
+        </div>
+      </div>
+      <div class = "form-group">
+        <label for = "truth2" class = "col-sm-4 control-label">Another Truth:</label>
+        <div class = "col-sm-8">
+          <input type ='text' name ='truth2' id = "truth2" class = "form-control" placeholder = "Truth" ng-model = 'user.truth2'>
+        </div>
+      </div>
+      <div class = "form-group">
+        <label for = "lie" class = "col-sm-4 control-label"> One Lie:</label>
+        <div class = "col-sm-8">
+          <input type ='text' name ='lie' id = "lie" class = "form-control" placeholder = "Lie" ng-model = 'user.lie'>
+        </div>
+      </div>
+      <div class = "form-group">
+        <label for = "work" class = "col-sm-4 control-label">Current Work:</label>
+        <div class = "col-sm-8">
+          <input type ='text' name ='work' id = "work" class = "form-control" placeholder = "Add Work" ng-model = 'user.work'>
+        </div>
+      </div>
+      <div class = "form-group">
+        <label for = "School" class = "col-sm-4 control-label">School:</label>
+        <div class = "col-sm-8">
+          <input type='School' name='School' id = "School" class = "form-control" placeholder = "Add School" ng-model = 'user.school'>
+        </div>
+      </div>
+      <div class = "form-group">
+        <label for = "gender" class = "col-sm-4 control-label">Gender:</label>
+        <div class = "col-sm-8">
+          <select class = "form-control" id = "gender" ng-model = "user.gender">
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+          <br>
+        <input type='submit' value='Done' class = "btn btn-primary last-btn">
+        </div>
+      </div>
+    </form>
+    </div>
+
+ </div>
+</div>

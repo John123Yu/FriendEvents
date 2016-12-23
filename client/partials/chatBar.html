@@ -1,0 +1,32 @@
+   <div ng-controller = "chatBarController">
+     <div ng-show="toggle" class = "navbar-fixed-bottom footerChatList">
+        <table class = "table">
+          <td class = "orange">Private Chats</td>
+        <tr ng-repeat="chat in chatList">
+          <td ng-click = "clickId(chat._id)" ng-if="chat.block != 'true'"><a href = ""><span ng-if="chat.news.indexOf(loginId) < 0" class = "danger">NEW!</span> {{chat._friend.firstName}} {{chat._friend.lastName}}</a></td>
+        </tr>
+        <tr ng-repeat = "chat in chatList2">
+          <td ng-click = "clickId(chat._id)" ng-if="chat.block != 'true' "><a href = ""><span ng-if="chat.news.indexOf(loginId) < 0" class = "danger">NEW!</span> {{chat._user.firstName}} {{chat._user.lastName}}</a></td>
+        </tr>
+          <td class = "orange">Group Chats</td>
+        <tr ng-repeat="userEvent in user.userEvents">
+          <td ng-if="userEvent._event"><a href = ""><span ng-if="userEvent._event.news.indexOf(loginId) < 0" class = "danger">NEW!</span> {{userEvent._event.title}}</a></td>
+        </tr>
+        </table>
+    </div>
+    <div ng-show="toggle" class = "navbar-fixed-bottom footerChat container" id = "footerChatBox">
+        <div id = "" class = "chatContainer"> 
+            <ul class = "list" ng-repeat="post in privateChats.posts track by $index">
+              <li class = ""> <a href="#!/user/{{post._user._id}}">{{post._user.firstName}} {{post._user.lastName}}: </a></li>
+              <li>{{post.created_at | date:'short'}}</li>
+              <li class = "">{{ post.post }}</li>
+            </ul>
+        </div>
+        <form class = "newform chat-bottom col-sm-12" name = "newform" class = "fixed-bottom inputText" width = "100%">
+           <input type = "text" id = "chat" class = "form-control" ng-model = "chatId.post"/>
+        </form>
+    </div>
+        <footer class="footer footer-nav navbar-fixed-bottom">
+        <button class = "btn chatButton btn-info" ng-click = "toggleChat()">Chat</button>
+        </footer>
+    </div>
