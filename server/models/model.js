@@ -53,8 +53,8 @@ var userSchema = new mongoose.Schema({
     }
   },
   birthday: {
-  	type: Date
-  	// required: [true, 'Birthday is required']
+  	type: Date,
+  	required: [true, 'Birthday is required']
   },
   created_at: { type : Date, default: Date.now },
   truth1: {
@@ -86,7 +86,9 @@ var userSchema = new mongoose.Schema({
   likes: [],
   likeCount: {type: Number, default: 0},
   admin: String,
-  passcode:{type: String, default: "9382730"}
+  passcode:{type: String, default: "9382730"},
+  confirm: String,
+  confirmPasscode: String
  });
 userSchema.methods.addLikes = function(id) {
   var likeExist = false;

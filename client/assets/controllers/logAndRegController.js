@@ -5,24 +5,6 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
   $cookies.put('distanceSetting', 25)
   $scope.IPError = true;
 
-  //  window.fbAsyncInit = function() {
-  //   FB.init({
-  //     appId      : '228276450952979',
-  //     xfbml      : true,
-  //     version    : 'v2.8'
-  //   });
-  //   FB.AppEvents.logPageView();
-  // };
-
-  // (function(d, s, id){
-  //    var js, fjs = d.getElementsByTagName(s)[0];
-  //    if (d.getElementById(id)) {return;}
-  //    js = d.createElement(s); js.id = id;
-  //    js.src = "//connect.facebook.net/en_US/sdk.js";
-  //    fjs.parentNode.insertBefore(js, fjs);
-  //  }(document, 'script', 'facebook-jssdk'));
-  
-
   navigator.geolocation.getCurrentPosition(function (position) {
     $cookies.put('lat', position.coords.latitude)
     $cookies.put('lng', position.coords.longitude)
@@ -41,12 +23,10 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
           }
           eventFriendsFactory.addUser($scope.user, function(data) {
             if(data.data.firstName) {
-              console.log('here')
               $cookies.put('loginId', data.data._id)
-              $location.url('/')
+              $location.url('/confirmEmail')
             }
             if(data.data.errmsg) {
-              console.log('in')
               $scope.EError = false
               $scope.emailError = "Email already registered"
             }
@@ -82,6 +62,10 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
     eventFriendsFactory.login($scope.user, function(data) {
       $scope.noEmailError = true;
       $scope.IPError = true;
+      if(data.data.notConfirmed) {
+        alert('Check your email for passcode!')
+        $location.url('/confirmEmail')
+      }
       if(data.data.noEmail) {
         $scope.noEmailError = false;
         $scope.noEmail = data.data.noEmail;

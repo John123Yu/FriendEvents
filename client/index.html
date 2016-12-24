@@ -34,6 +34,7 @@
     <script type="text/javascript" src = 'assets/controllers/adminUsersController.js'></script>
     <script type="text/javascript" src = 'assets/controllers/distanceCalc.js'></script>
     <script type="text/javascript" src = 'assets/controllers/resetEmailController.js'></script>
+    <script type="text/javascript" src = 'assets/controllers/confirmEmailController.js'></script>
 <script>
     myApp.config(function ($routeProvider) {
       $routeProvider
@@ -75,6 +76,9 @@
         })
         .when('/resetEmail/', {
             templateUrl: 'partials/forgotEmail.html'
+        })
+        .when('/confirmEmail/', {
+            templateUrl: 'partials/confirmEmail.html'
         })
         .otherwise({
           redirectTo: '/'
@@ -271,7 +275,7 @@ myApp.controller('indexController', ['$scope', 'eventFriendsFactory', '$location
 
     @media all and (max-width: 1080px) {
     .header {
-        height: 4.5em;
+        height: 4.8em;
     }
     }
     @media all and (max-width: 602px) {

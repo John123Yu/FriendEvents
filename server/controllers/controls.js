@@ -23,23 +23,22 @@ mailer.extend(app, {
   port: 465, // port for secure SMTP
   transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
   auth: {
-    user: 'John123Yu@gmail.com',
+    user: 'friendevents1@gmail.com',
     pass: 'P82ke57y'
   }
 });
 
-// var mailOptions = {
-//   to: 'bar@blurdybloop.com',
-//   subject: 'Hello ✔',
-//   locals: {
-//     title: 'Hello',
-//     message: 'Welcome to my website'
-//   }
-// }
-
 module.exports = {
 	create: function(req, res){
+      var passcode = ("a" + Math.floor(Math.random() * 10))+ (Math.floor(Math.random() * 10)) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
       var user = new User(req.body);
+      if(user.email) {
+        user.email = user.email.toLowerCase();
+      }
+      if(!user.confirmPasscode){
+        user.confirm = "false";
+        user.confirmPasscode = passcode
+      }
       user.save(function(err, context) {
 	    if(err) {
 	      console.log('Error with registering new user');
@@ -47,14 +46,47 @@ module.exports = {
         return res.json(err)
 	    } else {
 	      console.log('successfully registered a new user!');
-        return res.json(context)
+        app.mailer.send( 'confirmEmail', {
+            to: req.body.email, 
+            subject: 'Friend Events Confirm Email',
+            text: passcode
+          }, function (err) {
+            if (err) {
+              console.log(err);
+              return res.json({error: 'There was an error sending the confirm email'});
+            } else {
+              console.log("confirm email sent") 
+              return res.json(user)
+            }
+          })
 	    }
   	})
   },
+  confirmEmail: function(req, res) {
+    User.findOne({confirmPasscode: req.body.passcode}, function(err, user) { 
+      if(user == null) {
+        console.log('not a stored passcode')
+        return res.json({null: "Invalid Passcode"})
+      } else {
+        console.log('confirm Passcode went through!')
+        user.confirm = "true";
+        user.save();
+        return res.json(user)
+      }
+    })
+  },
   login: function(req, res) {
-    User.find({ email: req.body.emailLogin}, function(err, context) {
+    User.find({ email: req.body.emailLogin.toLowerCase()}, function(err, context) {
+      if(context[0] == null){
+        console.log("no email found")
+        return res.json({noEmail: "No such email in database"})
+      }
+      if(context[0].confirm == "false") {
+        console.log('user not confirmed yet!')
+        return res.json({notConfirmed: "Not confirmed"})
+      }
       if(context[0]) {
-        if(context[0].email == "John123Yu@gmail.com") {
+        if(context[0].email == "friendevents1@gmail.com") {
           context[0].addAdmin();
         }
         console.log('success finding email')
@@ -64,10 +96,6 @@ module.exports = {
           console.log("wrong password")
           return res.json({IncorrectPassword: 'Incorrect Password'})
         }
-      }
-      else {
-        console.log("no email found")
-        return res.json({noEmail: "No such email in database"})
       }
     })
   },
@@ -615,7 +643,7 @@ module.exports = {
   resetPassword: function(req, res) {
     var passcode = ("a" + Math.floor(Math.random() * 10))+ (Math.floor(Math.random() * 10)) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
     console.log(passcode)
-    User.findOne({email: req.body.email}, function(err, user) { 
+    User.findOne({email: req.body.email.toLowerCase()}, function(err, user) { 
       if(user == null) {
         console.log('not a stored email')
         return res.json(err)
@@ -665,7 +693,7 @@ module.exports = {
               console.log('successfully saved new user with new password!');
               user.passcode = passcode;
               user.save(function(err, context1) {
-                return res.json(context1)
+              return res.json(context1)
               })
             }
         })

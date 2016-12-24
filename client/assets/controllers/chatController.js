@@ -16,7 +16,6 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
   $scope.notify.eventId = $routeParams.id;
   eventFriendsFactory.getEventPosts($routeParams.id, function(data){
       $scope.eventInfo = data.data
-      console.log(data)
       if(data.data == null){
         $location.url('/chatLists')
       }
@@ -46,7 +45,6 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
       $scope.post.eventId = $scope.eventInfo._id
       eventFriendsFactory.post($scope.post, function(data) {
         $scope.post.post = ""
-        console.log(data)
         $scope.check = data;
       })
     }

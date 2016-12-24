@@ -31,7 +31,7 @@ if(!$cookies.get('loginId')) {
               i++;
               $cookies.put('lastSeen', i-1)
               if(i >= $scope.allEvents.length) {
-                alert('You have seen all the events!')
+                alert('You have seen all the events! Did not find anything you like? Create your own event!')
                 i = 0;
               }
               $scope.distance = $scope.allEvents[i].distance
@@ -58,7 +58,7 @@ if(!$cookies.get('loginId')) {
               console.log(i)
               $cookies.put('lastSeen', i-1)
               if(i >= $scope.allEvents.length) {
-                alert('You have seen all the events!')
+                alert('You have seen all the events! Did not find anything you like? Create your own event!')
                 i = 0;
               }
               $scope.distance = $scope.allEvents[i].distance
@@ -124,6 +124,7 @@ if(!$cookies.get('loginId')) {
   }
 
   $scope.joinEvent = function() {
+    alert('Event Joined!')
     $scope.event.joinerId = loginId
     eventFriendsFactory.joinEvent($scope.event, function(data) {
     }); 

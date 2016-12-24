@@ -33,7 +33,7 @@
   h1 {
     display: inline-block;
   }
-  button, a{
+  button, .link{
     margin-top: -20px;
     margin-left: 10px;
   }
@@ -41,8 +41,8 @@
 <div ng-controller = "privateChatController">
 	<div class = "container">
 		<h1>Private</h1>
-    <a class= "btn btn-success" ng-if = "privateChats._user != loginId" href="#!/user/{{privateChats._user}}">Friend's Profile</a>
-    <a class = "btn btn-success" ng-if = "privateChats._friend != loginId" href="#!/user/{{privateChats._friend}}">Friend's Profile</a>
+    <a class= "btn link btn-success" ng-if = "privateChats._user != loginId" href="#!/user/{{privateChats._user}}">Friend's Profile</a>
+    <a class = "btn link btn-success" ng-if = "privateChats._friend != loginId" href="#!/user/{{privateChats._friend}}">Friend's Profile</a>
     <button ng-click = "deleteChat()" class = "btn btn-warning">Delete Chat</button>
     <button ng-click="blockUser()" class = "btn btn-danger">Block User</button>
     <div id = "chat" class = "col-sm-12">

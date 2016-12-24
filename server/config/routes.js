@@ -149,4 +149,8 @@ app.post('/finalReset', function(req, res) {
 app.post('/deletePast/', function(req, res) {
   user.deletePast(req, res)
 })
+
+app.post('/confirmEmail/', function(req, res) {
+  user.confirmEmail(req, res)
+})
 }

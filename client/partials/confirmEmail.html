@@ -1,0 +1,21 @@
+<style type="text/css">
+  p {
+    color: red;
+    display: inline;
+  }
+</style>
+<div ng-controller = "confirmEmailController">
+  <div class = "container-fluid">
+    <h2>Confirm your email</h2>
+  <form  ng-submit = "confirmEmail()" class = "form-horizontal">
+    <div class = "form-group">
+      <label for = "passcode" class = "col-sm-2 control-label">Confirm Passcode:</label>
+      <p ng-hide ="passcodeError">{{passcode}}</p>
+      <div class = "col-sm-6">
+        <input type ='text' name ='passcode' id = "passcode" class = "form-control" placeholder = "passcode" ng-model = 'user.passcode'>
+        <br>
+        <input type='submit' value='Confirm Email' class = "btn btn-primary">
+      </div>
+    </div>
+  </form>
+</div>

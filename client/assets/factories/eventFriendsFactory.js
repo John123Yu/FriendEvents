@@ -6,7 +6,6 @@
       $http.post('/user', newUser).then(function(data){
         console.log("data sent back")
         if(data.data.errors || data.data.errmsg || data.data.firstName) {
-          console.log(data)
           callback(data);
         }
       })
@@ -17,7 +16,7 @@
         if(data.data.noEmail || data.data.IncorrectPassword) {
           callback(data);
         }
-        else if (data.data._id) {
+        else {
           callback(data)
         }
       })
@@ -208,6 +207,12 @@
     factory.deletePast = function( callback) {
       $http.post('/deletePast').then(function(data) {
         console.log('deleted past events')
+        callback(data)
+      })
+    }
+    factory.confirmEmail = function(code, callback) {
+      $http.post('/confirmEmail', code).then(function(data) {
+        console.log('email confirmed')
         callback(data)
       })
     }
