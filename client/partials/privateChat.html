@@ -1,3 +1,5 @@
+<meta name="viewport" content="width=device-width, initial-scale=.8">
+
 <style type="text/css">
   li {
     list-style-type: none;
@@ -5,10 +7,10 @@
   .col-sm-12 {
     background-color: rgb(219, 241, 255);
     border: 3px solid lightgrey;
-    padding: 25px;
+    padding: 3%;
     overflow-y: scroll;
     height: 250px;
-    padding-bottom: 65px;
+    padding-bottom: 9%;
     font: sans-serif;
     }
   .col-sm-12 li{
@@ -38,7 +40,7 @@
 </style>
 <div ng-controller = "privateChatController">
 	<div class = "container">
-		<h1>Private Chat</h1>
+		<h1>Private</h1>
     <a class= "btn btn-success" ng-if = "privateChats._user != loginId" href="#!/user/{{privateChats._user}}">Friend's Profile</a>
     <a class = "btn btn-success" ng-if = "privateChats._friend != loginId" href="#!/user/{{privateChats._friend}}">Friend's Profile</a>
     <button ng-click = "deleteChat()" class = "btn btn-warning">Delete Chat</button>

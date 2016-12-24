@@ -145,4 +145,8 @@ app.post('/resetPassword', function(req, res) {
 app.post('/finalReset', function(req, res) {
   user.finalReset(req, res)
 })
+
+app.post('/deletePast/', function(req, res) {
+  user.deletePast(req, res)
+})
 }

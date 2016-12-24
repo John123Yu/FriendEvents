@@ -17,7 +17,7 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
   eventFriendsFactory.getEventPosts($routeParams.id, function(data){
       $scope.eventInfo = data.data
       console.log(data)
-      if(data.data == ""){
+      if(data.data == null){
         $location.url('/chatLists')
       }
       socket.emit('create', $scope.eventInfo._id);
@@ -29,6 +29,9 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
     setTimeout(function(){  
       eventFriendsFactory.gChatPosts($scope.notify)
       eventFriendsFactory.getEventPosts($routeParams.id, function(data){
+      if(data.data == null){
+        $location.url('/chatLists')
+      }
       $scope.eventInfo = data.data
       elem.scrollTop = (elem.scrollHeight);
     })
@@ -37,13 +40,13 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
 
 
   document.onkeydown = function(a) {
-    console.log('ahsdfhaksdfhja')
     if(a.keyCode == 13) {
       socket.emit('create', $scope.eventInfo._id);
       $scope.post.userId = loginId
       $scope.post.eventId = $scope.eventInfo._id
       eventFriendsFactory.post($scope.post, function(data) {
         $scope.post.post = ""
+        console.log(data)
         $scope.check = data;
       })
     }

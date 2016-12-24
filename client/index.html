@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html ng-app='myApp'>
   <head>
-    <title></title>
+    <title>Event Friends</title>
+    <meta name="viewport" content="width=device-width, initial-scale=.5">
+    <meta name="keywords" content="Events, Friends, Local, Entertainment, Social, Meetup, Interests, Fun, Cool, Happy">
+    <meta name="description" content="Browse through local events posted by other people. Make new friends with similar interests using this new social site!">
     <script src="jquery/dist/jquery.js"></script>
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css"></script>
     <script src="bootstrap/dist/js/bootstrap.min.js"></script>
@@ -269,6 +272,11 @@ myApp.controller('indexController', ['$scope', 'eventFriendsFactory', '$location
     @media all and (max-width: 1080px) {
     .header {
         height: 4.5em;
+    }
+    }
+    @media all and (max-width: 602px) {
+    .header {
+        height: 8.5em;
     }
     }
 </style>

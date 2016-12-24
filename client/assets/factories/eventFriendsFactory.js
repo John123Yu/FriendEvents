@@ -205,6 +205,12 @@
         callback(data)
       })
     }
+    factory.deletePast = function( callback) {
+      $http.post('/deletePast').then(function(data) {
+        console.log('deleted past events')
+        callback(data)
+      })
+    }
 
     return factory;
     }]);

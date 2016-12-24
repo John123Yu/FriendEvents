@@ -190,6 +190,7 @@ var eventSchema = new mongoose.Schema({
   userEvents: [{type: Schema.Types.ObjectId, ref: 'UserEvent'}],
   posts: [{type: Schema.Types.ObjectId, ref: 'Posts'}],
   news: [],
+  confirm: { type: String, default: "true" },
   creater: [{type: Schema.Types.ObjectId, ref: 'User'}],
   hostName: String,
   distance: Number

@@ -3,7 +3,6 @@ myApp.controller('dashboardController', ['$scope', 'eventFriendsFactory', '$loca
 if(!$cookies.get('loginId')) {
     $location.url('/login')
   }
-  
   var loginId = $cookies.get('loginId')
   $scope.loginId = $cookies.get('loginId')
   $scope.check = 0;
@@ -30,8 +29,9 @@ if(!$cookies.get('loginId')) {
             $scope.allEvents = data.data
              incrementI = function() {
               i++;
+              $cookies.put('lastSeen', i-1)
               if(i >= $scope.allEvents.length) {
-                // alert('You have seen all the events!')
+                alert('You have seen all the events!')
                 i = 0;
               }
               $scope.distance = $scope.allEvents[i].distance
@@ -55,13 +55,15 @@ if(!$cookies.get('loginId')) {
             $scope.allEvents = data.data
              incrementI = function() {
               i++;
+              console.log(i)
+              $cookies.put('lastSeen', i-1)
               if(i >= $scope.allEvents.length) {
-                // alert('You have seen all the events!')
+                alert('You have seen all the events!')
                 i = 0;
               }
               $scope.distance = $scope.allEvents[i].distance
               $scope.event = $scope.allEvents[i]
-              console.log($scope.event.Photo1.file.path)
+              // console.log($scope.event.Photo1.file.path)
                if(!$scope.event.Photo1.file.path == true) {
                   $scope.photo1 = false;
                 }
@@ -76,9 +78,13 @@ if(!$cookies.get('loginId')) {
       }
     });
 
-  var i = -1;
+  if(!$cookies.get('lastSeen')) {
+    var i = -1;
+  } else {
+    var i = $cookies.get('lastSeen');  
+  }
   if(!$cookies.get('distanceSetting')){
-    $cookies.put('distanceSetting', 25)
+    $cookies.put('distanceSetting', 35)
   }
   $scope.distanceSetting = {};
   $scope.distanceSetting.distance = $cookies.get('distanceSetting')
@@ -88,8 +94,18 @@ if(!$cookies.get('loginId')) {
   $scope.setDistance = function() {
     $cookies.put('distanceSetting', $scope.setting.distance)
     $scope.distanceSetting.distance = $scope.setting.distance
-     eventFriendsFactory.getEvents($scope.setting, function(data) {
-      $scope.allEvents = data.data
+    eventFriendsFactory.setUserLoc($scope.location, function(data) {
+      if(data.data.data == "true") {
+        eventFriendsFactory.updateDistance($scope.location, function(data) {
+           eventFriendsFactory.getEvents($scope.setting, function(data) {
+            $scope.allEvents = data.data
+          })
+        })
+      } else {
+        eventFriendsFactory.getEvents($scope.setting, function(data) {
+            $scope.allEvents = data.data
+          })
+      }
     })
   }
 

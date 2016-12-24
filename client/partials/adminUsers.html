@@ -29,15 +29,14 @@
   <div class = "col-sm-6">
     <table class = "table table-bordered">
           <tr>
-            <th class = "info">All Events</th>
+            <th class = "info">All Events <button class = "btn btn-danger" ng-click = "deletePast()">Delete Past Events</button></th>
             <th class = "info"></th>
           </tr>
           <tr ng-repeat="event in allEvents | filter:searchText">
-            <td><a href="#!/showEvent/{{event._id}}">{{event.title}} {{event.created_at | date:"short"}}</a></td>
+            <td><a href="#!/showEvent/{{event._id}}">{{event.title}} {{event.date | date:"short"}}</a></td>
             <td><button class = "btn btn-danger" ng-click = "deleteEvent(event._id)">Delete</button></td>
           </tr>
     </table>
   </div>
   </div>
-
 </div>

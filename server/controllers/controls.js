@@ -11,6 +11,7 @@ var lastUser;
 var app = require('express')();
 var mailer = require('express-mailer');
 var jade = require('jade');
+var dateNow = new Date();
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -158,7 +159,7 @@ module.exports = {
     })
   },
   getEvents: function (req, res) {
-    Event.find({distance: {$lte: req.body.distance}}, null, {sort: 'created_at'}).exec( function(err, context) {
+    Event.find({distance: {$lte: req.body.distance}, date: {$gte: dateNow}}, null, {sort: 'created_at'}).exec( function(err, context) {
       if(context[0]) {
         console.log('success getting events')
         return res.json(context)
@@ -361,7 +362,10 @@ module.exports = {
   },
   newPost: function (req, res) {
     User.findOne({_id : req.body.userId}, function(err, user) {    
-      Event.findOne({_id : req.body.eventId}, function(err, event) {  
+      Event.findOne({_id : req.body.eventId}, function(err, event) {
+      if(event == null) {
+        return res.json({gone: "event has been deleted"})
+      }
       var post = new Posts({post: req.body.post})
       post._user = req.body.userId;
       post._event= req.body.eventId;
@@ -371,17 +375,7 @@ module.exports = {
           console.log('post not saved')
         } else {
           console.log('post saved')
-          user.posts.push(post)
           event.posts.push(post)
-          user.save(function(err) {
-            if(err) {
-              console.log(err)
-              console.log('Error with saving user after saving post')
-            } else {
-              console.log('user saved after saving post')
-              // return res.json({he:"hi"})
-            }
-          })
           event.save(function(err) {
             if(err) {
               console.log(err)
@@ -468,22 +462,12 @@ module.exports = {
         } else {
           console.log('post saved after private chat')
           privateChat.posts.push(post)
-          user.posts.push(post)
           privateChat.save(function(err) {
             if(err) {
               console.log(err)
               console.log('Error with saving privatechat after saving post')
             } else {
               console.log('privatechat saved after saving post')
-            }
-          })
-          user.save(function(err) {
-            if(err) {
-              console.log(err)
-              console.log('Error with saving user after saving post')
-            } else {
-              console.log('user saved after saving post')
-              privateChat.popId(user._id);
               return res.json({he:"hi"})
             }
           })
@@ -687,6 +671,17 @@ module.exports = {
         })
       }
     }
+    })
+  },
+  deletePast: function(req, res){
+    Event.remove({date: {$lte: dateNow}}, function(err, event) {
+        if(err) {
+          console.log(err)
+          console.log('something went wrong removing past events');
+        } else {
+          console.log('successfully removed past events!');
+          return res.json(event)
+        }
     })
   },
 };

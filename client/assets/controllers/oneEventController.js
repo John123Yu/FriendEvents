@@ -30,7 +30,6 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getOneEvent($routeParams.id, function(data){
       $scope.eventInfo = data.data 
-      console.log(data.data)
       if(!data.data.Photo1.file.name) {
         $scope.photo1 = false;
                 }

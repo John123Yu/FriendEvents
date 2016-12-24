@@ -9,6 +9,10 @@ myApp.controller('userController', ['$scope', 'eventFriendsFactory', '$location'
   var loginId = $cookies.get('loginId')
   $scope.loginId = loginId
   $scope.photo1 = true;
+  var date = new Date();
+  $scope.T1;
+  $scope.T2;
+  $scope.T3;
 
 
   $scope.uploadPic = function(file) {
@@ -26,6 +30,36 @@ myApp.controller('userController', ['$scope', 'eventFriendsFactory', '$location'
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getOneUser($routeParams.id, function(data){
       $scope.user = data.data
+      var birthdayDate = new Date(data.data.birthday)
+      var ageMilli = (date - birthdayDate)
+      var ageYear = Math.floor(ageMilli/(1000 * 60 * 60 * 24 * 365))
+      $scope.user.age = ageYear      
+      var rand = Math.random()
+      if(rand > 0 && rand <= .15) {
+        $scope.T1 = $scope.user.truth1;
+        $scope.T2 = $scope.user.truth2;
+        $scope.T3 = $scope.user.lie;
+      } else if (rand > .15 && rand <= .3) {
+        $scope.T1 = $scope.user.truth1;
+        $scope.T2 = $scope.user.lie;
+        $scope.T3 = $scope.user.truth2;
+      } else if (rand > .3 && rand <= .45) {
+        $scope.T1 = $scope.user.truth2;
+        $scope.T2 = $scope.user.truth1;
+        $scope.T3 = $scope.user.lie;
+      } else if (rand > .45 && rand <= .6) {
+        $scope.T1 = $scope.user.truth2;
+        $scope.T2 = $scope.user.lie;
+        $scope.T3 = $scope.user.truth1;
+      } else if (rand > .6 && rand <= .75) {
+        $scope.T1 = $scope.user.lie;
+        $scope.T2 = $scope.user.truth1;
+        $scope.T3 = $scope.user.truth2;
+      } else {
+        $scope.T1 = $scope.user.lie;
+        $scope.T2 = $scope.user.truth2;
+        $scope.T3 = $scope.user.truth1;
+      }
       if(!data.data.Photo.file.name) {
         $scope.photo1 = false;
       }

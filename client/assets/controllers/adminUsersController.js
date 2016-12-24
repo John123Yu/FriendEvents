@@ -44,4 +44,13 @@ myApp.controller('adminUsersController', ['$scope', 'eventFriendsFactory', '$loc
   }
   }
 
+  $scope.deletePast = function() {
+    var deletePast = confirm("Are you sure you want to delete past events?")
+    if(deletePast) {
+      eventFriendsFactory.deletePast(function(data) {
+        $scope.check = data;
+      })
+    }
+  }
+
 }])

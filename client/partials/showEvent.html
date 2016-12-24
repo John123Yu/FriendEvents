@@ -14,12 +14,19 @@
  .host {
   margin: 0px;
  }
+ .fb-share-button {
+  display: inline;
+ }
+ .map {
+  margin-bottom: 5%;
+ }
 </style>
 <div ng-controller='oneEventController'>
       <div class = "container-fluid">
       <h1><a href="">{{eventInfo.title}}</h1></a>
       <button class = "btn btn-success"  ng-click = "joinEvent()">Join!</button>
-      <a class = "btn btn-warning" ng-if="eventInfo.creater[0]._id == loginId" href="#!/event/{{eventInfo._id}}">Edit</a>
+      <!-- ng-if="eventInfo.creater[0]._id == loginId  -->
+      <a  ng-if="eventInfo.creater[0]._id == loginId" class = "btn btn-warning"  href="#!/event/{{eventInfo._id}}">Edit</a>
       <h4><a href="">Description: {{eventInfo.description}}</a></h4>
       <table class = "table ">
         <tr class = "">
