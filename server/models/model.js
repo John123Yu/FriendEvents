@@ -83,6 +83,7 @@ var userSchema = new mongoose.Schema({
   posts: [{type: Schema.Types.ObjectId, ref: 'Posts'}],
   privateChats: [{type: Schema.Types.ObjectId, ref: 'Private'}],
   lastLocation: Object,
+  lastOn: Date,
   likes: [],
   likeCount: {type: Number, default: 0},
   admin: String,
@@ -195,8 +196,9 @@ var eventSchema = new mongoose.Schema({
   confirm: { type: String, default: "true" },
   creater: [{type: Schema.Types.ObjectId, ref: 'User'}],
   hostName: String,
-  distance: Number
- });
+  distance: Number,
+  userDist: Schema.Types.Mixed
+   });
 
 eventSchema.plugin(thumbnailPlugin, {
     name: "Photo1",
@@ -222,6 +224,19 @@ eventSchema.methods.calcDistance = function(location) {
   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
   this.distance = distanceCalc.dist(location, eventLocation)
   this.save()
+}
+eventSchema.methods.calcDistance2 = function(location, userId) {
+  var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
+  var distance = distanceCalc.dist(location, eventLocation)
+  if(!this.userDist) {
+    this.userDist = {}
+  }
+  // console.log(this.userDist)
+  if(!this.userDist[userId]){
+    this.userDist[userId] = distance
+  }
+  this.save()
+  // console.log(this.userDist)
 }
 eventSchema.methods.pushId = function(id) {
   if (this.news.indexOf(id) > -1) {

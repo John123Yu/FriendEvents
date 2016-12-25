@@ -126,6 +126,10 @@ app.post('/updateDistance', function(req, res) {
   user.updateDistance(req, res)
 })
 
+app.post('/updateDistance2', function(req, res) {
+  user.updateDistance2(req, res)
+})
+
 app.post('/setUserLoc', function(req, res) {
   user.setUserLoc(req, res)
 })

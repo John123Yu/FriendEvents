@@ -187,8 +187,11 @@ module.exports = {
     })
   },
   getEvents: function (req, res) {
-    Event.find({distance: {$lte: req.body.distance}, date: {$gte: dateNow}}, null, {sort: 'created_at'}).exec( function(err, context) {
+    console.log(req.body.userId)
+    var userId = req.body.userId
+    Event.find({distance : {$lte: req.body.distance}, date: {$gte: dateNow}}, null, {sort: 'created_at'}).exec( function(err, context) {
       if(context[0]) {
+        console.log(context[0].userDist)
         console.log('success getting events')
         return res.json(context)
       }
@@ -578,6 +581,22 @@ module.exports = {
       if(context[0]) {
         for(item in context) {
           context[item].calcDistance(req.body.location)
+        }
+        console.log('success updating event distances')
+        return res.json(context)
+      }
+      else {
+        console.log('no events yet')
+        return res.json(context)
+      }
+    })
+  },
+  updateDistance2: function(req,res) {
+    Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
+      if(context[0]) {
+        for(item in context) {
+          context[item].calcDistance2(req.body.location, req.body.userId)
+          console.log(context[item].userDist)
         }
         console.log('success updating event distances')
         return res.json(context)

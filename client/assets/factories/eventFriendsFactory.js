@@ -174,6 +174,12 @@
         callback(data)
       })
     }
+    factory.updateDistance2 = function(location, callback) {
+      $http.post('/updateDistance2', location).then(function(data) {
+        console.log('distance 2 updated')
+        callback(data)
+      })
+    }
     factory.setUserLoc = function(location, callback) {
       $http.post('/setUserLoc', location).then(function(data) {
         console.log('user loc updated')

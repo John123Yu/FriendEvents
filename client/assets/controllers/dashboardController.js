@@ -17,14 +17,19 @@ if(!$cookies.get('loginId')) {
 
   });
 
+
   var yourLocation = new Loc($cookies.get('lat'), $cookies.get('lng'))
     $scope.location = {};
     $scope.location.location = yourLocation;
     $scope.location.userId = loginId;
+
+    eventFriendsFactory.updateDistance2($scope.location, function(data) {
+      console.log(data) })
+
     eventFriendsFactory.setUserLoc($scope.location, function(data) {
       if(data.data.data == "true") {
         eventFriendsFactory.updateDistance($scope.location, function(data) {
-
+          $scope.distanceSetting.userId = loginId
           eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
             $scope.allEvents = data.data
              incrementI = function() {
@@ -51,6 +56,7 @@ if(!$cookies.get('loginId')) {
         });
       } else { 
         console.log("no distance update")
+        $scope.distanceSetting.userId = loginId
          eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
             $scope.allEvents = data.data
              incrementI = function() {
