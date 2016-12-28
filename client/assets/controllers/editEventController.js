@@ -20,10 +20,10 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     eventFriendsFactory.getOneEvent($routeParams.id, function(data){
       $scope.eventInfo = data.data
       $scope.event = data.data
-      if(!data.data.Photo1.name) {
+      if(!data.data.Photo1.file.name) {
                   $scope.photo1 = false;
                 }
-      if(!data.data.Photo2.name) {
+      if(!data.data.Photo2.file.name) {
         $scope.photo2 = false;
       }
       if($cookies.get('loginId') != $scope.eventInfo.creater[0]._id){

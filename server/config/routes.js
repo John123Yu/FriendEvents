@@ -127,6 +127,7 @@ app.post('/updateDistance', function(req, res) {
 })
 
 app.post('/setUserLoc', function(req, res) {
+  // console.log(JSON.stringify(req.headers['x-forwarded-proto']))
   user.setUserLoc(req, res)
 })
 
