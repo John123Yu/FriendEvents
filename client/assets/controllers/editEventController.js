@@ -42,12 +42,13 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     $scope.ECError = true
     $scope.SError = true
     $scope.ZError = true
+    // $scope.event.date = new Date($scope.event.date)
     eventFriendsFactory.editEvent($routeParams.id, $scope.event, function(data){
       $scope.check = data
       if(data.data.n) {
         address= data.config.data.streetAddress + " " + data.config.data.city + " " + data.config.data.state + " " + data.config.data.zipcode 
         console.log(address)
-          $http.get('http://maps.google.com/maps/api/geocode/json?address=' + address + '&sensor=false').then(function(mapData) {
+          $http.get('https://maps.google.com/maps/api/geocode/json?address=' + address + '&sensor=false').then(function(mapData) {
             $scope.latLon.lat = mapData.data.results[0].geometry.location.lat
             $scope.latLon.lon = mapData.data.results[0].geometry.location.lng
             $scope.latLon.id = $routeParams.id
