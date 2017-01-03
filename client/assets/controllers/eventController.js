@@ -43,7 +43,7 @@ myApp.controller('eventController', ['$scope', 'eventFriendsFactory', '$location
         alert('Event Created! Make sure to upload pictures!')
 
         address= data.data.streetAddress + " " + data.data.city + " " + data.data.state + " " + data.data.zipcode 
-        $http.get('http://maps.google.com/maps/api/geocode/json?address=' + address + '&sensor=false').then(function(mapData) {
+        $http.get('https://maps.google.com/maps/api/geocode/json?address=' + address + '&sensor=false').then(function(mapData) {
           $scope.latLon.lat = mapData.data.results[0].geometry.location.lat
           $scope.latLon.lon = mapData.data.results[0].geometry.location.lng
           $scope.latLon.id = data.data._id
