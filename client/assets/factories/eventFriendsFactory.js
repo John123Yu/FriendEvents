@@ -168,18 +168,24 @@
         callback(data);
       })
     }
-    factory.updateDistance = function(location, callback) {
-      $http.post('/updateDistance', location).then(function(data) {
-        console.log('distances updated')
+    // factory.updateDistance = function(location, callback) {
+    //   $http.post('/updateDistance', location).then(function(data) {
+    //     console.log('distances updated')
+    //     callback(data)
+    //   })
+    // }
+    factory.updateDistance2 = function(location, callback) {
+      $http.post('/updateDistance2', location).then(function(data) {
+        console.log('distance 2 updated')
         callback(data)
       })
     }
-    factory.setUserLoc = function(location, callback) {
-      $http.post('/setUserLoc', location).then(function(data) {
-        console.log('user loc updated')
-        callback(data)
-      })
-    }
+    // factory.setUserLoc = function(location, callback) {
+    //   $http.post('/setUserLoc', location).then(function(data) {
+    //     console.log('user loc updated')
+    //     callback(data)
+    //   })
+    // }
     factory.getAllUsers = function(callback) {
       $http.get('/getAllUsers/').then(function(data) {
         console.log('got all users')
@@ -213,6 +219,12 @@
     factory.confirmEmail = function(code, callback) {
       $http.post('/confirmEmail', code).then(function(data) {
         console.log('email confirmed')
+        callback(data)
+      })
+    }
+    factory.lastUpdate = function(userId, callback) {
+      $http.post('/lastUpdate', userId).then(function(data) {
+        console.log('last update updated!')
         callback(data)
       })
     }

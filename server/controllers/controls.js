@@ -186,18 +186,6 @@ module.exports = {
       }
     })
   },
-  getEvents: function (req, res) {
-    Event.find({distance: {$lte: req.body.distance}, date: {$gte: dateNow}}, null, {sort: 'created_at'}).exec( function(err, context) {
-      if(context[0]) {
-        console.log('success getting events')
-        return res.json(context)
-      }
-      else {
-        console.log('no events yet')
-        return res.json(context)
-      }
-    })
-  },
   editEvent: function(req, res){
     Event.update({_id: req.params.id}, {title: req.body.title, description: req.body.description, date: req.body.date, participants: req.body.participants, category: req.body.category, streetAddress: req.body.streetAddress, city: req.body.city, state: req.body.state, zipcode: req.body.zipcode}, { runValidators: true }, function(err, event) {
         if(err) {
@@ -573,11 +561,26 @@ module.exports = {
       }
     })
   },
-  updateDistance: function(req,res) {
+  // updateDistance: function(req,res) {
+  //   Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
+  //     if(context[0]) {
+  //       for(item in context) {
+  //         context[item].calcDistance(req.body.location)
+  //       }
+  //       console.log('success updating event distances')
+  //       return res.json(context)
+  //     }
+  //     else {
+  //       console.log('no events yet')
+  //       return res.json(context)
+  //     }
+  //   })
+  // },
+  updateDistance2: function(req,res) {
     Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
       if(context[0]) {
         for(item in context) {
-          context[item].calcDistance(req.body.location)
+          context[item].calcDistance2(req.body.location, req.body.userId)
         }
         console.log('success updating event distances')
         return res.json(context)
@@ -588,36 +591,50 @@ module.exports = {
       }
     })
   },
-  setUserLoc: function(req, res) {
-    LastUser.find({}, function(err, last) {
-    User.findOne({_id :req.body.userId}, function(err, user) {
-      if(user == null) {
-        user = {};
-        user.lastLocation = 1;
-        return res.json({hi: 'hi'})
+  getEvents: function (req, res) {
+    var userId = req.body.userId
+    var distanceFrom = Number(req.body.distance)
+    Event.find({ userDist4 :{$elemMatch: {_id: userId, distance: {$lte: distanceFrom}}}, date: {$gte: dateNow}}, null, {sort: 'created_at'}).exec( function(err, context) {
+      if(context[0]) {
+        console.log('success getting events')
+        return res.json(context)
       }
-      if(!user.lastLocation) {
-        user.lastLocation = req.body.location
-        user.save()
-        console.log("user location updated")
-        return res.json({data: "true"})
-      } 
-      if(last[0].id != user._id) {
-        last[0].updateLast(user._id)
-        console.log("not the last user!")
-        return res.json({data: "true"})
-      }
-      else if(user.calcDistanceDif(req.body.location)) {
-        console.log("user location updated")
-        user.lastLocation = req.body.location
-        return res.json({data: "true"})
-      } else {
-        console.log("user location not changed")
-        return res.json({data: "false"})
+      else {
+        console.log('no events yet')
+        return res.json(context)
       }
     })
-  })
   },
+  // setUserLoc: function(req, res) {
+  //   LastUser.find({}, function(err, last) {
+  //   User.findOne({_id :req.body.userId}, function(err, user) {
+  //     if(user == null) {
+  //       user = {};
+  //       user.lastLocation = 1;
+  //       return res.json({hi: 'hi'})
+  //     }
+  //     if(!user.lastLocation) {
+  //       user.lastLocation = req.body.location
+  //       user.save()
+  //       console.log("user location updated")
+  //       return res.json({data: "true"})
+  //     } 
+  //     if(last[0].id != user._id) {
+  //       last[0].updateLast(user._id)
+  //       console.log("not the last user!")
+  //       return res.json({data: "true"})
+  //     }
+  //     else if(user.calcDistanceDif(req.body.location)) {
+  //       console.log("user location updated")
+  //       user.lastLocation = req.body.location
+  //       return res.json({data: "true"})
+  //     } else {
+  //       console.log("user location not changed")
+  //       return res.json({data: "false"})
+  //     }
+  //   })
+  // })
+  // },
   getAllUsers: function(req, res) {
     User.find({}, function(err, users) { 
       if(err) {
@@ -709,6 +726,44 @@ module.exports = {
         } else {
           console.log('successfully removed past events!');
           return res.json(event)
+        }
+    })
+  },
+  lastUpdate: function(req, res){
+    User.findOne({_id: req.body.userId}, function(err, user) {
+        if(err) {
+          console.log(err)
+          console.log('last update could not find user');
+        } else {
+          console.log('user found for last update');
+          if(user == null) {
+            user = {};
+            user.lastLocation = 1;
+            return res.json({hi: 'hi'})
+          }
+          if(!user.lastLocation) {
+            user.lastLocation = req.body.location
+            user.save()
+            console.log("user location updated")
+            return res.json({data: "true"})
+          } 
+          else if(user.calcDistanceDif(req.body.location)) {
+            user.lastLocation = req.body.location
+            user.save()
+            console.log("user location has changed and is updated")
+            return res.json({data: "true"})
+          } 
+          if(user.lastUpdate == null) {
+            user.lastUpdate =  dateNow 
+            user.save()
+            return res.json({data: "true"})
+          } else if( dateNow.getTime() > (user.lastUpdate.getTime() + 3600000)) {
+            user.lastUpdate =  dateNow 
+            user.save()
+            return res.json({data: "true"})
+          } else {
+            return res.json({data: "false"})
+          }
         }
     })
   },

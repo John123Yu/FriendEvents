@@ -126,6 +126,10 @@ app.post('/updateDistance', function(req, res) {
   user.updateDistance(req, res)
 })
 
+app.post('/updateDistance2', function(req, res) {
+  user.updateDistance2(req, res)
+})
+
 app.post('/setUserLoc', function(req, res) {
   // console.log(JSON.stringify(req.headers['x-forwarded-proto']))
   user.setUserLoc(req, res)
@@ -153,5 +157,9 @@ app.post('/deletePast/', function(req, res) {
 
 app.post('/confirmEmail/', function(req, res) {
   user.confirmEmail(req, res)
+})
+
+app.post('/lastUpdate/', function(req, res) {
+  user.lastUpdate(req, res)
 })
 }
