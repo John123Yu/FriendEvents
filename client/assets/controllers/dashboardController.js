@@ -23,66 +23,64 @@ if(!$cookies.get('loginId')) {
     $scope.location.location = yourLocation;
     $scope.location.userId = loginId;
 
-    eventFriendsFactory.updateDistance2($scope.location, function(data) {
-      console.log(data) })
-
-    eventFriendsFactory.setUserLoc($scope.location, function(data) {
+    eventFriendsFactory.lastUpdate($scope.location, function(data) {
+      console.log(data.data.data)
       if(data.data.data == "true") {
-        eventFriendsFactory.updateDistance($scope.location, function(data) {
-          $scope.distanceSetting.userId = loginId
-          eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
-            $scope.allEvents = data.data
-             incrementI = function() {
-              i++;
-              $cookies.put('lastSeen', i-1)
-              if(i >= $scope.allEvents.length) {
-                alert('You have seen all the events! Did not find anything you like? Create your own event!')
-                i = 0;
-              }
-              $scope.distance = $scope.allEvents[i].distance
-              $scope.event = $scope.allEvents[i]
-               if(!$scope.event.Photo1.file.path) {
-                  $scope.photo1 = false;
+          eventFriendsFactory.updateDistance2($scope.location, function(data) {
+            $scope.distanceSetting.userId = loginId
+            eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
+              $scope.allEvents = data.data
+               incrementI = function() {
+                $cookies.put('lastSeen', i)
+                i++;
+                if(i >= $scope.allEvents.length) {
+                  alert('You have seen all the events! Did not find anything you like? Create your own event!')
+                  i = 0;
+                  $cookies.put('lastSeen', i)
                 }
-                if(!$scope.event.Photo2.file.path) {
-                  $scope.photo2 = false;
-                }
-                // $scope.eventAll = data.data
-                // checkCreater();
-             }
-             incrementI();
-          })
+                $scope.distance = $scope.allEvents[i].distance
+                $scope.event = $scope.allEvents[i]
+                 if(!$scope.event.Photo1.file.path) {
+                    $scope.photo1 = false;
+                  }
+                  if(!$scope.event.Photo2.file.path) {
+                    $scope.photo2 = false;
+                  }
+                  // $scope.eventAll = data.data
+                  // checkCreater();
+               }
+               incrementI();
+            })
+          });
 
-        });
-      } else { 
-        console.log("no distance update")
+      } else {
         $scope.distanceSetting.userId = loginId
-         eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
-            $scope.allEvents = data.data
-             incrementI = function() {
-              i++;
-              console.log(i)
-              $cookies.put('lastSeen', i-1)
-              if(i >= $scope.allEvents.length) {
-                alert('You have seen all the events! Did not find anything you like? Create your own event!')
-                i = 0;
-              }
-              $scope.distance = $scope.allEvents[i].distance
-              $scope.event = $scope.allEvents[i]
-              // console.log($scope.event.Photo1.file.path)
-               if(!$scope.event.Photo1.file.path == true) {
-                  $scope.photo1 = false;
+        eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
+              $scope.allEvents = data.data
+               incrementI = function() {
+                $cookies.put('lastSeen', i)
+                i++;
+                if(i >= $scope.allEvents.length) {
+                  alert('You have seen all the events! Did not find anything you like? Create your own event!')
+                  i = 0;
+                  $cookies.put('lastSeen', i-1)
                 }
-                if(!$scope.event.Photo2.file.path == true) {
-                  $scope.photo2 = false;
-                }
-                // $scope.eventAll = data.data
-                // checkCreater();
-             }
-             incrementI();
-          })
+                $scope.distance = $scope.allEvents[i].distance
+                $scope.event = $scope.allEvents[i]
+                 if(!$scope.event.Photo1.file.path) {
+                    $scope.photo1 = false;
+                  }
+                  if(!$scope.event.Photo2.file.path) {
+                    $scope.photo2 = false;
+                  }
+                  // $scope.eventAll = data.data
+                  // checkCreater();
+               }
+               incrementI();
+            })
+
       }
-    });
+    })
 
   if(!$cookies.get('lastSeen')) {
     var i = -1;
@@ -100,19 +98,11 @@ if(!$cookies.get('loginId')) {
   $scope.setDistance = function() {
     $cookies.put('distanceSetting', $scope.setting.distance)
     $scope.distanceSetting.distance = $scope.setting.distance
-    eventFriendsFactory.setUserLoc($scope.location, function(data) {
-      if(data.data.data == "true") {
         eventFriendsFactory.updateDistance($scope.location, function(data) {
            eventFriendsFactory.getEvents($scope.setting, function(data) {
             $scope.allEvents = data.data
           })
         })
-      } else {
-        eventFriendsFactory.getEvents($scope.setting, function(data) {
-            $scope.allEvents = data.data
-          })
-      }
-    })
   }
 
   checkCreater = function() {

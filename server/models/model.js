@@ -84,6 +84,7 @@ var userSchema = new mongoose.Schema({
   privateChats: [{type: Schema.Types.ObjectId, ref: 'Private'}],
   lastLocation: Object,
   lastOn: Date,
+  lastUpdate: Date,
   likes: [],
   likeCount: {type: Number, default: 0},
   admin: String,
@@ -197,7 +198,7 @@ var eventSchema = new mongoose.Schema({
   creater: [{type: Schema.Types.ObjectId, ref: 'User'}],
   hostName: String,
   distance: Number,
-  userDist: Schema.Types.Mixed
+  userDist4: []
    });
 
 eventSchema.plugin(thumbnailPlugin, {
@@ -220,23 +221,35 @@ eventSchema.plugin(thumbnailPlugin, {
     relative_to: uploads_base
 })
 
-eventSchema.methods.calcDistance = function(location) {
-  var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
-  this.distance = distanceCalc.dist(location, eventLocation)
-  this.save()
-}
+// eventSchema.methods.calcDistance = function(location) {
+//   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
+//   this.distance = distanceCalc.dist(location, eventLocation)
+//   this.save()
+// }
 eventSchema.methods.calcDistance2 = function(location, userId) {
   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
   var distance = distanceCalc.dist(location, eventLocation)
-  if(!this.userDist) {
-    this.userDist = {}
+  var mark = false;
+  function lookup( userId, arr) {
+    for(var i = 0; i < arr.length; i++) {
+       // console.log(arr[i])
+      if((arr[i])._id == userId )
+        arr[i].distance = distance
+        mark = true;
+    }
+    if(mark) {
+      return true
+    } else {
+      return false;
+    }
   }
-  // console.log(this.userDist)
-  if(!this.userDist[userId]){
-    this.userDist[userId] = distance
+  if(!lookup(userId, this.userDist4)) {
+    this.userDist4.push({
+      _id: userId,
+      distance: distance
+    });
   }
   this.save()
-  // console.log(this.userDist)
 }
 eventSchema.methods.pushId = function(id) {
   if (this.news.indexOf(id) > -1) {

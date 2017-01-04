@@ -157,4 +157,8 @@ app.post('/deletePast/', function(req, res) {
 app.post('/confirmEmail/', function(req, res) {
   user.confirmEmail(req, res)
 })
+
+app.post('/lastUpdate/', function(req, res) {
+  user.lastUpdate(req, res)
+})
 }
