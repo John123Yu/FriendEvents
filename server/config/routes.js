@@ -122,18 +122,18 @@ app.post('/getChatLists2/', function(req, res) {
   user.getChatLists2(req, res)
 })
 
-app.post('/updateDistance', function(req, res) {
-  user.updateDistance(req, res)
-})
+// app.post('/updateDistance', function(req, res) {
+//   user.updateDistance(req, res)
+// })
 
 app.post('/updateDistance2', function(req, res) {
   user.updateDistance2(req, res)
 })
 
-app.post('/setUserLoc', function(req, res) {
-  // console.log(JSON.stringify(req.headers['x-forwarded-proto']))
-  user.setUserLoc(req, res)
-})
+// app.post('/setUserLoc', function(req, res) {
+//   // console.log(JSON.stringify(req.headers['x-forwarded-proto']))
+//   user.setUserLoc(req, res)
+// })
 
 app.get('/getAllUsers', function(req, res) {
   user.getAllUsers(req, res)
