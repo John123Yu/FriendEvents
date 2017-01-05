@@ -1,4 +1,4 @@
-myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload ){
+myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
@@ -20,12 +20,6 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     eventFriendsFactory.getOneEvent($routeParams.id, function(data){
       $scope.eventInfo = data.data
       $scope.event = data.data
-      if(!data.data.Photo1.file.name) {
-                  $scope.photo1 = false;
-                }
-      if(!data.data.Photo2.file.name) {
-        $scope.photo2 = false;
-      }
       if($cookies.get('loginId') != $scope.eventInfo.creater[0]._id){
         $location.url('/')
       }
@@ -106,27 +100,38 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     }
     $location.url('/allEvents')
   }
-  $scope.uploadEventPic1 = function(file) {
-    file.upload = Upload.upload({
-      url: "/uploadEventPic1/",
-      data: {id: $routeParams.id, file: file},
-    });
-
-    file.upload.then(function (response) {
-      console.log(response)
-      $scope.check = response.data;
-    })
+  $scope.uploadEventPic1 = function(image) {
+    $scope.upload = Upload.upload({
+    url: '/uploadEventPic1',
+    method: 'POST',
+    data: {
+      file: image,
+      id: $routeParams.id
+    },
+    file: image
+  }).success(function(data, status, headers, config) {
+    console.log('event 1 photo uploaded')
+    $scope.check = data
+  }).error(function(err) {
+    console.log('event 1 photo upload failure')
+  });
   } 
-  $scope.uploadEventPic2 = function(file) {
-    file.upload = Upload.upload({
-      url: "/uploadEventPic2/",
-      data: {id: $routeParams.id, file: file},
-    });
 
-    file.upload.then(function (response) {
-      console.log(response)
-      $scope.check = response.data;
-    })
+  $scope.uploadEventPic2 = function(image) {
+    $scope.upload = Upload.upload({
+    url: '/uploadEventPic2',
+    method: 'POST',
+    data: {
+      file: image,
+      id: $routeParams.id
+    },
+    file: image
+  }).success(function(data, status, headers, config) {
+    console.log('event 2 photo uploaded')
+    $scope.check = data
+  }).error(function(err) {
+    console.log('event 2 photo upload failure')
+  });
   } 
 
 }])

@@ -14,16 +14,21 @@ myApp.controller('editUserController', ['$scope', 'eventFriendsFactory', '$locat
   $scope.photo1 = true;
 
 
-  $scope.uploadPic = function(file) {
-    file.upload = Upload.upload({
-      url: "/uploadPic/",
-      data: {id: loginId, file: file},
-    });
-
-    file.upload.then(function (response) {
-      console.log(response)
-      $scope.check = response.data;
-    })
+  $scope.uploadPic = function(image) {
+    $scope.upload = Upload.upload({
+    url: '/uploadPic',
+    method: 'POST',
+    data: {
+      file: image,
+      id: loginId
+    },
+    file: image
+  }).success(function(data, status, headers, config) {
+    console.log('user photo uploaded')
+    $scope.check = data
+  }).error(function(err) {
+    console.log('user photo upload failure')
+  });
   } 
 
   $scope.$watch('check', function(newValue, oldValue) {
@@ -38,7 +43,6 @@ myApp.controller('editUserController', ['$scope', 'eventFriendsFactory', '$locat
   $scope.editUser = function() {
     eventFriendsFactory.editUser(loginId, $scope.user, function(data) {
       $scope.check = data
-      console.log(data)
       $location.url('/user/' + data.config.data._id)
     })
   }

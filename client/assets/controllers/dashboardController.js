@@ -98,8 +98,9 @@ if(!$cookies.get('loginId')) {
   $scope.setDistance = function() {
     $cookies.put('distanceSetting', $scope.setting.distance)
     $scope.distanceSetting.distance = $scope.setting.distance
-        eventFriendsFactory.updateDistance($scope.location, function(data) {
-           eventFriendsFactory.getEvents($scope.setting, function(data) {
+    $scope.distanceSetting.userId = loginId
+        eventFriendsFactory.updateDistance2($scope.location, function(data) {
+           eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
             $scope.allEvents = data.data
           })
         })

@@ -107,7 +107,7 @@
     <br>
     <br>
     <br>
-    <img ng-show="photo1" src="{{eventInfo.Photo1.file.path}}" width="300"/>
+    <img ng-show="photo1" src="{{eventInfo.event1Url}}" width="300"/>
     <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
     <form ng-app="fileUpload" name="form">
       <br>
@@ -117,7 +117,7 @@
       <button type="submit" class = "btn btn-primary" ng-click="uploadEventPic1(picFile)">Upload Picture 1</button>
   </form>
   <br>
-   <img ng-show = "photo2" src="{{eventInfo.Photo2.file.path}}" width="300"/>
+   <img ng-show = "photo2" src="{{eventInfo.event2Url}}" width="300"/>
    <img ng-hide = "photo2" class = "photo" src="/Upload.png" width="50%">
     <form ng-app="fileUpload" name="form">
       <br>

@@ -6,15 +6,6 @@ var EarthRadius = 3961
 var distanceCalc = require('./distanceCalc.js');
 
 var mongoose = require('mongoose');
-var filePluginLib = require('mongoose-file');
-var filePlugin = filePluginLib.filePlugin;
-// var make_upload_to_model = filePluginLib.make_upload_to_model;
-
-var thumbnailPluginLib = require('mongoose-thumbnail');
-var thumbnailPlugin = thumbnailPluginLib.thumbnailPlugin;
-var make_upload_to_model = thumbnailPluginLib.make_upload_to_model;
-var uploads_base = path.join(__dirname, "uploads");
-var uploads = path.join(uploads_base, "u");
 
 var userSchema = new mongoose.Schema({
   firstName : {
@@ -83,14 +74,14 @@ var userSchema = new mongoose.Schema({
   posts: [{type: Schema.Types.ObjectId, ref: 'Posts'}],
   privateChats: [{type: Schema.Types.ObjectId, ref: 'Private'}],
   lastLocation: Object,
-  lastOn: Date,
   lastUpdate: Date,
   likes: [],
   likeCount: {type: Number, default: 0},
   admin: String,
   passcode:{type: String, default: "9382730"},
   confirm: String,
-  confirmPasscode: String
+  confirmPasscode: String,
+  userPicUrl: String
  });
 userSchema.methods.addLikes = function(id) {
   var likeExist = false;
@@ -136,16 +127,6 @@ userSchema.methods.calcDistanceDif = function(newLocation) {
     return true
   } else { return false}
 }
-
-userSchema.plugin(thumbnailPlugin, {
-    name: "Photo",
-    format: "png",
-    size: 80,
-    inline: false,
-    save: true,
-    upload_to: make_upload_to_model(uploads, 'photos'),
-    relative_to: uploads_base
-})
 
 mongoose.model('User', userSchema);
 
@@ -198,28 +179,10 @@ var eventSchema = new mongoose.Schema({
   creater: [{type: Schema.Types.ObjectId, ref: 'User'}],
   hostName: String,
   distance: Number,
-  userDist4: []
+  userDist4: [],
+  event1Url: String,
+  event2Url: String,
    });
-
-eventSchema.plugin(thumbnailPlugin, {
-    name: "Photo1",
-    format: "png",
-    size: 80,
-    inline: false,
-    save: true,
-    upload_to: make_upload_to_model(uploads, 'photos'),
-    relative_to: uploads_base
-})
-
-eventSchema.plugin(thumbnailPlugin, {
-    name: "Photo2",
-    format: "png",
-    size: 80,
-    inline: false,
-    save: true,
-    upload_to: make_upload_to_model(uploads, 'photos'),
-    relative_to: uploads_base
-})
 
 // eventSchema.methods.calcDistance = function(location) {
 //   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
@@ -232,12 +195,12 @@ eventSchema.methods.calcDistance2 = function(location, userId) {
   var mark = false;
   function lookup( userId, arr) {
     for(var i = 0; i < arr.length; i++) {
-       // console.log(arr[i])
-      if((arr[i])._id == userId )
+      if((arr[i])._id == userId ) {
         arr[i].distance = distance
-        mark = true;
+        mark = true; 
+      }
     }
-    if(mark) {
+    if(mark == true) {
       return true
     } else {
       return false;

@@ -17,8 +17,7 @@ var Posts = mongoose.model('Posts');
 var Private = mongoose.model('Private');
 
 var bcrypt = require('bcryptjs');
-
-
+ 
 mongoose.Promise = global.Promise;
 app.use(bp.urlencoded({ extended: true }));
 app.use(bp.json());

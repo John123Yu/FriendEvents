@@ -6,6 +6,8 @@ var Posts = mongoose.model('Posts');
 var Private = mongoose.model('Private');
 var LastUser = mongoose.model('LastUser');
 var multiparty = require('multiparty');
+var uuid = require('uuid');
+var s3 = require('s3fs');
 var fs = require('fs');
 var lastUser;
 var app = require('express')();
@@ -27,6 +29,18 @@ mailer.extend(app, {
     pass: 'P82ke57y'
   }
 });
+
+var s3Impl = new s3('friendevents', {
+    accessKeyId: 'AKIAJNYQVRBWC4DYMD3A',
+    secretAccessKey: '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'
+});
+
+// var s3Client = s3.createClient({
+//     key: 'AKIAJNYQVRBWC4DYMD3A',
+//     secret: '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',
+//     bucket: 'friendevents'
+//     // url: "http://s3.amazonaws.com/friendevents/"
+// });
 
 module.exports = {
 	create: function(req, res){
@@ -297,21 +311,23 @@ module.exports = {
     })
   },
   uploadPic: function(req, res) {
-    console.log(req.files)
     User.findOne({_id :req.body.id}, function(err, context) {
       if(err) {
         console.log(err)
       } else {
         console.log('got user for photo upload')
-        context.Photo = req.files
-        context.save(function(err, save) {
-          if(err) {
-            console.log(err)
-          } else {
-            console.log('saved image with uploads')
-            return res.json(context)
-          }
-        })
+        var file = req.files.file;
+        var stream = fs.createReadStream(file.path);
+        var extension = file.path.substring(file.path.lastIndexOf('.'));
+        var temp = uuid.v4()
+        var destPath = '/eventImage/' +  temp + extension;
+        var base = "https://s3.amazonaws.com/friendevents/";
+        context.userPicUrl = ('https://s3.amazonaws.com/friendevents/eventImage/' + temp + extension)
+        context.save()
+        return s3Impl.writeFile(destPath, stream, {ContentType: file.type}).then(function(one){
+            fs.unlink(file.path);
+            res.send(base + destPath); 
+        });
       }
     })
   },
@@ -320,16 +336,18 @@ module.exports = {
       if(err) {
         console.log(err)
       } else {
-        console.log('got event for photo1 upload')
-        context.Photo1 = req.files
-        context.save(function(err, save) {
-          if(err) {
-            console.log(err)
-          } else {
-            console.log('saved photo 1 with uploads')
-            return res.json(context)
-          }
-        })
+        var file = req.files.file;
+        var stream = fs.createReadStream(file.path);
+        var extension = file.path.substring(file.path.lastIndexOf('.'));
+        var temp = uuid.v4()
+        var destPath = '/eventImage/' +  temp + extension;
+        var base = "https://s3.amazonaws.com/friendevents/";
+        context.event1Url = ('https://s3.amazonaws.com/friendevents/eventImage/' + temp + extension)
+        context.save()
+        return s3Impl.writeFile(destPath, stream, {ContentType: file.type}).then(function(one){
+            fs.unlink(file.path);
+            res.send(base + destPath); 
+        });
       }
     })
   },
@@ -338,16 +356,18 @@ module.exports = {
       if(err) {
         console.log(err)
       } else {
-        console.log('got event for photo2 upload')
-        context.Photo2 = req.files
-        context.save(function(err, save) {
-          if(err) {
-            console.log(err)
-          } else {
-            console.log('saved photo 2 with uploads')
-            return res.json(context)
-          }
-        })
+        var file = req.files.file;
+        var stream = fs.createReadStream(file.path);
+        var extension = file.path.substring(file.path.lastIndexOf('.'));
+        var temp = uuid.v4()
+        var destPath = '/eventImage/' +  temp + extension;
+        var base = "https://s3.amazonaws.com/friendevents/";
+        context.event2Url = ('https://s3.amazonaws.com/friendevents/eventImage/' + temp + extension)
+        context.save()
+        return s3Impl.writeFile(destPath, stream, {ContentType: file.type}).then(function(one){
+            fs.unlink(file.path);
+            res.send(base + destPath); 
+        });
       }
     })
   },
@@ -561,21 +581,6 @@ module.exports = {
       }
     })
   },
-  // updateDistance: function(req,res) {
-  //   Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
-  //     if(context[0]) {
-  //       for(item in context) {
-  //         context[item].calcDistance(req.body.location)
-  //       }
-  //       console.log('success updating event distances')
-  //       return res.json(context)
-  //     }
-  //     else {
-  //       console.log('no events yet')
-  //       return res.json(context)
-  //     }
-  //   })
-  // },
   updateDistance2: function(req,res) {
     Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
       if(context[0]) {
@@ -605,36 +610,6 @@ module.exports = {
       }
     })
   },
-  // setUserLoc: function(req, res) {
-  //   LastUser.find({}, function(err, last) {
-  //   User.findOne({_id :req.body.userId}, function(err, user) {
-  //     if(user == null) {
-  //       user = {};
-  //       user.lastLocation = 1;
-  //       return res.json({hi: 'hi'})
-  //     }
-  //     if(!user.lastLocation) {
-  //       user.lastLocation = req.body.location
-  //       user.save()
-  //       console.log("user location updated")
-  //       return res.json({data: "true"})
-  //     } 
-  //     if(last[0].id != user._id) {
-  //       last[0].updateLast(user._id)
-  //       console.log("not the last user!")
-  //       return res.json({data: "true"})
-  //     }
-  //     else if(user.calcDistanceDif(req.body.location)) {
-  //       console.log("user location updated")
-  //       user.lastLocation = req.body.location
-  //       return res.json({data: "true"})
-  //     } else {
-  //       console.log("user location not changed")
-  //       return res.json({data: "false"})
-  //     }
-  //   })
-  // })
-  // },
   getAllUsers: function(req, res) {
     User.find({}, function(err, users) { 
       if(err) {
@@ -736,9 +711,12 @@ module.exports = {
           console.log('last update could not find user');
         } else {
           console.log('user found for last update');
+          // console.log(user.lastUpdate)
+          // console.log(dateNow)
           if(user == null) {
             user = {};
             user.lastLocation = 1;
+            console.log("user is null for last update")
             return res.json({hi: 'hi'})
           }
           if(!user.lastLocation) {
@@ -756,12 +734,15 @@ module.exports = {
           if(user.lastUpdate == null) {
             user.lastUpdate =  dateNow 
             user.save()
+            console.log("user lastupdate is null for lastupdate")
             return res.json({data: "true"})
           } else if( dateNow.getTime() > (user.lastUpdate.getTime() + 3600000)) {
             user.lastUpdate =  dateNow 
             user.save()
+            console.log("last update updated")
             return res.json({data: "true"})
           } else {
+            console.log('no last update')
             return res.json({data: "false"})
           }
         }

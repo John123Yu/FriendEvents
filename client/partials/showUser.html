@@ -15,12 +15,12 @@
       <div class = "container-fluid">
       <div class = "col-sm-4 col-sm-offset-1 col-xs-8 col-xs-offset-2">
         <!-- /Users/john123yu/Documents/MEAN/FriendEvents -->
-        <img ng-show = "photo1" src="{{user.Photo.file.path}}" style="width:100%"/>
+        <img ng-show = "photo1" src="{{user.userPicUrl}}" style="width:100%"/>
         <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
         <form ng-if="loginId == user._id"ng-app="fileUpload" width = "90%" name="form">
-          <input class = "" type="file" ngf-select ng-model="picFile" name="file"  width = "90%" accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
+          <input class = "btn-primary btn" type="file" ngf-select ng-model="picFile" name="file"  width = "90%" accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
           <br>
-          <button type="submit" class = "btn submit button btn-warning" ng-click="uploadPic(picFile)">submit</button>
+          <button type="submit" class = "btn submit button btn-primary" ng-click="uploadPic(picFile)">submit</button>
       </form>
       </div>
       <div class = "col-sm-7">
