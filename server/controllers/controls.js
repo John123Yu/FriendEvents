@@ -26,13 +26,13 @@ mailer.extend(app, {
   transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
   auth: {
     user: 'friendevents1@gmail.com',
-    pass: 'P82ke57y'
+    pass: ''
   }
 });
 
 var s3Impl = new s3('friendevents', {
-    accessKeyId: 'AKIAJNYQVRBWC4DYMD3A',
-    secretAccessKey: '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'
+    accessKeyId: '',
+    secretAccessKey: ''
 });
 
 module.exports = {
