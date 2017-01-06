@@ -48,14 +48,14 @@
     <div>
         <div class = "row">
         <div class = "col-sm-6">
-          <a ng-show= "photo1" href="#!/showEvent/{{event._id}}"><img class = "photo" src="{{event.event1Url}}" width="100%" /></a>
-          <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
+          <a href="#!/showEvent/{{event._id}}"><img class = "photo" src="{{event.event1Url}}" width="100%" /></a>
+<!--           <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%"> -->
           <br>
         </div>
         <div class = "col-sm-6">
-          <a ng-show= "photo2" href="#!/showEvent/{{event._id}}"><img class = "photo" src="{{event.event2Url}}" width="100%" /></a>
-          <img ng-hide = "photo2" class = "photo" src="/Upload.png" width="50%">
+          <a href="#!/showEvent/{{event._id}}"><img class = "photo" src="{{event.event2Url}}" width="100%" /></a>
           <br>
+        </div>
         </div>
         <div class = "row">
           <div class = "col-sm-6">
@@ -64,5 +64,5 @@
           <div class = "col-sm-6">
             <button ng-click = "passEvent()" class = "btn btn-danger">Pass!</button>
           </div>
-    </div>
+        </div>
 </div>

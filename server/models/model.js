@@ -144,6 +144,7 @@ var eventSchema = new mongoose.Schema({
   },
   date : {
     type: Date,
+    required: [true, 'Date is required'],
   },
   created_at: { type : Date, default: Date.now },
   streetAddress : {
@@ -164,7 +165,7 @@ var eventSchema = new mongoose.Schema({
   },
   participants: {
     type: Number,
-    required: [true, 'Number of participants is required']
+    required: [true, 'Participants is required']
   },
   category: {
     type: String,
@@ -179,7 +180,7 @@ var eventSchema = new mongoose.Schema({
   creater: [{type: Schema.Types.ObjectId, ref: 'User'}],
   hostName: String,
   distance: Number,
-  userDist4: [],
+  userDist5: [],
   event1Url: String,
   event2Url: String,
    });
@@ -197,21 +198,18 @@ eventSchema.methods.calcDistance2 = function(location, userId) {
     for(var i = 0; i < arr.length; i++) {
       if((arr[i])._id == userId ) {
         arr[i].distance = distance
-        mark = true; 
+        return true
       }
     }
-    if(mark == true) {
-      return true
-    } else {
-      return false;
-    }
+    return false
   }
-  if(!lookup(userId, this.userDist4)) {
-    this.userDist4.push({
+  if(!lookup(userId, this.userDist5)) {
+    this.userDist5.push({
       _id: userId,
       distance: distance
     });
   }
+  console.log(this.userDist5)
   this.save()
 }
 eventSchema.methods.pushId = function(id) {

@@ -8,13 +8,10 @@ if(!$cookies.get('loginId')) {
   $scope.check = 0;
   $scope.distance = [];
   var EarthRadius = 3961
-  $scope.photo1 = true;
-  $scope.photo2 = true;
 
   navigator.geolocation.getCurrentPosition(function (position) {
     $cookies.put('lat', position.coords.latitude)
     $cookies.put('lng', position.coords.longitude)
-
   });
 
 
@@ -38,14 +35,17 @@ if(!$cookies.get('loginId')) {
                   i = 0;
                   $cookies.put('lastSeen', i)
                 }
-                $scope.distance = $scope.allEvents[i].distance
                 $scope.event = $scope.allEvents[i]
-                 if(!$scope.event.Photo1.file.path) {
-                    $scope.photo1 = false;
-                  }
-                  if(!$scope.event.Photo2.file.path) {
-                    $scope.photo2 = false;
-                  }
+                $scope.lat = $scope.allEvents[i].lati
+                $scope.lng = $scope.allEvents[i].longi
+                var yourLocation = new Loc($cookies.get('lat'), $cookies.get('lng'))
+                var eventLocation = new Loc($scope.lat, $scope.lng)
+                $scope.distance = dist(yourLocation, eventLocation)
+                // for(var item in $scope.allEvents[i].userDist) {
+                //   if($scope.allEvents[i].userDist5[item]._id = loginId){
+                //     $scope.distance = $scope.allEvents[i].userDist5[item].distance
+                //   }
+                // }
                   // $scope.eventAll = data.data
                   // checkCreater();
                }
@@ -65,14 +65,14 @@ if(!$cookies.get('loginId')) {
                   i = 0;
                   $cookies.put('lastSeen', i-1)
                 }
-                $scope.distance = $scope.allEvents[i].distance
                 $scope.event = $scope.allEvents[i]
-                 if(!$scope.event.Photo1.file.path) {
-                    $scope.photo1 = false;
-                  }
-                  if(!$scope.event.Photo2.file.path) {
-                    $scope.photo2 = false;
-                  }
+                // console.log($scope.allEvents[i])
+                $scope.lat = $scope.allEvents[i].lati
+                $scope.lng = $scope.allEvents[i].longi
+                // console.log($scope.lng)
+                var yourLocation = new Loc($cookies.get('lat'), $cookies.get('lng'))
+                var eventLocation = new Loc($scope.lat, $scope.lng)
+                $scope.distance = dist(yourLocation, eventLocation)
                   // $scope.eventAll = data.data
                   // checkCreater();
                }
@@ -99,27 +99,35 @@ if(!$cookies.get('loginId')) {
     $cookies.put('distanceSetting', $scope.setting.distance)
     $scope.distanceSetting.distance = $scope.setting.distance
     $scope.distanceSetting.userId = loginId
+    eventFriendsFactory.lastUpdate($scope.location, function(data) {
+      console.log(data.data.data)
+      if(data.data.data == "true") {
         eventFriendsFactory.updateDistance2($scope.location, function(data) {
            eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
             $scope.allEvents = data.data
           })
-        })
-  } 
-
-
-  checkCreater = function() {
-    if($scope.eventAll[i].creater[0] == loginId) {
-        console.log('here')
-        i++
+        }) 
       } else {
-        return true
+         eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
+            $scope.allEvents = data.data
+          })
       }
-    if(i >= $scope.eventAll.length) {
-        // alert('You have seen all the events!')
-        i = 0;
-      }
-    checkCreater()
+  })
   }
+
+  // checkCreater = function() {
+  //   if($scope.eventAll[i].creater[0] == loginId) {
+  //       console.log('here')
+  //       i++
+  //     } else {
+  //       return true
+  //     }
+  //   if(i >= $scope.eventAll.length) {
+  //       // alert('You have seen all the events!')
+  //       i = 0;
+  //     }
+  //   checkCreater()
+  // }
 
   $scope.joinEvent = function() {
     alert('Event Joined!')

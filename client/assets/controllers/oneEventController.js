@@ -14,7 +14,6 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
   $scope.photo1 = true;
   $scope.photo2 = true;
 
-// AIzaSyCFloLP_K9qctz3vRmSUO_cI50axycTj4M
   $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm0JOLmIsxPEnstWSdXKz7bYkb4d1flRY"
   NgMap.getMap().then(function(map) {
   });

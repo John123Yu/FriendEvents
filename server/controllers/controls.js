@@ -35,13 +35,6 @@ var s3Impl = new s3('friendevents', {
     secretAccessKey: 'KeAhAwkm3kVLT446I8N2tcvcnCVgHXpit8zt5UvT'
 });
 
-// var s3Client = s3.createClient({
-//     key: 'AKIAJNYQVRBWC4DYMD3A',
-//     secret: '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',
-//     bucket: 'friendevents'
-//     // url: "http://s3.amazonaws.com/friendevents/"
-// });
-
 module.exports = {
 	create: function(req, res){
       var passcode = ("a" + Math.floor(Math.random() * 10))+ (Math.floor(Math.random() * 10)) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
@@ -100,9 +93,9 @@ module.exports = {
         return res.json({notConfirmed: "Not confirmed"})
       }
       if(context[0]) {
-        if(context[0].email == "friendevents1@gmail.com") {
-          context[0].addAdmin();
-        }
+        // if(context[0].email == "friendevents1@gmail.com") {
+        //   context[0].addAdmin();
+        // }
         console.log('success finding email')
         if(context[0].validPassword(req.body.passwordLogin)) {
           return res.json({_id:context[0]._id})
@@ -150,6 +143,7 @@ module.exports = {
   },
   addEvent: function(req, res){
       User.findOne({_id: req.body.creater}, function(err, user) { var event = new Event(req.body);
+        event.date = new Date(req.body.date)
       event.save(function(err, event) {
       if(err) {
         console.log('Error with registering new event');
@@ -201,7 +195,7 @@ module.exports = {
     })
   },
   editEvent: function(req, res){
-    Event.update({_id: req.params.id}, {title: req.body.title, description: req.body.description, date: req.body.date, participants: req.body.participants, category: req.body.category, streetAddress: req.body.streetAddress, city: req.body.city, state: req.body.state, zipcode: req.body.zipcode}, { runValidators: true }, function(err, event) {
+    Event.update({_id: req.params.id}, {title: req.body.title, description: req.body.description, date: new Date(req.body.date), participants: req.body.participants, category: req.body.category, streetAddress: req.body.streetAddress, city: req.body.city, state: req.body.state, zipcode: req.body.zipcode}, { runValidators: true }, function(err, event) {
         if(err) {
           console.log(err)
           console.log('something went wrong updating event');
@@ -598,8 +592,9 @@ module.exports = {
   },
   getEvents: function (req, res) {
     var userId = req.body.userId
+    console.log(userId)
     var distanceFrom = Number(req.body.distance)
-    Event.find({ userDist4 :{$elemMatch: {_id: userId, distance: {$lte: distanceFrom}}}, date: {$gte: dateNow}}, null, {sort: 'created_at'}).exec( function(err, context) {
+    Event.find({ userDist5 :{$elemMatch: {_id: userId, distance: {$lte: distanceFrom}}}, date: {$gte: dateNow}}, null, {sort: 'created_at'}).exec( function(err, context) {
       if(context[0]) {
         console.log('success getting events')
         return res.json(context)

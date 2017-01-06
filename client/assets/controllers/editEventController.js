@@ -20,6 +20,7 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     eventFriendsFactory.getOneEvent($routeParams.id, function(data){
       $scope.eventInfo = data.data
       $scope.event = data.data
+      $scope.event.date = new Date($scope.event.date)
       if($cookies.get('loginId') != $scope.eventInfo.creater[0]._id){
         $location.url('/')
       }
@@ -41,7 +42,6 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
       $scope.check = data
       if(data.data.n) {
         address= data.config.data.streetAddress + " " + data.config.data.city + " " + data.config.data.state + " " + data.config.data.zipcode 
-        console.log(address)
           $http.get('https://maps.google.com/maps/api/geocode/json?address=' + address + '&sensor=false').then(function(mapData) {
             $scope.latLon.lat = mapData.data.results[0].geometry.location.lat
             $scope.latLon.lon = mapData.data.results[0].geometry.location.lng
