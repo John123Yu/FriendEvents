@@ -26,19 +26,20 @@ mailer.extend(app, {
   transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
   auth: {
     user: 'friendevents1@gmail.com',
-    pass: ''
+    pass: 'P82ke57y'
   }
 });
 
 var s3Impl = new s3('friendevents', {
-    accessKeyId: '',
-    secretAccessKey: ''
+    accessKeyId: 'AKIAJNYQVRBWC4DYMD3A',
+    secretAccessKey: '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'
 });
 
 module.exports = {
 	create: function(req, res){
       var passcode = ("a" + Math.floor(Math.random() * 10))+ (Math.floor(Math.random() * 10)) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
       var user = new User(req.body);
+      console.log(req.body.birthday)
       if(user.email) {
         user.email = user.email.toLowerCase();
       }
@@ -498,6 +499,7 @@ module.exports = {
               console.log('Error with saving privatechat after saving post')
             } else {
               console.log('privatechat saved after saving post')
+              privateChat.popId(user._id)
               return res.json({he:"hi"})
             }
           })
@@ -700,6 +702,7 @@ module.exports = {
     })
   },
   lastUpdate: function(req, res){
+    dateNow = new Date()
     User.findOne({_id: req.body.userId}, function(err, user) {
         if(err) {
           console.log(err)
@@ -716,29 +719,34 @@ module.exports = {
           }
           if(!user.lastLocation) {
             user.lastLocation = req.body.location
+            user.lastUpdate = dateNow
             user.save()
             console.log("user location updated")
             return res.json({data: "true"})
           } 
           else if(user.calcDistanceDif(req.body.location)) {
             user.lastLocation = req.body.location
+            user.lastUpdate = dateNow
             user.save()
             console.log("user location has changed and is updated")
             return res.json({data: "true"})
           } 
           if(user.lastUpdate == null) {
             user.lastUpdate =  dateNow 
+            user.lastLocation = req.body.location
             user.save()
             console.log("user lastupdate is null for lastupdate")
             return res.json({data: "true"})
           } else if( dateNow.getTime() > (user.lastUpdate.getTime() + 3600000)) {
-            user.lastUpdate =  dateNow 
+            user.lastUpdate =  dateNow
+            user.lastLocation = req.body.location 
             user.save()
             console.log("last update updated")
             return res.json({data: "true"})
           } else {
+            console.log(dateNow.getTime()-user.lastUpdate.getTime())
             console.log('no last update')
-            return res.json({data: "false"})
+            return res.json({data: (dateNow.getTime()-user.lastUpdate.getTime())})
           }
         }
     })

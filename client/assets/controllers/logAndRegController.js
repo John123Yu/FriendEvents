@@ -1,9 +1,17 @@
+myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$rootScope', 'dateFilter', function ($scope, eventFriendsFactory, $location, $cookies, $rootScope, dateFilter ){
 
-myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location', '$cookies',  function ($scope, eventFriendsFactory, $location, $cookies ){
 
   $cookies.remove('loginId')
-  $cookies.put('distanceSetting', 25)
+  // $cookies.put('distanceSetting', 25)
   $scope.IPError = true;
+
+ // $('.birthdayDate').datepicker({
+ //      startDate: "01/01/1900",
+ //      endDate: "today",
+ //      startView: 2,
+ //      defaultViewDate: { year: 1985, month: 04, day: 25 },
+ //      format: "yyyy-MM-dd"
+ //    })
 
   navigator.geolocation.getCurrentPosition(function (position) {
     $cookies.put('lat', position.coords.latitude)
@@ -21,6 +29,9 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
             $scope.CPError = false
             $scope.confirmPasswordError = "Confirm password must match password"
           }
+          $scope.user.birthday = dateFilter($scope.user.birthday, "yyyy-MM-dd");
+          // $scope.user.birthday = new Date($scope.user.birthday);
+          console.log($scope.user)
           eventFriendsFactory.addUser($scope.user, function(data) {
             if(data.data.firstName) {
               $cookies.put('loginId', data.data._id)
@@ -51,7 +62,6 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
               $scope.passwordError = data.data.errors.password.message  
             }
           }); 
-
           $location.url('/login');
         }
 
@@ -77,6 +87,7 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
       else if(data.data._id) {
         console.log('login sent back')
         $cookies.put('loginId', data.data._id)
+        $rootScope.$emit("loggedIn", {});
         $location.url('/')
       }
     })

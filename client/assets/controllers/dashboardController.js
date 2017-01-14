@@ -20,6 +20,7 @@ if(!$cookies.get('loginId')) {
     $scope.location.location = yourLocation;
     $scope.location.userId = loginId;
 
+  if($cookies.get('loginId')) {
     eventFriendsFactory.lastUpdate($scope.location, function(data) {
       console.log(data.data.data)
       if(data.data.data == "true") {
@@ -81,6 +82,7 @@ if(!$cookies.get('loginId')) {
 
       }
     })
+  }
 
   if(!$cookies.get('lastSeen')) {
     var i = -1;
@@ -88,9 +90,10 @@ if(!$cookies.get('loginId')) {
     var i = $cookies.get('lastSeen');  
   }
   if(!$cookies.get('distanceSetting')){
-    $cookies.put('distanceSetting', 35)
+    $cookies.put('distanceSetting', 50)
   }
-  $scope.distanceSetting = {};
+
+  $scope.distanceSetting = {}
   $scope.distanceSetting.distance = $cookies.get('distanceSetting')
   $scope.event;
   $scope.allEvents;

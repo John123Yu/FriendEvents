@@ -1,4 +1,4 @@
-myApp.controller('privateChatController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval ){
+ myApp.controller('privateChatController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')

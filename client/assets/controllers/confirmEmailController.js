@@ -1,5 +1,5 @@
 
-myApp.controller('confirmEmailController', ['$scope', 'eventFriendsFactory', '$location', '$cookies',  function ($scope, eventFriendsFactory, $location, $cookies ){
+myApp.controller('confirmEmailController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$rootScope',  function ($scope, eventFriendsFactory, $location, $cookies, $rootScope ){
 
   $scope.confirmEmail = function() {
     $scope.passcodeError = true;
@@ -7,6 +7,7 @@ myApp.controller('confirmEmailController', ['$scope', 'eventFriendsFactory', '$l
       console.log(data)
       if(data.data.firstName) {
         $cookies.put('loginId', data.data._id)
+        $rootScope.$emit("loggedIn", {});
         $location.url('/')
       }
       if(data.data.null){
