@@ -30,11 +30,25 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getOneEvent($routeParams.id, function(data){
       $scope.eventInfo = data.data 
-      if(!data.data.Photo1.file.name) {
-        $scope.photo1 = false;
-                }
-      if(!data.data.Photo2.file.name) {
-        $scope.photo2 = false;
+      if(!$scope.eventInfo.fullAddress) {
+        $scope.eventInfo.fullAddress = $scope.eventInfo.streetAddress + ", " + $scope.eventInfo.city + " " +  $scope.eventInfo.state + ". " +  $scope.eventInfo.zipcode
+      }
+      console.log($scope.eventInfo = data.data)
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Concert") {
+        $scope.eventInfo.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/mrxd-j9-4ps-daniel-robert.jpg"
+        $scope.eventInfo.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/cushbgbdxc0-desi-mendoza.jpg"
+      }
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Sports") {
+        $scope.eventInfo.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ae4kypxwhr8-joshua-peacock.jpg"
+        $scope.eventInfo.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/m6owr3op4do-rob-bye.jpg"
+      }
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Performing-arts") {
+        $scope.eventInfo.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/xxa8ptuld1y-neal-kharawala.jpg"
+        $scope.eventInfo.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/7o3swrbqhws-ron-sartini.jpg"
+      }
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Community Event") {
+        $scope.eventInfo.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/poxhu0uedcg-aranxa-esteve.jpg"
+        $scope.eventInfo.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ds0zia5gzc4-nina-strehl.jpg"
       }
     })
   })
@@ -50,16 +64,3 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
   }
 
 }])
-// .directive('ngPlaceholder', function($document) {
-//   return {
-//     restrict: 'A',
-//     scope: {
-//       placeholder: '=ngPlaceholder'
-//     },
-//     link: function(scope, elem, attr) {
-//       scope.$watch('placeholder',function() {
-//         elem[0].placeholder = scope.placeholder;
-//       });
-//     }
-//   }
-// });

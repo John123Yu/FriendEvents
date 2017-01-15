@@ -1,32 +1,55 @@
-myApp.controller('chatListController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval ){
+myApp.controller('adminEventsController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
   }
+
   var loginId = $cookies.get('loginId')
   $scope.loginId = loginId
   $scope.check = 0;
   $scope.pass = {}
   $scope.notification = false;
 
+  eventFriendsFactory.getOneUser(loginId, function(data){
+          if(data.data.admin != "true") {
+            $location.url('/')
+          }
+  })
+
   $scope.$watch('check', function(newValue, oldValue) {
-    $scope.pass.id = loginId
-    eventFriendsFactory.getChatList($scope.pass, function(data){
-      $scope.chatList = data.data;
-      // console.log($scope.chatList)
-      // for(var i = 0; i < $scope.chatList.length; i++) {
-      //   if($scope.chatList[i].news[0] != loginId){
-      //     $scope.notification = true;
-      //   }
-      // }
+    eventFriendsFactory.getAllUsers(function(data){
+      $scope.allUsers = data.data;
     })
-    eventFriendsFactory.getChatList2($scope.pass, function(data){
-      $scope.chatList2 = data.data;
-    })
-    eventFriendsFactory.getUserEvents(loginId, function(data) {
-      $scope.user = data.data
+    eventFriendsFactory.getAllEvents(function(data){
+      $scope.allEvents = data.data;
     })
   })
 
+  $scope.deleteEvent = function(id) {
+    var deleteEvent= confirm("Are you sure you want to delete event?")
+    if(deleteEvent) {
+      eventFriendsFactory.removeEvent(id, function(data) {
+      $scope.check = Math.random();
+    })
+    }
+  }
+
+  $scope.deleteUser = function(id) {
+    var deleteFriend = confirm("Are you sure you want to delete user?")
+    if (deleteFriend) {
+      eventFriendsFactory.removeUser(id, function(data) {
+      $scope.check = Math.random();
+    })
+  }
+  }
+
+  $scope.deletePast = function() {
+    var deletePast = confirm("Are you sure you want to delete past events?")
+    if(deletePast) {
+      eventFriendsFactory.deletePast(function(data) {
+        $scope.check = data;
+      })
+    }
+  }
 
 }])

@@ -13,6 +13,9 @@
     <form>
       <label>Search: <input ng-model="searchText"></label>
     </form>
+    <form ng-submit = "getEventsAPI()">
+      <input type = "submit" value = "Predict HQ Events">
+    </form>
   </div>
 	<div class = "col-sm-6">
   	<table class = "table table-bordered">
@@ -31,9 +34,13 @@
           <tr>
             <th class = "info">All Events <button class = "btn btn-danger" ng-click = "deletePast()">Delete Past Events</button></th>
             <th class = "info"></th>
+            <th class = "info"></th>
+            <th class = "info"></th>
           </tr>
           <tr ng-repeat="event in allEvents | filter:searchText">
             <td><a href="#!/showEvent/{{event._id}}">{{event.title}} {{event.date | date:"short"}}</a></td>
+             <td><a class = "btn btn-warning" href="#!/event/{{event._id}}">Edit</a></td>
+             <td><button class = "btn btn-success" ng-click = "updateAddress(event)">UA</button></td>
             <td><button class = "btn btn-danger" ng-click = "deleteEvent(event._id)">Delete</button></td>
           </tr>
     </table>

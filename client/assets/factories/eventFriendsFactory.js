@@ -228,6 +228,18 @@
         callback(data)
       })
     }
+    factory.getEventsAPI = function( callback) {
+      $http.post('/getEventsAPI').then(function(data) {
+        console.log('got api events!')
+        callback(data)
+      })
+    }
+    factory.saveAddress = function(routeParams, callback) {
+      $http.post('/saveAddress', routeParams).then(function(data) {
+        console.log('saved address through coordinates!')
+        callback(data)
+      })
+    }
 
     return factory;
     }]);

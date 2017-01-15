@@ -1,6 +1,5 @@
 myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$rootScope', 'dateFilter', function ($scope, eventFriendsFactory, $location, $cookies, $rootScope, dateFilter ){
 
-
   $cookies.remove('loginId')
   // $cookies.put('distanceSetting', 25)
   $scope.IPError = true;

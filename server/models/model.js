@@ -139,7 +139,7 @@ var eventSchema = new mongoose.Schema({
   description : {
     type: String,
     required: [true, 'Description is required'],
-    maxlength: [800, 'Description must be less than 800 characters'],
+    // maxlength: [800, 'Description must be less than 800 characters'],
     trim: true
   },
   date : {
@@ -163,6 +163,9 @@ var eventSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Zipcode is required']
   },
+  fullAddress: {
+    type: String,
+  },
   participants: {
     type: Number,
     required: [true, 'Participants is required']
@@ -185,11 +188,6 @@ var eventSchema = new mongoose.Schema({
   event2Url: String,
    });
 
-// eventSchema.methods.calcDistance = function(location) {
-//   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
-//   this.distance = distanceCalc.dist(location, eventLocation)
-//   this.save()
-// }
 eventSchema.methods.calcDistance2 = function(location, userId) {
   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
   var distance = distanceCalc.dist(location, eventLocation)
@@ -232,6 +230,7 @@ eventSchema.methods.popId = function(id) {
   console.log('pop')
   console.log(this.news)
 }
+
 mongoose.model('Event', eventSchema);
 
 var userEventSchema = new mongoose.Schema({
@@ -291,14 +290,3 @@ lastUserSchema.methods.updateLast = function(id) {
 }
 mongoose.model('LastUser', lastUserSchema);
 
-// var userLikeSchema = new mongoose.Schema({
-//     id : String,
-//     _user: {type: Schema.Types.ObjectId, ref: 'User'},
-//     likes: [],
-//     likeCount: Number
-//  });
-// userLikeSchema.methods.likeCount = function(id) {
-//   this.likeCount = this.likes.length;
-//   this.save()
-// }
-// mongoose.model('UserLike', lastUserSchema);

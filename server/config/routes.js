@@ -156,4 +156,12 @@ app.post('/confirmEmail/', function(req, res) {
 app.post('/lastUpdate/', function(req, res) {
   user.lastUpdate(req, res)
 })
+
+app.post('/getEventsAPI/', function(req, res) {
+  user.getEventsAPI(req, res)
+})
+
+app.post('/saveAddress/', function(req, res) {
+  user.saveAddress(req, res)
+})
 }

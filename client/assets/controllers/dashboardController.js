@@ -37,6 +37,27 @@ if(!$cookies.get('loginId')) {
                   $cookies.put('lastSeen', i)
                 }
                 $scope.event = $scope.allEvents[i]
+                if(!$scope.event.fullAddress) {
+                  $scope.event.fullAddress = $scope.event.streetAddress + ", " + $scope.event.city + " " +  $scope.event.state + ". " +  $scope.event.zipcode
+                }
+                // $scope.url1 = $scope.event.event1Url
+                if(!$scope.event.event1Url && $scope.event.category == "Concert") {
+                  $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/mrxd-j9-4ps-daniel-robert.jpg"
+                  $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/cushbgbdxc0-desi-mendoza.jpg"
+                }
+                if(!$scope.event.event1Url && $scope.event.category == "Sports") {
+                  $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ae4kypxwhr8-joshua-peacock.jpg"
+                  $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/m6owr3op4do-rob-bye.jpg"
+                }
+                if(!$scope.event.event1Url && $scope.event.category == "Performing-arts") {
+                  $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/xxa8ptuld1y-neal-kharawala.jpg"
+                  $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/7o3swrbqhws-ron-sartini.jpg"
+                }
+                if(!$scope.event.event1Url && $scope.event.category == "Community Event") {
+                  $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/poxhu0uedcg-aranxa-esteve.jpg"
+                  $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ds0zia5gzc4-nina-strehl.jpg"
+                }
+
                 $scope.lat = $scope.allEvents[i].lati
                 $scope.lng = $scope.allEvents[i].longi
                 var yourLocation = new Loc($cookies.get('lat'), $cookies.get('lng'))
@@ -67,6 +88,27 @@ if(!$cookies.get('loginId')) {
                   $cookies.put('lastSeen', i-1)
                 }
                 $scope.event = $scope.allEvents[i]
+                if(!$scope.event.fullAddress) {
+                  $scope.event.fullAddress = $scope.event.streetAddress + ", " + $scope.event.city + " " +  $scope.event.state + ". " +  $scope.event.zipcode
+                }
+
+                if(!$scope.event.event1Url && $scope.event.category == "Concert") {
+                  $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/mrxd-j9-4ps-daniel-robert.jpg"
+                  $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/cushbgbdxc0-desi-mendoza.jpg"
+                }
+                if(!$scope.event.event1Url && $scope.event.category == "Sports") {
+                  $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ae4kypxwhr8-joshua-peacock.jpg"
+                  $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/m6owr3op4do-rob-bye.jpg"
+                }
+                if(!$scope.event.event1Url && $scope.event.category == "Performing-arts") {
+                  $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/xxa8ptuld1y-neal-kharawala.jpg"
+                  $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/7o3swrbqhws-ron-sartini.jpg"
+                }
+                if(!$scope.event.event1Url && $scope.event.category == "Community Event") {
+                  $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/poxhu0uedcg-aranxa-esteve.jpg"
+                  $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ds0zia5gzc4-nina-strehl.jpg"
+                }
+
                 // console.log($scope.allEvents[i])
                 $scope.lat = $scope.allEvents[i].lati
                 $scope.lng = $scope.allEvents[i].longi

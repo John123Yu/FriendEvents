@@ -16,6 +16,7 @@ myApp.controller('eventController', ['$scope', 'eventFriendsFactory', '$location
 
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getUserEvents(loginId, function(data) {
+      console.log(data.data.userEvents)
       $scope.user = data.data
       if(!data.data.Photo1) {
         $scope.photo1 = false;

@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css"></script>
     <script src="bootstrap/dist/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Annie+Use+Your+Telescope" rel="stylesheet">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="angular/angular.js"></script>
     <script src="angular-route/angular-route.js"></script>
@@ -19,8 +17,9 @@
     <script src="ng-file-upload/ng-file-upload.js"></script>
     <script src="/ngmap/build/scripts/ng-map.min.js"></script>
     <script src='//maps.googleapis.com/maps/api/js?key=AIzaSyCFloLP_K9qctz3vRmSUO_cI50axycTj4M'></script>
+    <script src="angular-reverse-geocode/dist/angular-reverse-geocode.min.js" charset="utf-8"></script>
     <script type="text/javascript">
-        var myApp = angular.module('myApp', ['ngRoute', 'ngCookies', 'ngFileUpload', 'ngMap']);
+        var myApp = angular.module('myApp', ['ngRoute', 'ngCookies', 'ngFileUpload', 'ngMap', 'AngularReverseGeocode']);
     </script>
     <script type="text/javascript" src = 'assets/factories/eventFriendsFactory.js'></script>
     <script type="text/javascript" src = 'assets/controllers/logAndRegController.js'></script>
@@ -90,10 +89,12 @@
 
 myApp.controller('indexController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval', '$rootScope', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval, $rootScope ){
 
+    // $scope.check = ""
+    // var loginId = $cookies.get('loginId')
+
     $rootScope.$on("loggedIn", function(){
         var loginId = $cookies.get('loginId')
         $scope.loginId = $cookies.get('loginId')
-        console.log("Heree")
         eventFriendsFactory.getOneUser(loginId, function(data){
           $scope.user = data.data
         })
@@ -163,11 +164,15 @@ myApp.controller('indexController', ['$scope', 'eventFriendsFactory', '$location
     h4 a {
         color: rgb(242, 109, 0);
     }
-    .datepicker table tr td.day {
-        color: black;
-    }
     .map {
         border: 2px solid rgb(188, 242, 255);
+    }
+    .Max {
+        width: 300px;
+    }
+    .distanceInput {
+        position: relative;
+        top: -2.5px;
     }
     table  tr th {
         text-align: center;

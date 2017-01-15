@@ -1,4 +1,4 @@
-myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload ){
+myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', 'reverseGeocode', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload, reverseGeocode ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
@@ -11,7 +11,9 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
   $scope.eventInfo = {};
   $scope.latLon = {}
   var address;
-  var EarthRadius = 3961
+  var EarthRadius = 3961  
+  var vm = this;
+  vm.formatted_address = "";
   $scope.photo1 = true;
   $scope.photo2 = true;
 
@@ -20,12 +22,25 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     eventFriendsFactory.getOneEvent($routeParams.id, function(data){
       $scope.eventInfo = data.data
       $scope.event = data.data
+      vm.lat = data.data.lati;
+      vm.lng = data.data.longi;
       $scope.event.date = new Date($scope.event.date)
-      if($cookies.get('loginId') != $scope.eventInfo.creater[0]._id){
+      if($cookies.get('loginId') != $scope.eventInfo.creater[0]._id && $scope.eventInfo.creater[0].admin != "true"){
         $location.url('/')
       }
     })
   })
+
+  $scope.getAddress = function() {
+    console.log('here')
+    reverseGeocode.geocodePosition(vm.lat, vm.lng, function(address){
+       vm.formatted_address = address;
+       $routeParams.address = vm.formatted_address
+       eventFriendsFactory.saveAddress($routeParams, function(data) {
+        scope.check = data.data
+      })       
+    });
+  }
 
   $scope.editEvent = function() {
     $scope.ETError = true
@@ -100,6 +115,13 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     }
     $location.url('/allEvents')
   }
+
+  // $scope.getAddress = function() {
+  //     eventFriendsFactory.getAddress($routeParams.id, function(data) {
+  //       scope.check = data.data
+  //     })
+  // }
+
   $scope.uploadEventPic1 = function(image) {
     $scope.upload = Upload.upload({
     url: '/uploadEventPic1',

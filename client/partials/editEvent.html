@@ -78,6 +78,7 @@
             <option>Commercial</option>
             <option>Celebration</option>
             <option>Company</option>
+            <option>Concert</option>
             <option>Dance</option>
             <option>Dating</option>
             <option>Entertainment</option>
@@ -127,6 +128,7 @@
       <button type="submit" class = "btn upload btn-primary" ng-click="uploadEventPic2(picFile)">Upload Picture 2</button>
   </form>
   </div>
+   <button ng-show="eventInfo.creater[0].admin == 'true'" class = "btn btn-warning" ng-click = "getAddress()">Get Address</button>
 
 </div>
 </div>
