@@ -66,7 +66,7 @@
     factory.removeEvent = function(id, callback){
       $http.delete('/removeEvent/' + id).then(function(data){
         console.log("success removing event");
-        callback(data);
+        callback("dummyData");
       })
     }
     factory.removeUser = function(id, callback){
@@ -161,12 +161,6 @@
       $http.post('/getChatLists2', userId).then(function(data) {
         console.log('got Chat Lists2')
         callback(data);
-      })
-    }
-    factory.updateDistance = function(location, callback) {
-      $http.post('/updateDistance', location).then(function(data) {
-        console.log('distance updated')
-        callback(data)
       })
     }
     factory.getAllUsers = function(callback) {

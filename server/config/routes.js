@@ -124,11 +124,6 @@ app.post('/getChatLists2/', function(req, res) {
   user.getChatLists2(req, res)
 })
 
-app.post('/updateDistance', function(req, res) {
-  user.updateDistance(req, res)
-})
-
-
 app.get('/getAllUsers', function(req, res) {
   user.getAllUsers(req, res)
 })

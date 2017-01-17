@@ -188,6 +188,7 @@ var eventSchema = new mongoose.Schema({
   event2Url: String,
    });
 
+//--------calcDistance2 checks if an object containing the userId and distance is already in the userDist5 array. If the object exists, function lookup updates the distance attribute of the object----If the object does not exist AND the distance between event and user is less than 100 miles, then a new object is created and pushed into the userDist5 array.------The 100 miles basically limits searches of events up to 100 miles away from user, BUT it reduces the size of the userDist5 array. For example, users in Philidelphia will not be pushed into the userDist5 array of an event from Miami.----//
 eventSchema.methods.calcDistance2 = function(location, userId) {
   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
   var distance = distanceCalc.dist(location, eventLocation)
@@ -201,13 +202,12 @@ eventSchema.methods.calcDistance2 = function(location, userId) {
     }
     return false
   }
-  if(!lookup(userId, this.userDist5)) {
+  if(!lookup(userId, this.userDist5) && distance < 100) {
     this.userDist5.push({
       _id: userId,
       distance: distance
     });
   }
-  console.log(this.userDist5)
   this.save()
 }
 eventSchema.methods.pushId = function(id) {

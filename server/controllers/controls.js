@@ -580,21 +580,6 @@ module.exports = {
       }
     })
   },
-  updateDistance: function(req,res) {
-    Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
-      if(context[0]) {
-        for(item in context) {
-          context[item].calcDistance2(req.body.location, req.body.userId)
-        }
-        console.log('success updating event distances')
-        return res.json(context)
-      }
-      else {
-        console.log('no events yet')
-        return res.json(context)
-      }
-    })
-  },
   getEvents: function (req, res) {
     var userId = req.body.userId
     console.log(userId)
@@ -710,7 +695,10 @@ module.exports = {
         }
     })
   },
+  //-----More about lastUpdate can be seen in dashboardController.js----//
+  //-----The current setup allows users to search for events based on distance between user and events. Each event has an array of objects. Each object is specific to one user and contains a userId and a distance. This way, every event knows how far it is from each user. This will be a problem further on when there becomes thousands(or millions?) of users. Every event will have a very large array in it. But this allows queries to be done quickly based on distance of events to user. A measure to alleviate this issue is to only push user information into an event's array if the user is less than 100 miles away from event. This code will need to be revisited and optimized. Please see model.js(calcDistance2)----//
   lastUpdate: function(req, res){
+    var updateDistances = false;
     dateNow = new Date()
     User.findOne({_id: req.body.userId}, function(err, user) {
         if(err) {
@@ -718,8 +706,6 @@ module.exports = {
           console.log('last update could not find user');
         } else {
           console.log('user found for last update');
-          // console.log(user.lastUpdate)
-          // console.log(dateNow)
           if(user == null) {
             user = {};
             user.lastLocation = 1;
@@ -731,31 +717,48 @@ module.exports = {
             user.lastUpdate = dateNow
             user.save()
             console.log("user location updated")
-            return res.json({data: "true"})
+            updateDistances = true;
           } 
+          //---calcDistanceDif determines if the user's location has changed by a mile since last use of website---//
           else if(user.calcDistanceDif(req.body.location)) {
             user.lastLocation = req.body.location
             user.lastUpdate = dateNow
             user.save()
             console.log("user location has changed and is updated")
-            return res.json({data: "true"})
+            updateDistances = true;
           } 
           if(user.lastUpdate == null) {
             user.lastUpdate =  dateNow 
             user.lastLocation = req.body.location
             user.save()
             console.log("user lastupdate is null for lastupdate")
-            return res.json({data: "true"})
-          } else if( dateNow.getTime() > (user.lastUpdate.getTime() + 0)) {
+            updateDistances = true
+          } else if( dateNow.getTime() > (user.lastUpdate.getTime() + 60000)) {
             user.lastUpdate =  dateNow
             user.lastLocation = req.body.location 
             user.save()
-            console.log("last update updated")
-            return res.json({data: "true"})
+            console.log("enough time has passed and last update updated")
+            updateDistances = true
+          } 
+          //----potential problem here...run time is N^2-----//
+          if(updateDistances) {
+            Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
+              if(context[0]) {
+                //---calcDistance2 creates or updates distance between user and events---- See model.js----//
+                for(item in context) {
+                  context[item].calcDistance2(req.body.location, req.body.userId)
+                }
+                console.log('success updating event distances')
+                return res.json(context)
+              }
+              else {
+                console.log('no events yet')
+                return res.json(context)
+              }
+            })
           } else {
-            console.log(dateNow.getTime()-user.lastUpdate.getTime())
-            console.log('no last update')
-            return res.json({data: (dateNow.getTime()-user.lastUpdate.getTime())})
+            console.log("No update of distances")
+            return res.json({data: "No update"})
           }
         }
     })

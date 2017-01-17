@@ -5,25 +5,14 @@ myApp.controller('eventController', ['$scope', 'eventFriendsFactory', '$location
   }
   var loginId = $cookies.get('loginId')
   $scope.loginId = loginId
-  $scope.check = 0;
   $scope.events;
   $scope.eventInfo = {};
   $scope.latLon = {}
   var address;
-  var EarthRadius = 3961
-  $scope.photo1 = true;
-  $scope.photo2 = true;
 
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getUserEvents(loginId, function(data) {
-      console.log(data.data.userEvents)
       $scope.user = data.data
-      if(!data.data.Photo1) {
-        $scope.photo1 = false;
-                }
-      if(!data.data.Photo2) {
-        $scope.photo2 = false;
-      }
     })
   })
 
@@ -41,12 +30,15 @@ myApp.controller('eventController', ['$scope', 'eventFriendsFactory', '$location
     eventFriendsFactory.addEvent($scope.event, function(data) {
       $scope.check = data
       if(!data.data.errors) {
+        //----The code here combines address components to make a full address. The full address is then sent to google geolocator API to obtain the coordinates of the address. This allows the distance between users and events to be later calculated and displayed in miles---------//
         address= data.data.streetAddress + " " + data.data.city + " " + data.data.state + " " + data.data.zipcode 
         $http.get('https://maps.google.com/maps/api/geocode/json?address=' + address + '&sensor=false').then(function(mapData) {
           $scope.latLon.lat = mapData.data.results[0].geometry.location.lat
           $scope.latLon.lon = mapData.data.results[0].geometry.location.lng
           $scope.latLon.id = data.data._id
+          eventFriendsFactory.latLon($scope.latLon)
           }).catch( function(response) {
+            //------If the address did not successfully get coordinates from the API, a toast message will be displayed-------//
             toaster.pop('error', "", 'The address you entered was not valid. Edit your address, otherwise your event will not show up in searches.');
           }) 
           toaster.pop('success', "", 'Your event has been created. Make sure to upload pictures next.');

@@ -31,17 +31,6 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     })
   })
 
-  $scope.getAddress = function() {
-    console.log('here')
-    reverseGeocode.geocodePosition(vm.lat, vm.lng, function(address){
-       vm.formatted_address = address;
-       $routeParams.address = vm.formatted_address
-       eventFriendsFactory.saveAddress($routeParams, function(data) {
-        scope.check = data.data
-      })       
-    });
-  }
-
   $scope.editEvent = function() {
     $scope.ETError = true
     $scope.EDError = true
@@ -52,11 +41,11 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
     $scope.ECError = true
     $scope.SError = true
     $scope.ZError = true
-    // $scope.event.date = new Date($scope.event.date)
     eventFriendsFactory.editEvent($routeParams.id, $scope.event, function(data){
       $scope.check = data
       if(data.data.n) {
         address= data.config.data.streetAddress + " " + data.config.data.city + " " + data.config.data.state + " " + data.config.data.zipcode 
+        //------checks if address entered is valid, if so, updates coordinates of event----//
           $http.get('https://maps.google.com/maps/api/geocode/json?address=' + address + '&sensor=false').then(function(mapData) {
             $scope.latLon.lat = mapData.data.results[0].geometry.location.lat
             $scope.latLon.lon = mapData.data.results[0].geometry.location.lng
@@ -106,21 +95,28 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
       }
     })
   }
-  $scope.removeEvent = function() {
-    var remove = confirm("are you sure you want to remove event?") 
+
+  $scope.removeEvent = function(e) {
+    e.preventDefault()
+    var remove = confirm("are you sure you want to remove event?")
     if (remove == true) {
       eventFriendsFactory.removeEvent($routeParams.id, function(data) {
-        scope.check = data.data
+      $location.url('/allEvents')
       })
     }
-    $location.url('/allEvents')
   }
 
-  // $scope.getAddress = function() {
-  //     eventFriendsFactory.getAddress($routeParams.id, function(data) {
-  //       scope.check = data.data
-  //     })
-  // }
+  //----This code here is for events gotten from API. API only gives coordinates. Coordinates are reverse geolocated to get event address ----//
+  $scope.getAddress = function(e) {
+    e.preventDefault()
+    reverseGeocode.geocodePosition(vm.lat, vm.lng, function(address){
+       vm.formatted_address = address;
+       $routeParams.address = vm.formatted_address
+       eventFriendsFactory.saveAddress($routeParams, function(data) {
+        scope.check = data.data
+      })       
+    });
+  }
 
   $scope.uploadEventPic1 = function(image) {
     $scope.upload = Upload.upload({
