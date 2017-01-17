@@ -1,4 +1,4 @@
-myApp.controller('dashboardController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams ){
+myApp.controller('dashboardController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', 'toaster',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, toaster ){
 
 if(!$cookies.get('loginId')) {
     $location.url('/login')
@@ -8,6 +8,10 @@ if(!$cookies.get('loginId')) {
   $scope.check = 0;
   $scope.distance = [];
   var EarthRadius = 3961
+
+  $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+  });
 
   navigator.geolocation.getCurrentPosition(function (position) {
     $cookies.put('lat', position.coords.latitude)
@@ -24,7 +28,8 @@ if(!$cookies.get('loginId')) {
     eventFriendsFactory.lastUpdate($scope.location, function(data) {
       console.log(data.data.data)
       if(data.data.data == "true") {
-          eventFriendsFactory.updateDistance2($scope.location, function(data) {
+        // the distance updates can be on the back end..
+          eventFriendsFactory.updateDistance($scope.location, function(data) {
             $scope.distanceSetting.userId = loginId
             eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
               $scope.allEvents = data.data
@@ -32,7 +37,7 @@ if(!$cookies.get('loginId')) {
                 $cookies.put('lastSeen', i)
                 i++;
                 if(i >= $scope.allEvents.length) {
-                  alert('You have seen all the events! Did not find anything you like? Create your own event!')
+                  toaster.pop('info', "", 'You have seen all the events. Did not find anything you like? Create your own event.');
                   i = 0;
                   $cookies.put('lastSeen', i)
                 }
@@ -63,13 +68,6 @@ if(!$cookies.get('loginId')) {
                 var yourLocation = new Loc($cookies.get('lat'), $cookies.get('lng'))
                 var eventLocation = new Loc($scope.lat, $scope.lng)
                 $scope.distance = dist(yourLocation, eventLocation)
-                // for(var item in $scope.allEvents[i].userDist) {
-                //   if($scope.allEvents[i].userDist5[item]._id = loginId){
-                //     $scope.distance = $scope.allEvents[i].userDist5[item].distance
-                //   }
-                // }
-                  // $scope.eventAll = data.data
-                  // checkCreater();
                }
                incrementI();
             })
@@ -83,7 +81,7 @@ if(!$cookies.get('loginId')) {
                 $cookies.put('lastSeen', i)
                 i++;
                 if(i >= $scope.allEvents.length) {
-                  alert('You have seen all the events! Did not find anything you like? Create your own event!')
+                  toaster.pop('info', "", 'You have seen all the events. Did not find anything you like? Create your own event.');
                   i = 0;
                   $cookies.put('lastSeen', i-1)
                 }
@@ -147,7 +145,7 @@ if(!$cookies.get('loginId')) {
     eventFriendsFactory.lastUpdate($scope.location, function(data) {
       console.log(data.data.data)
       if(data.data.data == "true") {
-        eventFriendsFactory.updateDistance2($scope.location, function(data) {
+        eventFriendsFactory.updateDistance($scope.location, function(data) {
            eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
             $scope.allEvents = data.data
           })
@@ -160,22 +158,8 @@ if(!$cookies.get('loginId')) {
   })
   }
 
-  // checkCreater = function() {
-  //   if($scope.eventAll[i].creater[0] == loginId) {
-  //       console.log('here')
-  //       i++
-  //     } else {
-  //       return true
-  //     }
-  //   if(i >= $scope.eventAll.length) {
-  //       // alert('You have seen all the events!')
-  //       i = 0;
-  //     }
-  //   checkCreater()
-  // }
-
   $scope.joinEvent = function() {
-    alert('Event Joined!')
+    toaster.pop('success', "", 'You have joined this event. Check "Your Events" for a list of all your events');
     $scope.event.joinerId = loginId
     eventFriendsFactory.joinEvent($scope.event, function(data) {
     }); 

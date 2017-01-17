@@ -1,8 +1,10 @@
-myApp.controller('adminUsersController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval', 'reverseGeocode', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval, reverseGeocode ){
+myApp.controller('adminUsersController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval', 'reverseGeocode','toaster', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval, reverseGeocode, toaster ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
   }
+
+
 
   var loginId = $cookies.get('loginId')
   $scope.loginId = loginId

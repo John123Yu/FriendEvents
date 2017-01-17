@@ -1,4 +1,4 @@
-myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', 'reverseGeocode', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload, reverseGeocode ){
+myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', 'reverseGeocode', 'toaster', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload, reverseGeocode, toaster ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
@@ -64,7 +64,7 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
             eventFriendsFactory.latLon($scope.latLon)
             $location.url('/showEvent/' + $routeParams.id)
             }).catch( function(response) {
-              alert("Address failed! Add a valid address while editing event. Otherwise your event will not show up in searches.")
+              toaster.pop('error', "", 'The address you entered was not valid. Edit your address, otherwise your event will not show up in searches.');
               $location.url('/event/' + $routeParams.id)
           })  
       }

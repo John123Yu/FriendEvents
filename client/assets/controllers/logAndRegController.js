@@ -1,4 +1,4 @@
-myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$rootScope', 'dateFilter', function ($scope, eventFriendsFactory, $location, $cookies, $rootScope, dateFilter ){
+myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$rootScope', 'dateFilter', 'toaster', function ($scope, eventFriendsFactory, $location, $cookies, $rootScope, dateFilter, toaster ){
 
   $cookies.remove('loginId')
   // $cookies.put('distanceSetting', 25)
@@ -34,6 +34,7 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
           eventFriendsFactory.addUser($scope.user, function(data) {
             if(data.data.firstName) {
               $cookies.put('loginId', data.data._id)
+              toaster.pop('info', "", 'Check your email for a passcode');
               $location.url('/confirmEmail')
             }
             if(data.data.errmsg) {
@@ -72,7 +73,7 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
       $scope.noEmailError = true;
       $scope.IPError = true;
       if(data.data.notConfirmed) {
-        alert('Check your email for passcode!')
+        toaster.pop('info', "", 'Check your email for a passcode');
         $location.url('/confirmEmail')
       }
       if(data.data.noEmail) {

@@ -1,4 +1,4 @@
-myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload ){
+myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', 'toaster', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload, toaster ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
@@ -58,7 +58,7 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
     eventFriendsFactory.joinEvent($scope.eventInfo, function(data) {
       if(data.data.already){
       } else {
-        alert("You've joined! Chat with other users!")
+        toaster.pop('success', "", "You've joined this event. Make sure to check out the group chat");
       }
     }); 
   }

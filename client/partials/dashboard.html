@@ -18,6 +18,8 @@
     color: black;
     /*margin-left: 0px;*/
   }
+  .toast {
+  }
 </style>
 <div ng-controller='dashboardController'>
       <div class = "container-fluid">
@@ -37,7 +39,7 @@
           <td>{{ event.date | date: 'short' }}</td>
           <td>{{ event.fullAddress }}</td>
           <td>{{ distance | number:0 }} miles</td>
-          <td class= "Max"><form class = "form-dorizontal distanceForm">
+          <td data-toggle="tooltip" title="Use this to change distance of events" class= "Max"><form class = "form-dorizontal distanceForm">
             <input type = "number" ng-model = "setting.distance" style="width:30%">
             <button ng-click = "setDistance()" class = "btn btn-primary distanceInput" >Set Max Distance</button>
           </form></td>

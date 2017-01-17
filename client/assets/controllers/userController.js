@@ -1,4 +1,4 @@
-myApp.controller('userController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', 'Upload', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, Upload){
+myApp.controller('userController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', 'Upload', 'toaster', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, Upload, toaster){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
@@ -86,7 +86,7 @@ myApp.controller('userController', ['$scope', 'eventFriendsFactory', '$location'
       })
     }
     else {
-      alert('Can"t chat yourself!')
+      toaster.pop('error', "", "You can't chat with yourself");
     }
   }
 

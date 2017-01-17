@@ -580,7 +580,7 @@ module.exports = {
       }
     })
   },
-  updateDistance2: function(req,res) {
+  updateDistance: function(req,res) {
     Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
       if(context[0]) {
         for(item in context) {
