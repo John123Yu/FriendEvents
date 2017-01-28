@@ -38,12 +38,14 @@ $scope.location.userId = loginId;
 
 
 //-----Code below searches for and gets events within desired distance----//
-//-----lastUpdate checks if the events in the database have been updated within a certain time (such as an hour), or if the postion of the user has changed by a mile. If either is true, the events are updated. The update resets how far the user is from each individual event. This way queries for events can be made by distance between user and events. More about lastUpdate can be seen in the back-end controller----------//
 if($cookies.get('loginId')) {
-  eventFriendsFactory.lastUpdate($scope.location, function(data) {
-    $scope.distanceSetting.userId = loginId
+    $scope.distanceSetting.latDif = ($cookies.get('distanceSetting') / 69)
+    $scope.distanceSetting.lonDif = $cookies.get('distanceSetting')  / (69 * Math.cos(toRad($cookies.get('lat')))) 
+    $scope.distanceSetting.lat = $cookies.get('lat')
+    $scope.distanceSetting.lng = $cookies.get('lng')
     eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
       $scope.allEvents = data.data
+      console.log(data.data)
       //------incrementI is how the user browses through events ------//
        incrementI = function() {
         $cookies.put('lastSeen', i)
@@ -54,6 +56,14 @@ if($cookies.get('loginId')) {
           $cookies.put('lastSeen', i)
         }
         $scope.event = $scope.allEvents[i]
+        $scope.lat = $scope.event.lati
+        $scope.lng = $scope.event.longi
+        var yourLocation = new Loc($cookies.get('lat'), $cookies.get('lng'))
+        var eventLocation = new Loc($scope.lat, $scope.lng)
+        $scope.distance = dist(yourLocation, eventLocation)
+        if(Math.floor($scope.distance) > Math.floor($cookies.get('distanceSetting'))) {
+          incrementI();
+        }
         if(!$scope.event.fullAddress) {
           $scope.event.fullAddress = $scope.event.streetAddress + ", " + $scope.event.city + " " +  $scope.event.state + ". " +  $scope.event.zipcode
         }
@@ -78,23 +88,18 @@ if($cookies.get('loginId')) {
           $scope.event.event1Url = "/festival6.jpg"
           $scope.event.event2Url = "/festival2.jpg"
         }
-
-        $scope.lat = $scope.allEvents[i].lati
-        $scope.lng = $scope.allEvents[i].longi
-        var yourLocation = new Loc($cookies.get('lat'), $cookies.get('lng'))
-        var eventLocation = new Loc($scope.lat, $scope.lng)
-        $scope.distance = dist(yourLocation, eventLocation)
        }
        incrementI();
     })
 
-  })
 }
 
 //-----allows user to change desired distance between events and user-----///
 $scope.setDistance = function() {
   $cookies.put('distanceSetting', $scope.setting.distance)
-  $scope.distanceSetting.distance = $scope.setting.distance
+  $scope.distanceSetting.latDif = ($scope.setting.distance / 69)
+  $scope.distanceSetting.lonDif = ($scope.setting.distance / (69 * Math.cos($cookies.get('lat')))) 
+  // Longitude: 1 deg = 111.320*cos(latitude) km
   $scope.distanceSetting.userId = loginId
   eventFriendsFactory.lastUpdate($scope.location, function(data) {
      eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {

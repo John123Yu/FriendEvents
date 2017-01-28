@@ -213,7 +213,7 @@ eventSchema.methods.calcDistance2 = function(location, userId) {
 mongoose.model('Event', eventSchema);
 
 var userEventSchema = new mongoose.Schema({
-  date: Date,
+  // date: Date,
   _event: {type: Schema.Types.ObjectId, ref: 'Event'},
   _user: {type: Schema.Types.ObjectId, ref: 'User'},
  });
