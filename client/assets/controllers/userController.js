@@ -34,6 +34,9 @@ myApp.controller('userController', ['$scope', 'eventFriendsFactory', '$location'
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getOneUser($routeParams.id, function(data){
       $scope.user = data.data
+      if(!$scope.user.userPicUrl) {
+        $scope.user.userPicUrl = '/dbx2nglsgn8-swaraj-tiwari.jpg'
+      }
       var birthdayDate = new Date(data.data.birthday)
       var ageMilli = (date - birthdayDate)
       var ageYear = Math.floor(ageMilli/(1000 * 60 * 60 * 24 * 365))
@@ -63,9 +66,6 @@ myApp.controller('userController', ['$scope', 'eventFriendsFactory', '$location'
         $scope.T1 = $scope.user.lie;
         $scope.T2 = $scope.user.truth2;
         $scope.T3 = $scope.user.truth1;
-      }
-      if(!data.data.Photo.file.name) {
-        $scope.photo1 = false;
       }
     })
   })

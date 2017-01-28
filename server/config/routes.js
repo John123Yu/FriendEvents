@@ -88,8 +88,8 @@ app.post('/gChatPosts/', function(req, res) {
   user.gChatPosts(req, res)
 })
 
-app.post('/newPost/', function(req, res) {
-  user.newPost(req, res)
+app.post('/postGroupChat/', function(req, res) {
+  user.postGroupChat(req, res)
 })
 
 app.post('/privateChat/', function(req, res) {

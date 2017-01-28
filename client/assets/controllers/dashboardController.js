@@ -59,21 +59,26 @@ if($cookies.get('loginId')) {
         }
         //------The code here is a bit verbose, but basically sets default images based on the category of the event. Since I'm pulling events from an API, many events do not have specific images. Not ideal, but saves time-----//
         if(!$scope.event.event1Url && $scope.event.category == "Concert") {
-          $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/mrxd-j9-4ps-daniel-robert.jpg"
-          $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/cushbgbdxc0-desi-mendoza.jpg"
+          $scope.event.event1Url = "/mrxd-j9-4ps-daniel-robert.jpg"
+          $scope.event.event2Url = "/cushbgbdxc0-desi-mendoza.jpg"
         }
         if(!$scope.event.event1Url && $scope.event.category == "Sports") {
-          $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ae4kypxwhr8-joshua-peacock.jpg"
-          $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/m6owr3op4do-rob-bye.jpg"
+          $scope.event.event2Url = "/basketball-hoop.jpg"
+          $scope.event.event1Url = "/old-soccer-ball.jpg"
         }
         if(!$scope.event.event1Url && $scope.event.category == "Performing-arts") {
-          $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/xxa8ptuld1y-neal-kharawala.jpg"
-          $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/7o3swrbqhws-ron-sartini.jpg"
+          $scope.event.event1Url = "/xxa8ptuld1y-neal-kharawala.jpg"
+          $scope.event.event2Url = "/theatre-seats.jpg"
         }
         if(!$scope.event.event1Url && $scope.event.category == "Community Event") {
-          $scope.event.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/poxhu0uedcg-aranxa-esteve.jpg"
-          $scope.event.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ds0zia5gzc4-nina-strehl.jpg"
+          $scope.event.event1Url = "/poxhu0uedcg-aranxa-esteve.jpg"
+          $scope.event.event2Url = "/ds0zia5gzc4-nina-strehl.jpg"
         }
+        if(!$scope.event.event1Url && $scope.event.category == "Festival") {
+          $scope.event.event1Url = "/festival6.jpg"
+          $scope.event.event2Url = "/festival2.jpg"
+        }
+
         $scope.lat = $scope.allEvents[i].lati
         $scope.lng = $scope.allEvents[i].longi
         var yourLocation = new Loc($cookies.get('lat'), $cookies.get('lng'))

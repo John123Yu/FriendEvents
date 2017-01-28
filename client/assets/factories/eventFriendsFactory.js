@@ -98,9 +98,9 @@
         callback(data);
       })
     }
-    factory.post = function(newpost, callback) {
-      $http.post('/newPost', newpost).then(function(data) {
-        console.log('post successful')
+    factory.postGroupChat = function(newpost, callback) {
+      $http.post('/postGroupChat', newpost).then(function(data) {
+        console.log('group chat post successful')
         callback(data)
       })
     }

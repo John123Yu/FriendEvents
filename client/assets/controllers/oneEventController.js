@@ -35,21 +35,25 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
       }
       console.log($scope.eventInfo = data.data)
       if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Concert") {
-        $scope.eventInfo.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/mrxd-j9-4ps-daniel-robert.jpg"
-        $scope.eventInfo.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/cushbgbdxc0-desi-mendoza.jpg"
+        $scope.eventInfo.event1Url = "/mrxd-j9-4ps-daniel-robert.jpg"
+        $scope.eventInfo.event2Url = "/cushbgbdxc0-desi-mendoza.jpg"
       }
       if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Sports") {
-        $scope.eventInfo.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ae4kypxwhr8-joshua-peacock.jpg"
-        $scope.eventInfo.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/m6owr3op4do-rob-bye.jpg"
+        $scope.eventInfo.event2Url = "/ae4kypxwhr8-joshua-peacock.jpg"
+        $scope.eventInfo.event1Url = "/m6owr3op4do-rob-bye.jpg"
       }
       if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Performing-arts") {
-        $scope.eventInfo.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/xxa8ptuld1y-neal-kharawala.jpg"
-        $scope.eventInfo.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/7o3swrbqhws-ron-sartini.jpg"
+        $scope.eventInfo.event1Url = "/xxa8ptuld1y-neal-kharawala.jpg"
+        $scope.eventInfo.event2Url = "/7o3swrbqhws-ron-sartini.jpg"
       }
       if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Community Event") {
-        $scope.eventInfo.event1Url = "https://s3.amazonaws.com/friendevents/eventImage/poxhu0uedcg-aranxa-esteve.jpg"
-        $scope.eventInfo.event2Url = "https://s3.amazonaws.com/friendevents/eventImage/ds0zia5gzc4-nina-strehl.jpg"
+        $scope.eventInfo.event1Url = "/poxhu0uedcg-aranxa-esteve.jpg"
+        $scope.eventInfo.event2Url = "/ds0zia5gzc4-nina-strehl.jpg"
       }
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Festival") {
+          $scope.eventInfo.event1Url = "/festival6.jpg"
+          $scope.eventInfo.event2Url = "/festival2.jpg"
+        }
     })
   })
 

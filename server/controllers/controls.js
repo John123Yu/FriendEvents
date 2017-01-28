@@ -4,12 +4,12 @@ var Event = mongoose.model('Event');
 var UserEvent = mongoose.model('UserEvent');
 var Posts = mongoose.model('Posts');
 var Private = mongoose.model('Private');
-var LastUser = mongoose.model('LastUser');
+var EventPosts = mongoose.model('EventPosts');
+var AllEvents = mongoose.model('AllEvents');
 var multiparty = require('multiparty');
 var uuid = require('uuid');
 var s3 = require('s3fs');
 var fs = require('fs');
-var lastUser;
 var app = require('express')();
 var mailer = require('express-mailer');
 var jade = require('jade');
@@ -146,15 +146,19 @@ module.exports = {
     })
   },
   addEvent: function(req, res){
-      User.findOne({_id: req.body.creater}, function(err, user) { var event = new Event(req.body);
-        event.date = new Date(req.body.date)
+    User.findOne({_id: req.body.creater}, function(err, user) { 
+      var event = new Event(req.body);
+      event.date = new Date(req.body.date)
       event.save(function(err, event) {
       if(err) {
         console.log('Error with registering new event');
         return res.json(err)
       } else {
         console.log('successfully registered a new event!');
-        // return res.json(context)
+        var eventPost = new EventPosts();
+        eventPost._event = event._id
+        eventPost.save()
+        event._eventPost = eventPost._id
         var userEvent = new UserEvent();
         userEvent._user = user._id;
         userEvent._event = event._id;
@@ -176,7 +180,7 @@ module.exports = {
                  if(err) {
                       console.log('Error with saving event with userevents');
                  } else {
-                      console.log("Event Saved with userEvent")
+                    console.log("Event Saved with userEvent")
                     return res.json(event)
                  }
             })
@@ -370,7 +374,7 @@ module.exports = {
     })
   },
   getEventPosts: function (req, res) {
-    Event.findOne({_id: req.params.id}, null, {sort: 'created_at'}).populate({path: 'posts', populate: {path: '_user'}}).exec( function(err, context) {
+    EventPosts.findOne({_event: req.params.id}, null, {sort: 'created_at'}).populate({path: 'posts'}).exec( function(err, context) {
       if(context) {
         console.log('success getting event posts')
         return res.json(context)
@@ -382,7 +386,7 @@ module.exports = {
     })
   },
   gChatPosts: function (req, res) {
-    Event.findOne({_id: req.body.eventId}, null, {sort: 'created_at'}).exec( function(err, context) {
+    EventPosts.findOne({_event: req.body.eventId}, null, {sort: 'created_at'}).exec( function(err, context) {
       if(context) {
         context.pushId(req.body.userId)
         console.log('success updating group notifications')
@@ -394,15 +398,18 @@ module.exports = {
       }
     })
   },
-  newPost: function (req, res) {
+  postGroupChat: function (req, res) {
     User.findOne({_id : req.body.userId}, function(err, user) {    
-      Event.findOne({_id : req.body.eventId}, function(err, event) {
+      EventPosts.findOne({_id : req.body.eventId}, function(err, event) {
+        console.log("hree")
+        console.log(event)
       if(event == null) {
         return res.json({gone: "event has been deleted"})
       }
       var post = new Posts({post: req.body.post})
       post._user = req.body.userId;
-      post._event= req.body.eventId;
+      post.userFullName = user.firstName + " " + user.lastName
+      post._eventPost = event._id;
       post.save(function(err) {
         if(err) {
           console.log(err)
@@ -461,7 +468,7 @@ module.exports = {
   })
   },
   getPrivatePosts: function (req, res) {
-    Private.findOne({_id: req.body.id}, null, {sort: 'created_at'}).populate({path: 'posts', populate: {path: '_user'}}).exec( function(err, context) {
+    Private.findOne({_id: req.body.id}, null, {sort: 'created_at'}).populate({path: 'posts'}).exec( function(err, context) {
       if(context == null) {
         return res.json({nothing: 'nothingdata'})
       }
@@ -487,6 +494,7 @@ module.exports = {
       }
       User.findOne({_id : req.body.userId}, function(err, user) { 
       var post = new Posts({post: req.body.post})
+      post.userFullName = user.firstName + " " + user.lastName
       post._private = privateChat._id;
       post._user = user._id;
       post.save(function(err) {
@@ -535,6 +543,7 @@ module.exports = {
       }
     })
   },
+  // do i need to populate user and friend?
   getChatLists: function (req, res) {
     Private.find({_user : req.body.id}, null, {sort: 'created_at'}).populate('_user').populate('_friend').exec( function(err, context) {
       if(context) {
@@ -582,7 +591,6 @@ module.exports = {
   },
   getEvents: function (req, res) {
     var userId = req.body.userId
-    console.log(userId)
     var distanceFrom = Number(req.body.distance)
     Event.find({ userDist5 :{$elemMatch: {_id: userId, distance: {$lte: distanceFrom}}}, date: {$gte: dateNow}}, null, {sort: 'date'}).exec( function(err, context) {
       if(context[0]) {
@@ -607,7 +615,7 @@ module.exports = {
     })
   },
   getAllEvents: function(req, res) {
-    Event.find({}, function(err, events) { 
+    Event.find({}, null, {sort: 'date'}).exec(function(err, events) { 
       if(err) {
         console.log(err)
         console.log('something went wrong find all events')
@@ -679,11 +687,24 @@ module.exports = {
     })
   },
   deletePast: function(req, res){
+    AllEvents.find({}, function(err, allEvents) {
+      allEvents[0].allEvents = []
+      allEvents[0].save();
+    })
+//     var id = 88;
+
+// for(var i = 0; i < data.length; i++) {
+//     if(data[i].id == id) {
+//         data.splice(i, 1);
+//         break;
+//     }
+// }
     Event.remove({}, function(err, event) {
         if(err) {
           console.log(err)
           console.log('something went wrong removing past events');
         } else {
+          console.log(event)
           console.log('successfully removed past events!');
           UserEvent.remove({})
           User.findOne({email:"friendevents1@gmail.com"}, function(err, user) {
@@ -775,14 +796,19 @@ module.exports = {
   }
   var newDate = dateNow.getFullYear() + "-" + dateMonth + "-" + dateNow.getDate()
 
+// var newAllEvents = new AllEvents();
+// newAllEvents.save();
+AllEvents.find({}, function(err, allEvents) {
+  // console.log(allEvents[0])
   User.findOne({email:"friendevents1@gmail.com"}, function(err, user) {
-    phq.events.search({ limit: 10, sort:'rank', within: '100km@38.9072,-77.0369',  'start.gte':newDate, rank_level:'3,4,5', category: ['observances', 'expos', 'festivals', 'community', 'performing-arts']  })
+    phq.events.search({ limit: 10, sort:'rank', within: '100km@38.9072,-77.0369',  'start.gte':newDate, rank_level:'3,4,5', category: ['expos', 'festivals', 'community', 'performing-arts']  })
       .then(function(results){
         console.log(results.result.count)
           var events = results.toArray()
           for(var i=0; i < events.length; i++) {
-            if(!EventNames.includes(events[i].title)) {
-              EventNames.push(events[i].title)
+            if(!allEvents[0].allEvents.includes(events[i].title)) {
+              allEvents[0].allEvents.push(events[i].title)
+              // allEvents[0].save();
               // console.info(events[i].rank, events[i].category, events[i].title, events[i].start, events[i].location[0])
               if(!events[i].description) {
                 events[i].description = "There is currently no description for this event."
@@ -803,11 +829,16 @@ module.exports = {
                 events[i].category = 'Performing-arts'
               }
               var newEvent = new Event({title:events[i].title, description:events[i].description, date: events[i].start, streetAddress:" ", city: " ", state: " ", zipcode: " ", category:events[i].category, lati:events[i].location[1], longi:events[i].location[0], participants:100, creater: user._id});
+              var eventPost = new EventPosts();
+              eventPost._event = newEvent._id
+              newEvent._eventPost = eventPost._id
+              eventPost.save()
               newEvent.save(function(err, event){
                 console.log(err)
               })
             }
           }
+      allEvents[0].save();
       }).catch(function (err) {
         console.log(err)
         console.log("Promise Rejected");
@@ -818,6 +849,9 @@ module.exports = {
         console.log(results.result.count)
           var events = results.toArray()
           for(var i=0; i < events.length; i++) {
+              if(!allEvents[0].allEvents.includes(events[i].title)) {
+              allEvents[0].allEvents.push(events[i].title)
+              // allEvents[0].save();
               console.info(events[i].rank, events[i].category, events[i].title, events[i].start, events[i].location)
               if(!events[i].description) {
                 events[i].description = "There is currently no description for this event."
@@ -829,18 +863,27 @@ module.exports = {
                 events[i].category = 'Concert'
               }
               var newEvent = new Event({title:events[i].title, description:events[i].description, date: events[i].start, streetAddress:" ", city: " ", state: " ", zipcode: " ", category:events[i].category, lati:events[i].location[1], longi:events[i].location[0], participants:100, creater: user._id});
+              var eventPost = new EventPosts();
+              eventPost._event = newEvent._id
+              newEvent._eventPost = eventPost._id
+              eventPost.save()
               newEvent.save(function(err, event){
                 console.log(err)
               })
+            }
           }
-          return res.json({data:"data"})
+      allEvents[0].save();
+      console.log(allEvents[0])
+      return res.json({data:"data"})
       }).catch(function (err) {
         console.log(err)
         console.log("Promise Rejected");
       })
-
+  // allEvents[0].save(function(err, allEventsSave) {
+  //   return res.json({data:"data"})
+  // });
   })
-
+})
   },
     saveAddress: function (req, res) {
       console.log(req.body)

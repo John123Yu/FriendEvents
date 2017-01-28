@@ -54,7 +54,7 @@ body {
  }
 img {
     margin-bottom: 2%;
-    border: 2px solid rgb(188, 242, 255);
+    box-shadow: 2px 2px black;
 }
 footer {
     height: 3em;
