@@ -16,7 +16,7 @@ var jade = require('jade');
 var dateNow = new Date();
 global.fetch = require('node-fetch') 
 var Client = require('predicthq')
-var phq = new Client.Client({access_token: "txCFLUg03pdR0TLHBAHziay5oszROu"})
+var phq = new Client.Client({access_token: "Eh0f8e0q1dcMTp6ZWQVNXire1bN7pV"})
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -695,14 +695,7 @@ module.exports = {
       allEvents[0].allEvents = []
       allEvents[0].save();
     })
-//     var id = 88;
 
-// for(var i = 0; i < data.length; i++) {
-//     if(data[i].id == id) {
-//         data.splice(i, 1);
-//         break;
-//     }
-// }
     Event.remove({}, function(err, event) {
         if(err) {
           console.log(err)
