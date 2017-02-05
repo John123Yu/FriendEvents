@@ -6,73 +6,86 @@
   .upload {
     margin-bottom: 5%;
   }
+  .col-sm-3 {
+    text-align: left;
+  }
+  .col-sm-8 {
+    margin-bottom: 5%;
+  }
 </style>
 <div ng-controller = "editEventController">
  <div class = "container-fluid">
- <div class = "col-sm-7">
+ <div class = "col-sm-8">
  <h1>Edit {{eventInfo.title}}</h1>
- <form  ng-submit = "editEvent()" class = "form-horizontal">
+ <form  name = "editEventForm" ng-submit = "editEvent()" class = "form-horizontal">
      <div class = "form-group">
         <label for = "title" class = "col-sm-2 control-label"> Event Title:</label>
-        <p ng-hide ="NPError">{{numberParticipantsError}}</p>
-        <p ng-hide ="ETError">{{eventTitleError}}</p>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <input type ='text' name ='title' id = "title" class = "form-control" ng-model = 'event.title'>
+        <div class = "col-sm-7 col-xs-10">
+          <input type ='text' name ='title' id = "title" class = "form-control" ng-model = 'event.title' required>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.title.$dirty && editEventForm.title.$invalid">Required Field.</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.title.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
         <label for = "description" class = "col-sm-2 control-label">Event Description:</label>
-        <p ng-hide ="EDError">{{eventDescriptionError}}</p>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <textarea class="form-control" rows="3" id = "description" ng-model = 'event.description' ></textarea>
+          <div class = "col-sm-7 col-xs-10">
+          <textarea name = "description" class="form-control" rows="3" id = "description" ng-model = 'event.description' required ng-maxlength="2000"></textarea>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.description.$dirty && editEventForm.description.$invalid">Required Field. Max Length 2000 Characters</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.description.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
         <label for = "street" class = "col-sm-2 control-label">Street:</label>
-        <p ng-hide ="SAError">{{streetAddressError}}</p>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <input type='street' name='street' id = "street" class = "form-control"  ng-model = 'event.streetAddress' >
+        <div class = "col-sm-7 col-xs-10">
+          <input type='street' name='street' id = "street" class = "form-control"  ng-model = 'event.streetAddress' required>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.street.$dirty && editEventForm.street.$invalid">Required Field.</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.street.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
         <label for = "city" class = "col-sm-2 control-label">City:</label>
-        <p ng-hide ="CError">{{cityError}}</p>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <input type='city' name='city' id = "city" class = "form-control"  ng-model = 'event.city'>
+        <div class = "col-sm-7 col-xs-10">
+          <input type='city' name='city' id = "city" class = "form-control"  ng-model = 'event.city' required>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.city.$dirty && editEventForm.city.$invalid">Required Field.</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.city.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
         <label for = "state" class = "col-sm-2 control-label">State:</label>
-        <p ng-hide ="SError">{{stateError}}</p>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <input type='state' name='state' id = "state" class = "form-control"  ng-model = 'event.state' >
+        <div class = "col-sm-7 col-xs-10">
+          <input type='state' name='state' id = "state" class = "form-control"  ng-model = 'event.state' required>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.state.$dirty && editEventForm.state.$invalid">Required Field.</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.state.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
         <label for = "zipcode" class = "col-sm-2 control-label">Zipcode:</label>
-        <p ng-hide ="ZError">{{zipcodeError}}</p>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <input type='zipcode' name='zipcode' id = "zipcode" class = "form-control"  ng-model = 'event.zipcode'>
+        <div class = "col-sm-7 col-xs-10">
+          <input type='zipcode' name='zipcode' id = "zipcode" class = "form-control"  ng-model = 'event.zipcode'required>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.zipcode.$dirty && editEventForm.zipcode.$invalid">Required Field.</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.zipcode.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
         <label for = "Participants" class = "col-sm-2 control-label">Number of Participants:</label>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <input type='number' name='Participants' id = "Participants" class = "form-control" ng-model = 'event.participants'>
+        <div class = "col-sm-7 col-xs-10">
+          <input type='number' name='Participants' id = "Participants" class = "form-control" ng-model = 'event.participants' required>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.Participants.$dirty && editEventForm.Participants.$invalid">Required Field.</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.Participants.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
         <label for = "date" class = "col-sm-2 control-label"> Event Date:</label>
-        <p ng-hide ="EDError">{{eventDateError}}</p>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <input type ='datetime-local' name ='date' id = "date" class = "form-control" ng-model = 'event.date'>
+        <div class = "col-sm-7 col-xs-10">
+          <input type ='datetime-local' name ='date' id = "date" class = "form-control" ng-model = 'event.date' required>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.date.$dirty && editEventForm.date.$invalid">Required Field.</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.date.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
         <label for = "category" class = "col-sm-2 control-label">Event Category:</label>
-        <p ng-hide ="ECError">{{eventCategoryError}}</p>
-        <div class = "col-sm-8 col-xs-10 col-xs-offset-1">
-          <select class = "form-control" id = "category" ng-model = "event.category">
+        <div class = "col-sm-7 col-xs-10">
+          <select class = "form-control" id = "category" ng-model = "event.category" required>
             <option>Arts</option>
             <option>Classes</option>
             <option>Commercial</option>
@@ -97,10 +110,12 @@
             <option>Tech</option>
           </select>
           <br>
-        <input type='submit' value='Update' class = "btn btn-primary last-btn">
+        <input type='submit' value='Update' class = "btn btn-primary last-btn" ng-disabled = "editEventForm.$invalid">
          <button ng-show="eventInfo.creater[0].admin == 'true'" class = "btn btn-warning" ng-click = "getAddress($event)">Get Address</button>
          <button class = "btn btn-danger" ng-click = "removeEvent($event)">Delete</button>
         </div>
+        <span class = "error col-sm-3" ng-show="editEventForm.category.$dirty && editEventForm.category.$invalid">Required Field.</span>
+        <span class="success col-sm-3 " ng-show="editEventForm.category.$valid">&#x2714;</span>
       </div>
     </form>
   </div>
@@ -109,22 +124,21 @@
     <br>
     <br>
     <br>
-    <img ng-show="photo1" src="{{eventInfo.event1Url}}" width="300"/>
-    <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
+    <br>
+    <img ng-show="photo1" src="{{eventInfo.event1Url}}" width = "100%" />
     <form ng-app="fileUpload" name="form">
       <br>
       <input class = "btn btn-primary" type="file" ngf-select ng-model="picFile" name="file" 
-      accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
+      accept="image/*" ngf-max-size="8MB" required ngf-model-invalid="errorFile">
       <br>
       <button type="submit" class = "btn btn-primary" ng-click="uploadEventPic1(picFile)">Upload Picture 1</button>
   </form>
   <br>
-   <img ng-show = "photo2" src="{{eventInfo.event2Url}}" width="300"/>
-   <img ng-hide = "photo2" class = "photo" src="/Upload.png" width="50%">
+   <img ng-show = "photo2" src="{{eventInfo.event2Url}}" width = "100%"/>
     <form ng-app="fileUpload" name="form">
       <br>
       <input class = "btn btn-primary" type="file" ngf-select ng-model="picFile" name="file" 
-      accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
+      accept="image/*" ngf-max-size="8MB" required ngf-model-invalid="errorFile">
       <br>
       <button type="submit" class = "btn upload btn-primary" ng-click="uploadEventPic2(picFile)">Upload Picture 2</button>
   </form>

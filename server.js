@@ -12,7 +12,8 @@ require('./server/config/mongoose.js');
 var Schema = mongoose.Schema;
 var User = mongoose.model('User');
 var Event = mongoose.model('Event');
-var UserEvent = mongoose.model('UserEvent');
+var UserEvents = mongoose.model('UserEvents');
+var EventUsers = mongoose.model('EventUsers');
 var Posts = mongoose.model('Posts');
 var Private = mongoose.model('Private');
 

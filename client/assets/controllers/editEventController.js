@@ -32,15 +32,6 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
   })
 
   $scope.editEvent = function() {
-    $scope.ETError = true
-    $scope.EDError = true
-    $scope.EDError = true
-    $scope.SArror = true
-    $scope.CError = true
-    $scope.NPError = true
-    $scope.ECError = true
-    $scope.SError = true
-    $scope.ZError = true
     eventFriendsFactory.editEvent($routeParams.id, $scope.event, function(data){
       $scope.check = data
       if(data.data.n) {
@@ -53,45 +44,9 @@ myApp.controller('editEventController', ['$scope', 'eventFriendsFactory', '$loca
             eventFriendsFactory.latLon($scope.latLon)
             $location.url('/showEvent/' + $routeParams.id)
             }).catch( function(response) {
-              toaster.pop('error', "", 'The address you entered was not valid. Edit your address, otherwise your event will not show up in searches.');
+              toaster.pop('warning', "", 'The address you entered was not valid. Edit your address, otherwise your event will not show up in searches.');
               $location.url('/event/' + $routeParams.id)
           })  
-      }
-      if(data.data.kind == "number") {
-        $scope.NPError = false
-        $scope.numberParticipantsError = "Field inputs required" 
-      }
-      if(data.data.errors.title) {
-        $scope.ETError = false
-        $scope.eventTitleError = data.data.errors.title.message  
-      }
-      if(data.data.errors.description) {
-        $scope.EDError = false
-        $scope.eventDescriptionError = data.data.errors.description.message  
-      }
-      if(data.data.errors.date) {
-        $scope.EDError = false
-        $scope.eventDateError = data.data.errors.date.message  
-      }
-      if(data.data.errors.streetAddress) {
-        $scope.SAError = false
-        $scope.streetAddressError = data.data.errors.streetAddress.message  
-      }
-      if(data.data.errors.city) {
-        $scope.CError = false
-        $scope.cityError = data.data.errors.city.message  
-      }
-      if(data.data.errors.state) {
-        $scope.SError = false
-        $scope.stateError = data.data.errors.state.message  
-      }
-      if(data.data.errors.zipcode) {
-        $scope.ZError = false
-        $scope.zipcodeError = data.data.errors.zipcode.message  
-      }
-      if(data.data.errors.category) {
-        $scope.ECError = false
-        $scope.eventCategoryError = data.data.errors.category.message  
       }
     })
   }

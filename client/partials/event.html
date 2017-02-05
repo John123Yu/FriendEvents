@@ -1,78 +1,88 @@
 <style type="text/css">
-  p {
-    color: red;
-    display: inline-block;
-  }
   .last-btn {
     margin-bottom: 10%;
+  }
+  h1 {
+    position: relative;
+    right: 12%;
+  }
+  .col-sm-4, .col-sm-1, .col-sm-3 {
+      text-align: left;
   }
 </style>
 <div ng-controller = "eventController">
 <!--   <toaster-container class= "toast" toaster-options="{'time-out': 5000}"></toaster-container> -->
  <div class = "container-fluid">
  <h1>Create Event</h1>
- <form  ng-submit = "addEvent()" class = "form-horizontal">
+ <form  name = "createEventForm" ng-submit = "addEvent()" class = "form-horizontal">
      <div class = "form-group">
-        <label for = "title" class = "col-sm-3 control-label"> Event Title:</label>
-        <p ng-hide ="ETError">{{eventTitleError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <input type ='text' name ='title' id = "title" class = "form-control" ng-model = 'event.title' placeholder = "Event Title">
+        <label for = "title" class = "col-sm-2 control-label">Event Title:</label>
+        <div class = "col-sm-6 col-xs-11 ">
+          <input type ='text' name ='title' id = "title" class = "form-control" ng-model = 'event.title' placeholder = "Event Title" required>
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.title.$dirty && createEventForm.title.$invalid">Required Field.</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.title.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
-        <label for = "description" class = "col-sm-3 control-label">Event Description:</label>
-        <p ng-hide ="EDError">{{eventDescriptionError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <textarea class="form-control" rows="3" id = "description" ng-model = 'event.description' placeholder = "Description"></textarea>
+        <label for = "description" class = "col-sm-2 control-label">Event Description:</label>
+        <div class = "col-sm-6 col-xs-11">
+          <textarea class="form-control" rows="3" name = "description" id = "description" ng-model = 'event.description' placeholder = "Description" ng-maxlength="2000" required></textarea>
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.description.$dirty && createEventForm.description.$invalid">Required Field. Max Length 2000 Characters</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.description.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
-        <label for = "date" class = "col-sm-3 control-label"> Event Date:</label>
-        <p ng-hide ="EDError">{{eventDateError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <input type ='datetime-local' name ='date' id = "date" class = "form-control" ng-model = 'event.date'>
+        <label for = "date" class = "col-sm-2 control-label"> Event Date:</label>
+        <div class = "col-sm-6 col-xs-11">
+          <input type ='datetime-local' name ='date' id = "date" class = "form-control" ng-model = 'event.date' required>
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.date.$dirty && createEventForm.date.$invalid">Required Field.</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.date.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
-        <label for = "StreetAddress" class = "col-sm-3 control-label"> Street Address:</label>
-        <p ng-hide ="SAError">{{streetAddressError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <input type='text' name='StreetAddress' id = "StreetAddress" class = "form-control" placeholder = "StreetAddress" ng-model = 'event.streetAddress'>
+        <label for = "StreetAddress" class = "col-sm-2 control-label"> Street Address:</label>
+        <div class = "col-sm-6 col-xs-11">
+          <input type='text' name='StreetAddress' id = "StreetAddress" class = "form-control" placeholder = "StreetAddress" ng-model = 'event.streetAddress' required>
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.StreetAddress.$dirty && createEventForm.StreetAddress.$invalid">Required Field.</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.StreetAddress.$valid">&#x2714;</span>
       </div>
        <div class = "form-group">
-        <label for = "city" class = "col-sm-3 control-label">City:</label>
-        <p ng-hide ="CError">{{cityError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <input type='text' name='city' id = "city" class = "form-control" placeholder = "city" ng-model = 'event.city'>
+        <label for = "city" class = "col-sm-2 control-label">City:</label>
+        <div class = "col-sm-6 col-xs-11">
+          <input type='text' name='city' id = "city" class = "form-control" placeholder = "city" ng-model = 'event.city' required>
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.city.$dirty && createEventForm.city.$invalid">Required Field.</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.city.$valid">&#x2714;</span>
       </div>
        <div class = "form-group">
-        <label for = "state" class = "col-sm-3 control-label">State:</label>
-        <p ng-hide ="SError">{{stateError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <input type='text' name='state' id = "state" class = "form-control" placeholder = "state" ng-model = 'event.state'>
+        <label for = "state" class = "col-sm-2 control-label">State:</label>
+        <div class = "col-sm-6 col-xs-11">
+          <input type='text' name='state' id = "state" class = "form-control" placeholder = "state" ng-model = 'event.state' required>
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.state.$dirty && createEventForm.state.$invalid">Required Field.</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.state.$valid">&#x2714;</span>
       </div>
        <div class = "form-group">
-        <label for = "zipcode" class = "col-sm-3 control-label">Zipcode:</label>
-        <p ng-hide ="ZError">{{zipcodeError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <input type='text' name='zipcode' id = "zipcode" class = "form-control" placeholder = "zipcode" ng-model = 'event.zipcode'>
+        <label for = "zipcode" class = "col-sm-2 control-label">Zipcode:</label>
+        <div class = "col-sm-6 col-xs-11">
+          <input type='text' name='zipcode' id = "zipcode" class = "form-control" placeholder = "zipcode" ng-model = 'event.zipcode' required>
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.zipcode.$dirty && createEventForm.zipcode.$invalid">Required Field.</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.zipcode.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
-        <label for = "Participants" class = "col-sm-3 control-label">Number of Participants:</label>
-        <p ng-hide ="NPError">{{numberParticipantsError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <input type='number' name='Participants' id = "Participants" class = "form-control" placeholder = "Participants" ng-model = 'event.participants'>
+        <label for = "Participants" class = "col-sm-2 control-label">Number of Participants:</label>
+        <div class = "col-sm-6 col-xs-11">
+          <input type='number' name='Participants' id = "Participants" class = "form-control" placeholder = "Participants" ng-model = 'event.participants' required>
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.Participants.$dirty && createEventForm.Participants.$invalid">Required Field.</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.Participants.$valid">&#x2714;</span>
       </div>
       <div class = "form-group">
-        <label for = "category" class = "col-sm-3 control-label">Event Category:</label>
-        <p ng-hide ="ECError">{{eventCategoryError}}</p>
-        <div class = "col-sm-6 col-xs-10 col-xs-offset-1">
-          <select class = "form-control" id = "category" ng-model = "event.category">
+        <label for = "category" class = "col-sm-2 control-label">Event Category:</label>
+        <div class = "col-sm-6 col-xs-11">
+          <select class = "form-control" name = "category" id = "category" ng-model = "event.category" required>
             <option>Arts</option>
             <option>Classes</option>
             <option>Commercial</option>
@@ -96,8 +106,10 @@
             <option>Tech</option>
           </select>
           <br>
-        <input type='submit' value='Create Event' class = "btn btn-primary last-btn">
+        <input type='submit' value='Create Event' class = "btn btn-primary last-btn" ng-disabled="createEventForm.$invalid">
         </div>
+        <span class = "error col-sm-4" ng-show="createEventForm.category.$dirty && createEventForm.category.$invalid">Required Field.</span>
+        <span class="success col-sm-4 " ng-show="createEventForm.category.$valid">&#x2714;</span>
       </div>
     </form>
 

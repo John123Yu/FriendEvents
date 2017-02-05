@@ -1,13 +1,14 @@
     <style>
     h1 {
       font-size: 3.3em;
+      position: relative;
+      right: 5%;
     }
     .btn {
       margin-top: 15px;
     }
-    p {
-      display: inline-block;
-      color: red;
+    .col-sm-4, .col-sm-1, .col-sm-3 {
+      text-align: left;
     }
     .login {
       margin-bottom: 5%;
@@ -16,51 +17,60 @@
 
     <h1>Welcome To FriendEvents</h1>
     <div ng-controller='loginController'>
-      <div class = "container">
+      <div class = "container-fluid">
         <div class = "col-sm-offset-1">
-        <form ng-submit = "addUser()" class = "form-horizontal">
+        <form name = 'regForm' ng-submit = "addUser()" class = "form-horizontal">
           <div class = "form-group">
             <label for ="first_name" class="col-sm-2 control-label">First Name:</label>
-            <p ng-hide ="FNError">{{firstNameError}}</p>
-            <div class = "col-sm-offset-0 col-sm-7 col-xs-10 col-xs-offset-1">
-              <input type='text' class = "form-control" name='first_name' id = "first_name" placeholder = "First Name" ng-model = 'user.firstName'> 
+            <div class = "col-sm-offset-0 col-sm-6 col-xs-10 col-xs-offset-1">
+              <input type='text' class = "form-control" name='first_name' id = "first_name" placeholder = "First Name" ng-model = 'user.firstName' ng-minlength="2" required> 
             </div>
+            <span class = "error col-sm-4" ng-show="regForm.first_name.$dirty && regForm.first_name.$invalid">Required Field. Minimum 2 characters.</span>
+            <span class="success col-sm-4 " ng-show="regForm.first_name.$valid">&#x2714;</span>
           </div>
           <div class = "form-group">
             <label for = "last_name" class = "col-sm-2 control-label">Last Name:</label>
-            <p ng-hide ="LNError">{{lastNameError}}</p>
-            <div class = "col-sm-offset-0 col-sm-7 col-xs-10 col-xs-offset-1">
-              <input type='text' name='last_name' class = "form-control" id = "last_name" placeholder = "Last Name" ng-model = 'user.lastName'>
+            <div class = "col-sm-offset-0 col-sm-6 col-xs-10 col-xs-offset-1">
+              <input type='text' name='last_name' class = "form-control" id = "last_name" placeholder = "Last Name" ng-model = 'user.lastName' ng-minlength="2" required>
             </div>
+            <span class = "error col-sm-4" ng-show="regForm.last_name.$dirty && regForm.last_name.$invalid">Required Field. Minimum 2 characters.</span>
+            <span class="success col-sm-4 " ng-show="regForm.last_name.$valid">&#x2714;</span>
           </div>
         <div class = "form-group">
           <label for = "email" class = "col-sm-2 control-label">Email:</label>
-          <p ng-hide ="EError">{{emailError}}</p>
-          <div class = "col-sm-offset-0 col-sm-7 col-xs-10 col-xs-offset-1">
-            <input type='text' name='email' class = "form-control" id = "email" placeholder = "Email" ng-model = 'user.email'>
+          <div class = "col-sm-offset-0 col-sm-6 col-xs-10 col-xs-offset-1">
+            <input type='email' name='email' class = "form-control" id = "email" placeholder = "Email" ng-model = 'user.email' required>
           </div>
+          <span class = "error col-sm-4" ng-show="regForm.email.$dirty && regForm.email.$error.required">Required Field.</span>
+          <span class = "error col-sm-4" ng-show="regForm.email.$error.email">
+        Not a valid email.</span>
+          <span class="success col-sm-4" ng-show="regForm.email.$valid && !emailError">&#x2714;</span>
+          <span class = "col-sm-4 error" ng-hide ="EError">{{emailError}}</span>
         </div>
         <div class = "form-group">
           <label for = "birthday" class = "col-sm-2 control-label">Birthday:</label>
-          <p ng-hide ="BError">{{birthdayError}}</p>
-          <div class = "col-sm-offset-0 col-sm-7 col-xs-10 col-xs-offset-1">
-            <input type='date' name='birthday' class = "birthdayDate form-control" id = "birthday" placeholder = "Birthday" ng-model = 'user.birthday'>
+          <div class = "col-sm-offset-0 col-sm-6 col-xs-10 col-xs-offset-1">
+            <input type='date' name='birthday' class = "birthdayDate form-control" id = "birthday" placeholder = "Birthday" ng-model = 'user.birthday' required>
           </div>
+          <span class = "error col-sm-4" ng-show="regForm.birthday.$dirty && regForm.birthday.$invalid">Required Field.</span>
+          <span class="success col-sm-4" ng-show="regForm.birthday.$valid">&#x2714;</span>
         </div>
         <div class = "form-group">
           <label for = "password" class = "col-sm-2 control-label">Password:</label>
-          <p ng-hide ="PError">{{passwordError}}</p>
-          <div class = "col-sm-offset-0 col-sm-7 col-xs-10 col-xs-offset-1">
-            <input type='password' name='password' class = "form-control" id = "password" placeholder = "Password" ng-model = 'user.password'>
+          <div class = "col-sm-offset-0 col-sm-6 col-xs-10 col-xs-offset-1">
+            <input type='password' name='password' class = "form-control" id = "password" placeholder = "Password" ng-model = 'user.password' ng-pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,32}/" required>
           </div>
+          <span class = "error col-sm-4" class="error" ng-show="regForm.password.$error.pattern && regForm.password.$dirty">Requires 1 uppercase, lowercase, number, and special character. 8-32 characters.</span>
+          <span class="success col-sm-4" ng-show="regForm.password.$valid">&#x2714;</span>
         </div>
         <div class = "form-group">
           <label for = "confirmpassword" class = "col-sm-2 control-label">Confirm Password:</label>
-          <p ng-hide ="CPError">{{confirmPasswordError}}</p>
-          <div class = "col-sm-offset-0 col-sm-7 col-xs-10 col-xs-offset-1">
-            <input type='password' name='confirm_password' class = "form-control" id = "confirmpassword"placeholder = "Password" ng-model = 'user.confirmPassword'>
-            <input type='submit' value='Create User' class = "btn btn-primary">
+          <div class = "col-sm-offset-0 col-sm-6 col-xs-10 col-xs-offset-1">
+            <input type='password' name='confirmPassword' class = "form-control" id = "confirmPassword" placeholder = "Password" ng-model = 'user.confirmPassword' compare-to="user.password" required>
+            <input type='submit' value='Create User' ng-disabled="regForm.$invalid" class = "btn btn-primary">
           </div>
+          <span class = "error col-sm-4" ng-show="regForm.confirmPassword.$dirty && regForm.confirmPassword.$invalid">Required Field. Must match password field.</span>
+         <span class="success col-sm-4" ng-show="regForm.confirmPassword.$valid">&#x2714;</span>
         </div>
         </form>
 
@@ -68,18 +78,18 @@
         <form  ng-submit = "login()" class = "form-horizontal">
           <div class = "form-group">
             <label for = "email" class = "col-sm-2 control-label">Email:</label>
-            <p ng-hide ="noEmailError">{{noEmail}}</p>
-            <div class = "col-sm-offset-0 col-sm-7 col-xs-10 col-xs-offset-1">
+            <div class = "col-sm-offset-0 col-sm-6 col-xs-10 col-xs-offset-1">
               <input type ='text' name ='email' id = "email" class = "form-control" placeholder = "Email" ng-model = 'user.emailLogin'>
             </div>
+            <span class = "col-sm-4 error" ng-hide ="noEmailError">{{noEmail}}</span>
           </div>
           <div class = "form-group">
             <label for = "password" class = "col-sm-2 control-label">Password:</label>
-            <a ng-hide ="IPError" href="#!/resetEmail">Forgot your password?</a>
-            <div class = "col-sm-offset-0 col-sm-7 col-xs-10 col-xs-offset-1">
+            <div class = "col-sm-offset-0 col-sm-6 col-xs-10 col-xs-offset-1">
               <input type='password' name='password' id = "password" class = "form-control" placeholder = "Password" ng-model = 'user.passwordLogin'>
               <input type='submit' value='Login' class = "btn login btn-primary last-btn">
             </div>
+            <a class = "col-sm-4" ng-hide ="IPError" href="#!/resetEmail">Forgot your password?</a>
           </div>
         </form>
       </div>

@@ -69,19 +69,15 @@ var userSchema = new mongoose.Schema({
   gender: {
     type: String
   },
-  userEvents: [{type: Schema.Types.ObjectId, ref: 'UserEvent'}],
-  // Photo: { data: },
-  posts: [{type: Schema.Types.ObjectId, ref: 'Posts'}],
-  privateChats: [{type: Schema.Types.ObjectId, ref: 'Private'}],
-  lastLocation: Object,
-  lastUpdate: Date,
+  // privateChats: [{type: Schema.Types.ObjectId, ref: 'Private'}],
   likes: [],
   likeCount: {type: Number, default: 0},
   admin: String,
   passcode:{type: String, default: "9382730"},
   confirm: String,
   confirmPasscode: String,
-  userPicUrl: String
+  userPicUrl: String,
+  userdestPath: String,
  });
 userSchema.methods.addLikes = function(id) {
   var likeExist = false;
@@ -118,16 +114,6 @@ userSchema.methods.addAdmin = function() {
   console.log('admin updated')
 }
 
-userSchema.methods.calcDistanceDif = function(newLocation) {
-  var distanceChange = distanceCalc.dist(newLocation, this.lastLocation)
-  if (distanceChange > 1) {
-    this.lastLocation = newLocation;
-    console.log(this.lastLocation)
-    this.save();
-    return true
-  } else { return false}
-}
-
 mongoose.model('User', userSchema);
 
 var eventSchema = new mongoose.Schema({
@@ -139,7 +125,7 @@ var eventSchema = new mongoose.Schema({
   description : {
     type: String,
     required: [true, 'Description is required'],
-    // maxlength: [800, 'Description must be less than 800 characters'],
+    maxlength: [2000, 'Description must be less than 2000 characters'],
     trim: true
   },
   date : {
@@ -176,48 +162,33 @@ var eventSchema = new mongoose.Schema({
   },
   lati: Number,
   longi: Number,
-  userEvents: [{type: Schema.Types.ObjectId, ref: 'UserEvent'}],
+  // userEvents: [{type: Schema.Types.ObjectId, ref: 'UserEvent'}],
   _eventPost: {type: Schema.Types.ObjectId, ref: 'EventPosts'},
   news: [],
   confirm: { type: String, default: "true" },
-  creater: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  creater: {type: Schema.Types.ObjectId, ref: 'User'},
   hostName: String,
-  distance: Number,
-  userDist5: [],
   event1Url: String,
+  event1destPath: String,
   event2Url: String,
+  event2destPath: String
    });
 
-eventSchema.methods.calcDistance2 = function(location, userId) {
-  var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
-  var distance = distanceCalc.dist(location, eventLocation)
-  var mark = false;
-  function lookup( userId, arr) {
-    for(var i = 0; i < arr.length; i++) {
-      if((arr[i])._id == userId ) {
-        arr[i].distance = distance
-        return true
-      }
-    }
-    return false
-  }
-  if(!lookup(userId, this.userDist5) && distance < 100) {
-    this.userDist5.push({
-      _id: userId,
-      distance: distance
-    });
-  }
-  this.save()
-}
 mongoose.model('Event', eventSchema);
 
-var userEventSchema = new mongoose.Schema({
+var userEventsSchema = new mongoose.Schema({
   date: Date,
-  _event: {type: Schema.Types.ObjectId, ref: 'Event'},
+  events: [{type: Schema.Types.ObjectId, ref: 'Event'}],
   _user: {type: Schema.Types.ObjectId, ref: 'User'},
  });
+mongoose.model('UserEvents', userEventsSchema);
 
-mongoose.model('UserEvent', userEventSchema);
+var eventUsersSchema = new mongoose.Schema({
+  date: Date,
+  _event: {type: Schema.Types.ObjectId, ref: 'Event'},
+  users: [{type: Schema.Types.ObjectId, ref: 'User'}],
+ });
+mongoose.model('EventUsers', eventUsersSchema);
 
 var postSchema = new mongoose.Schema({
   post: {
@@ -262,6 +233,7 @@ privateSchema.methods.popId = function(id) {
 mongoose.model('Private', privateSchema);
 
 var eventPostsSchema = new mongoose.Schema({
+  date: Date,
   created_at: { type : Date, default: Date.now },
   _event: {type: Schema.Types.ObjectId, ref: 'Event'},
   posts: [{type: Schema.Types.ObjectId, ref: 'Posts'}],

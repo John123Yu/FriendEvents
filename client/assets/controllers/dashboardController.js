@@ -97,15 +97,14 @@ if($cookies.get('loginId')) {
 //-----allows user to change desired distance between events and user-----///
 $scope.setDistance = function() {
   $cookies.put('distanceSetting', $scope.setting.distance)
+  $scope.distanceSetting.distance = $scope.setting.distance
   $scope.distanceSetting.latDif = ($scope.setting.distance / 69)
   $scope.distanceSetting.lonDif = ($scope.setting.distance / (69 * Math.cos($cookies.get('lat')))) 
   // Longitude: 1 deg = 111.320*cos(latitude) km
   $scope.distanceSetting.userId = loginId
-  eventFriendsFactory.lastUpdate($scope.location, function(data) {
      eventFriendsFactory.getEvents($scope.distanceSetting, function(data) {
       $scope.allEvents = data.data
     })
-  })
 }
 
 $scope.joinEvent = function() {

@@ -24,18 +24,18 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
           $scope.BError = true
           $scope.PError = true
           $scope.CPError = true
-          if($scope.user.password != $scope.user.confirmPassword) {
-            $scope.CPError = false
-            $scope.confirmPasswordError = "Confirm password must match password"
-          }
           $scope.user.birthday = dateFilter($scope.user.birthday, "yyyy-MM-dd");
-          // $scope.user.birthday = new Date($scope.user.birthday);
-          console.log($scope.user)
+          $scope.user.birthday = new Date($scope.user.birthday);
           eventFriendsFactory.addUser($scope.user, function(data) {
+            console.log(data)
             if(data.data.firstName) {
               $cookies.put('loginId', data.data._id)
               toaster.pop('info', "", 'Check your email for a passcode');
               $location.url('/confirmEmail')
+            }
+            if(data.data.error) {
+              $scope.CPError = false
+              $scope.confirmPasswordError = data.data.error
             }
             if(data.data.errmsg) {
               $scope.EError = false
@@ -95,4 +95,21 @@ myApp.controller('loginController', ['$scope', 'eventFriendsFactory', '$location
   }
 
 
-}])
+}]).directive("compareTo", function() {
+    return {
+        require: "ngModel",
+        scope: {
+            otherModelValue: "=compareTo"
+        },
+        link: function(scope, element, attributes, ngModel) {
+             
+            ngModel.$validators.compareTo = function(modelValue) {
+                return modelValue == scope.otherModelValue;
+            };
+ 
+            scope.$watch("otherModelValue", function() {
+                ngModel.$validate();
+            });
+        }
+    };
+});

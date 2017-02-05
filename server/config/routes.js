@@ -36,6 +36,10 @@ app.get('/getOneEvent/:id', function(req, res) {
   user.getOneEvent(req, res)
 })
 
+app.get('/getOneEventUsers/:id', function(req, res) {
+  user.getOneEventUsers(req, res)
+})
+
 app.post('/getEvents/', function(req, res) {
   user.getEvents(req, res)
 })

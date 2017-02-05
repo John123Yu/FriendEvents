@@ -24,7 +24,8 @@ myApp.controller('chatListController', ['$scope', 'eventFriendsFactory', '$locat
       $scope.chatList2 = data.data;
     })
     eventFriendsFactory.getUserEvents(loginId, function(data) {
-      $scope.user = data.data
+      $scope.userEvents = data.data
+      console.log($scope.userEvents)
     })
   })
 

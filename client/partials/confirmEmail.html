@@ -1,21 +1,22 @@
 <style type="text/css">
-  p {
-    color: red;
-    display: inline;
+  .error {
+      color: rgb(255, 56, 56);
+      /*font-size: 1em;*/
   }
 </style>
 <div ng-controller = "confirmEmailController">
   <div class = "container">
-  <form  ng-submit = "confirmEmail()" class = "form-horizontal">
+  <form  id = "confirmEmailForm" ng-submit = "confirmEmail()" class = "form-horizontal">
     <h2>Check your email for the passcode</h2>
+    <br>
     <div class = "form-group">
       <label for = "passcode" class = "col-sm-3 control-label">Confirm Passcode:</label>
-      <p ng-hide ="passcodeError">{{passcode}}</p>
-      <div class = "col-sm-7">
-        <input type ='text' name ='passcode' id = "passcode" class = "form-control" placeholder = "passcode" ng-model = 'user.passcode'>
+      <div class = "col-sm-6">
+        <input type ='text' name ='passcode' id = "passcode" class = "form-control" placeholder = "passcode" ng-model = 'user.passcode' required>
         <br>
         <input type='submit' value='Confirm Email' class = "btn btn-primary">
       </div>
+      <span class = "error col-sm-3" ng-hide ="passcodeError">{{passcode}}</span>
     </div>
   </form>
 </div>

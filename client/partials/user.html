@@ -11,7 +11,7 @@
     <img src="{{user.userPicUrl}}" style="width:100%"/>
     <form ng-app="fileUpload" name="form">
       <input class = "" type="file" ngf-select ng-model="picFile" name="file" 
-      accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
+      accept="image/*" ngf-max-size="8MB" required ngf-model-invalid="errorFile">
       <br>
       <button type="submit" class = "btn upload btn-primary" ng-click="uploadPic(picFile)">submit</button>
   </form>

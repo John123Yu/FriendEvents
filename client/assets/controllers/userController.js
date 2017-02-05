@@ -80,6 +80,7 @@ myApp.controller('userController', ['$scope', 'eventFriendsFactory', '$location'
           $location.url('/privateChat/' + data.data._id)
         } else {
           eventFriendsFactory.createPrivate($scope.privateChat, function(data) {
+            console.log(data.data)
             $location.url('/privateChat/' + data.data._id)
           })
         }
