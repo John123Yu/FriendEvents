@@ -19,6 +19,7 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
   });
 
   eventFriendsFactory.getOneEvent($routeParams.id, function(data){
+    console.log(data.data)
     $scope.eventInfo = data.data
     $scope.lat = data.data.lati
     $scope.lng = data.data.longi
@@ -27,13 +28,17 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
     $scope.distance = dist(yourLocation, eventLocation)
   })
 
+  eventFriendsFactory.getOneEventUsers($routeParams.id, function(data){
+    console.log(data.data)
+    $scope.interestedFriends = data.data
+  })
+
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getOneEvent($routeParams.id, function(data){
       $scope.eventInfo = data.data 
       if(!$scope.eventInfo.fullAddress) {
         $scope.eventInfo.fullAddress = $scope.eventInfo.streetAddress + ", " + $scope.eventInfo.city + " " +  $scope.eventInfo.state + ". " +  $scope.eventInfo.zipcode
       }
-      console.log($scope.eventInfo = data.data)
       if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Concert") {
         $scope.eventInfo.event1Url = "/mrxd-j9-4ps-daniel-robert.jpg"
         $scope.eventInfo.event2Url = "/cushbgbdxc0-desi-mendoza.jpg"
@@ -44,7 +49,7 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
       }
       if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Performing-arts") {
         $scope.eventInfo.event1Url = "/xxa8ptuld1y-neal-kharawala.jpg"
-        $scope.eventInfo.event2Url = "/7o3swrbqhws-ron-sartini.jpg"
+        $scope.eventInfo.event2Url = "/theatre-seats.jpg"
       }
       if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Community Event") {
         $scope.eventInfo.event1Url = "/poxhu0uedcg-aranxa-esteve.jpg"

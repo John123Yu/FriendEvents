@@ -15,44 +15,49 @@ body {
 </style>
 <div ng-controller = "resetEmailController">
   <div class = "container">
-  <form  ng-submit = "resetPassword()" class = "form-horizontal">
+  <form  name = "resetPasswordForm" ng-submit = "resetPassword()" class = "form-horizontal">
   <h2>Reset Password</h2>
     <div class = "form-group">
       <label for = "email" class = "col-sm-2 control-label">Enter Your Email:</label>
-      <p ng-hide ="noEmailError">{{noEmail}}</p>
       <div class = "col-sm-6">
-        <input type ='text' name ='email' id = "email" class = "form-control" placeholder = "Email" ng-model = 'user.email'>
+        <input type ='email' name ='email' id = "email" class = "form-control" placeholder = "Email" ng-model = 'user.email' required>
         <br>
         <input type='submit' value='Send' class = "btn btn-primary last-btn">
         <br>
-        <p class = "orange" ng-hide ="passcodeMessage">{{passcodeMessageMessage}}</p>
       </div>
+        <span class = "orange col-sm-4" ng-hide ="passcodeMessage && !noEmailError">{{passcodeMessageMessage}}</span>
+        <span class = "error col-sm-4" ng-show="resetPasswordForm.email.$dirty && resetPasswordForm.email.$error.required">Required Field.</span>
+        <span class = "error col-sm-4" ng-show="resetPasswordForm.email.$error.email">Not a valid email</span>
+         <span class = "col-sm-4" ng-hide ="noEmailError && !passcodeMessageMessage">{{noEmail}}</span>
     </div>
   </form>
 
-  <form  ng-submit = "finalReset()" class = "form-horizontal">
+  <form  name = "finalResetForm" ng-submit = "finalReset()" class = "form-horizontal">
     <div class = "form-group">
       <label for = "passcode" class = "col-sm-2 control-label">Temporary Passcode:</label>
-      <p ng-hide ="passcodeError">{{passcode}}</p>
       <div class = "col-sm-6">
-        <input type ='text' name ='passcode' id = "passcode" class = "form-control" placeholder = "passcode" ng-model = 'user.passcode'>
+        <input type ='text' name ='passcode' id = "passcode" class = "form-control" placeholder = "passcode" ng-model = 'user.passcode' required>
       </div>
+      <span class = "error col-sm-4" ng-hide ="passcodeError">{{passcode}}</span>
     </div>
     <div class = "form-group">
       <label for = "password" class = "col-sm-2 control-label">New Password:</label>
-      <p ng-hide ="PError">{{passwordError}}</p>
       <div class = "col-sm-6">
-        <input type='password' name='password' id = "password" class = "form-control" placeholder = "Password" ng-model = 'user.password'>
+        <input type='password' name='password' id = "password" class = "form-control" placeholder = "Password" ng-model = 'user.password'  ng-pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,32}/" required>
       </div>
+      <span class = "error col-sm-4" ng-show="finalResetForm.password.$error.pattern && finalResetForm.password.$dirty">Requires 1 uppercase, lowercase, number, and special character. 8-32 characters.</span>
+      <span class="success col-sm-4" ng-show="finalResetForm.password.$valid">&#x2714;</span>
     </div>
     <div class = "form-group">
       <label for = "confirmPassword" class = "col-sm-2 control-label">Confirm Password:</label>
       <p ng-hide ="CPError">{{confirmPasswordError}}</p>
       <div class = "col-sm-6">
-        <input type='password' name='confirmPassword' id = "confirmPassword" class = "form-control" placeholder = "Password" ng-model = 'user.confirmPassword'>
+        <input type='password' name='confirmPassword' id = "confirmPassword" class = "form-control" placeholder = "Password" ng-model = 'user.confirmPassword' compare-to="user.password" required>
         <br>
-        <input type='submit' value='Reset and Login' class = "btn btn-primary last-btn">
+        <input type='submit' value='Reset and Login' class = "btn btn-primary last-btn" ng-disabled="finalResetForm.$invalid">
       </div>
+      <span class = "error col-sm-4" ng-show="finalResetForm.confirmPassword.$dirty && finalResetForm.confirmPassword.$invalid">Required Field. Must match password field.</span>
+         <span class="success col-sm-4" ng-show="finalResetForm.confirmPassword.$valid">&#x2714;</span>
     </div>
   </form>
 </div>

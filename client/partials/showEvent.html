@@ -39,7 +39,7 @@
           <th>Distance</th>
         </tr>
         <tr class = "thin">
-          <td><a class = "btn btn-warning host" href="#!/user/{{eventInfo.creater[0]._id}}">{{eventInfo.creater[0].firstName}} {{eventInfo.creater[0].lastName}}</a></td>
+          <td><a class = "btn btn-warning host" href="#!/user/{{eventInfo.creater._id}}">{{eventInfo.creater.firstName}} {{eventInfo.creater.lastName}}</a></td>
           <td>{{eventInfo.date | date:'short'}}</td>
           <td>{{eventInfo.fullAddress}}</td>
           <td>{{eventInfo.category}}</td>
@@ -64,8 +64,8 @@
         <tr class = "">
           <th class = "info">Interested Friends</th>
         </tr>
-        <tr class = "" ng-repeat= "userEvent in eventInfo.userEvents">
-          <td><a class = "" href="#!/user/{{userEvent._user._id}}">{{userEvent._user.firstName}} {{userEvent._user.lastName}}</a></td>
+        <tr class = "" ng-repeat= "user in interestedFriends.users">
+          <td><a class = "" href="#!/user/{{user._id}}">{{user.firstName}} {{user.lastName}}</a></td>
         </tr>
       </table>
     </div>

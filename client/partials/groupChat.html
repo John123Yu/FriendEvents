@@ -8,9 +8,9 @@
   }
   .col-sm-12 {
     background-color: rgb(219, 241, 255);
-    border: 3px solid lightgrey;
     padding: 3%;
-    padding-bottom: 9%;
+    border-radius: 2%;
+    padding-bottom: 12%;
     overflow-y: scroll;
     height: 250px;
     font-family: serif;
@@ -30,6 +30,34 @@
   .col-sm-12 a {
     color: orange;
   }
+    .dateSmall {
+    font-size: .7em;
+  }
+  .postName {
+    
+  }
+  .postName a{
+    font-size: .85em;
+    color: darkblue;
+  }
+  .postDiv {
+    border-radius: 5%;
+    display: inline-block;
+    padding: 3% 3%;
+    background-color: rgb(255, 225, 165);
+    width: 28%;
+    word-wrap: break-word;
+  }
+  .postPost {
+    color: #330000 !important;
+    line-height: .99em !important;
+    /*margin: 4% 1% !important;*/
+    margin-bottom: 5% !important;
+    font-size: 1.2em !important;
+  }
+  .chatBox {
+    text-align: right;
+  }
  </style>
 <div ng-controller = "chatController">
 	<div class = "container">
@@ -37,9 +65,11 @@
     <h4>{{eventInfo.description}}</h4>
     <div id = "chat" class = "col-sm-12">
       <ul class = "list" ng-repeat="post in eventInfo.posts track by $index">
-          <li class = ""> <a href="#!/user/{{post._user}}">{{post.userFullName}}:</a></li>
-          <li>{{post.created_at | date:'short'}}</li>
-          <li class = "">{{ post.post }}</li>
+           <div ng-style="post._user == loginId &&{'background-color' :'rgb(79, 178, 255)' } || {'margin-right': '30%'} " class = "postDiv">
+          <li class = "postPost">{{ post.post }}</li>
+          <li class = "postName" > <a href="#!/user/{{post._user}}">-{{post.userFullName}}</a></li>
+          <li class = "dateSmall">{{post.created_at | date:'short'}}</li>
+        </div>
       </ul>
   </div>
 		<form class = "newform" name = "postForm">

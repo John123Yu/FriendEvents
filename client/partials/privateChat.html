@@ -4,16 +4,16 @@
   li {
     list-style-type: none;
   }
-  .col-sm-12 {
+  .col-sm-8 {
     background-color: rgb(219, 241, 255);
-    border: 3px solid lightgrey;
+    border-radius: 1%;
     padding: 3%;
     overflow-y: scroll;
     height: 250px;
-    padding-bottom: 9%;
+    padding-bottom: 10%;
     font: sans-serif;
     }
-  .col-sm-12 li{
+  .col-sm-8 li{
     color: black;
     text-align: left;
     margin-bottom: -5px;
@@ -21,14 +21,11 @@
     font-family: serif;
     font-weight: 300;
   }
-  .col-sm-12 a {
+  .col-sm-8 a {
     color: orange;
     text-align: left;
     font-weight: 500;
     font-family: serif;
-  }
-  .col-sm-9 {
-    text-align: right;
   }
   h1 {
     display: inline-block;
@@ -36,6 +33,34 @@
   button, .link{
     margin-top: -20px;
     margin-left: 10px;
+  }
+  .dateSmall {
+    font-size: .7em;
+  }
+  .postName {
+    
+  }
+  .postName a{
+    font-size: .85em;
+    color: darkblue;
+  }
+  .postDiv {
+    border-radius: 5%;
+    display: inline-block;
+    padding: 3% 3%;
+    background-color: rgb(255, 225, 165);
+    width: 28%;
+    word-wrap: break-word;
+  }
+  .postPost {
+    color: #330000 !important;
+    line-height: .99em !important;
+    /*margin: 4% 1% !important;*/
+    margin-bottom: 5% !important;
+    font-size: 1.2em !important;
+  }
+  .chatBox {
+    text-align: right;
   }
 </style>
 <div ng-controller = "privateChatController">
@@ -45,16 +70,18 @@
     <a class = "btn link btn-success" ng-if = "privateChats._friend != loginId" href="#!/user/{{privateChats._friend}}">Friend's Profile</a>
     <button ng-click = "deleteChat()" class = "btn btn-warning">Delete Chat</button>
     <button ng-click="blockUser()" class = "btn btn-danger">Block User</button>
-    <div id = "chat" class = "col-sm-12">
-      <ul class = "list" ng-repeat="post in privateChats.posts track by $index">
-          <li class = ""> <a href="#!/user/{{post._user}}">{{post.userFullName}}: </a></li>
-          <li>{{post.created_at | date:'short'}}</li>
-          <li class = "">{{ post.post }}</li>
+    <div id = "chat" class = "col-sm-8 col-sm-offset-2">
+      <ul class = "list chatBox" ng-repeat="post in privateChats.posts track by $index">
+        <div ng-style="post._user == loginId &&{'background-color' :'rgb(79, 178, 255)' } || {'margin-right': '30%'} " class = "postDiv">
+          <li class = "postPost">{{ post.post }}</li>
+          <li class = "postName" > <a href="#!/user/{{post._user}}">-{{post.userFullName}}</a></li>
+          <li class = "dateSmall">{{post.created_at | date:'short'}}</li>
+        </div>
       </ul>
   </div>
 		<form class = "newform" name = "newform">
-       <div class = "form-group col-sm-offset-3 col-sm-9">
-        <div class = "">
+       <div class = "form-group col-sm-offset-3 col-sm-7">
+        <div class = "chatBox">
            </br> <textarea id = "chat" class = "form-control" ng-model = "privateChat.post"></textarea><br>
           <input type='submit' value='Chat' class = "btn btn-success">
         </div>

@@ -16,7 +16,7 @@
       <div class = "col-sm-4 col-sm-offset-1 col-xs-8 col-xs-offset-2">
         <img ng-show = "photo1" src="{{user.userPicUrl}}" style="width:100%"/>
         <form ng-if="loginId == user._id" ng-app="fileUpload" width = "90%" name="form">
-          <input class = "chooseFile" type="file" ngf-select ng-model="picFile" name="file"  width = "90%" accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
+          <input class = "chooseFile" type="file" ngf-select ng-model="picFile" name="file"  width = "90%" accept="image/*" ngf-max-size="8MB" required ngf-model-invalid="errorFile">
           <br>
           <button type="submit" class = "btn submit button btn-primary" ng-click="uploadPic(picFile)">submit</button>
       </form>

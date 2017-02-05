@@ -15,12 +15,12 @@
           <th class = "info"></th>
           <th class = "info"></th>
         </tr>
-        <tr ng-repeat="event in user.userEvents | filter:searchText track by $index ">
-          <td ng-if="event._event"><a href="#!/showEvent/{{event._event._id}}">{{ event._event.title }}</a></td>
-         <!--  <td ng-if="event._event"><a href="#!/showEvent/{{event._event._id}}">{{event._event.description}}</a></td> -->
-          <th ng-if="event._event"><a class = "btn btn-success" href="#!/groupChat/{{event._event._id}}">Socialize</a></th>
-          <td ng-if="event._event"><button class = "btn btn-danger" ng-click = "leaveEvent(event._id)">Leave</button></td>
-          <td ng-if="event._event"><a class = "btn btn-warning" ng-if="event._event.creater[0] == loginId" href="#!/event/{{event._event._id}}">Edit</a></td>
+        <tr ng-repeat="event in userEvents.events | filter:searchText track by $index ">
+          <td ng-if="event"><a href="#!/showEvent/{{event._id}}">{{ event.title }}</a></td>
+<!--           <td ng-if="event._event"><a href="#!/showEvent/{{event._event._id}}">{{event._event.description}}</a></td> -->
+          <th ng-if="event"><a class = "btn btn-success" href="#!/groupChat/{{event._id}}">Socialize</a></th>
+          <td ng-if="event"><button class = "btn btn-danger" ng-click = "leaveEvent(event._id)">Leave</button></td>
+          <td ng-if="event"><a class = "btn btn-warning" ng-if="event.creater == loginId" href="#!/event/{{event._id}}">Edit</a></td>
         </tr>
       </table>
     </div>

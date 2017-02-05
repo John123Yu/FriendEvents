@@ -7,6 +7,7 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
   var loginId = $cookies.get('loginId')
   $scope.loginId = loginId
   $scope.check = 0;
+  var firstClick = 0;
   $scope.eventInfo;
   $scope.post = {};
   var elem = document.getElementById('chat');
@@ -30,7 +31,12 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
         $location.url('/chatLists')
       }
       $scope.eventInfo = data.data
-      elem.scrollTop = (elem.scrollHeight);
+      if(firstClick == 0 ) {
+        elem.scrollTop = (elem.scrollHeight - 330);
+        firstClick++;
+      } else {
+        elem.scrollTop = (elem.scrollHeight);
+      }
     })
     }, 300);
   })

@@ -8,6 +8,7 @@
   $scope.check = 0;
   $scope.eventInfo;
   $scope.privateChat;
+  var firstClick = 0;
   var elem = document.getElementById('chat');
   var socket = io.connect();
 
@@ -30,7 +31,12 @@
     setTimeout(function(){  
       eventFriendsFactory.getPrivatePosts($routeParams, function(data){
         $scope.privateChats = data.data;
-        elem.scrollTop = (elem.scrollHeight);
+        if(firstClick == 0) {
+          elem.scrollTop = (elem.scrollHeight - 330);
+          firstClick++;
+        } else {
+          elem.scrollTop = (elem.scrollHeight);
+        }
         // console.log(elem.scrollTop)
         // console.log(elem.scrollHeight)
       })

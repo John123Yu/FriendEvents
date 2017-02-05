@@ -3,6 +3,7 @@ myApp.controller('resetEmailController', ['$scope', 'eventFriendsFactory', '$loc
 
   $scope.resetPassword = function() {
     $scope.noEmailError = true;
+    $scope.passcodeMessage = true;
     eventFriendsFactory.resetPassword($scope.user, function(data) {
       if(data.data == null){
         $scope.noEmailError = false;

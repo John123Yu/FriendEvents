@@ -5,9 +5,7 @@
     factory.addUser = function(newUser, callback) {
       $http.post('/user', newUser).then(function(data){
         console.log("data sent back")
-        if(data.data.errors || data.data.errmsg || data.data.firstName) {
           callback(data);
-        }
       })
     }
     factory.login = function(user, callback) {
@@ -48,6 +46,12 @@
     factory.getOneEvent = function(eventId, callback) {
       $http.get('/getOneEvent/' + eventId).then(function(data) {
         console.log('got one event')
+        callback(data);
+      })
+    }
+    factory.getOneEventUsers = function(eventId, callback) {
+      $http.get('/getOneEventUsers/' + eventId).then(function(data) {
+        console.log('got one event users')
         callback(data);
       })
     }
@@ -92,8 +96,8 @@
         callback(data);
       })
     }
-    factory.leaveEvent = function(eventId, callback) {
-      $http.post('/leaveEvent', eventId).then(function(data){
+    factory.leaveEvent = function(info, callback) {
+      $http.post('/leaveEvent', info).then(function(data){
         console.log("event left")
         callback(data);
       })
