@@ -88,8 +88,8 @@ app.post('/gChatPosts/', function(req, res) {
   user.gChatPosts(req, res)
 })
 
-app.post('/newPost/', function(req, res) {
-  user.newPost(req, res)
+app.post('/postGroupChat/', function(req, res) {
+  user.postGroupChat(req, res)
 })
 
 app.post('/privateChat/', function(req, res) {
@@ -124,11 +124,6 @@ app.post('/getChatLists2/', function(req, res) {
   user.getChatLists2(req, res)
 })
 
-app.post('/updateDistance2', function(req, res) {
-  user.updateDistance2(req, res)
-})
-
-
 app.get('/getAllUsers', function(req, res) {
   user.getAllUsers(req, res)
 })
@@ -155,5 +150,13 @@ app.post('/confirmEmail/', function(req, res) {
 
 app.post('/lastUpdate/', function(req, res) {
   user.lastUpdate(req, res)
+})
+
+app.post('/getEventsAPI/', function(req, res) {
+  user.getEventsAPI(req, res)
+})
+
+app.post('/saveAddress/', function(req, res) {
+  user.saveAddress(req, res)
 })
 }

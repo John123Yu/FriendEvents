@@ -16,9 +16,6 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
   $scope.notify.eventId = $routeParams.id;
   eventFriendsFactory.getEventPosts($routeParams.id, function(data){
       $scope.eventInfo = data.data
-      if(data.data == null){
-        $location.url('/chatLists')
-      }
       socket.emit('create', $scope.eventInfo._id);
     })
 
@@ -28,6 +25,7 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
     setTimeout(function(){  
       eventFriendsFactory.gChatPosts($scope.notify)
       eventFriendsFactory.getEventPosts($routeParams.id, function(data){
+      console.log(data.data)
       if(data.data == null){
         $location.url('/chatLists')
       }
@@ -43,7 +41,7 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
       socket.emit('create', $scope.eventInfo._id);
       $scope.post.userId = loginId
       $scope.post.eventId = $scope.eventInfo._id
-      eventFriendsFactory.post($scope.post, function(data) {
+      eventFriendsFactory.postGroupChat($scope.post, function(data) {
         $scope.post.post = ""
         $scope.check = data;
       })
@@ -55,7 +53,7 @@ myApp.controller('chatController', ['$scope', 'eventFriendsFactory', '$location'
     socket.emit('create', $scope.eventInfo._id);
     $scope.post.userId = loginId
     $scope.post.eventId = $scope.eventInfo._id
-    eventFriendsFactory.post($scope.post, function(data) {
+    eventFriendsFactory.postGroupChat($scope.post, function(data) {
       $scope.post.post = ""
       $scope.check = data;
     })

@@ -11,7 +11,7 @@ myApp.controller('editUserController', ['$scope', 'eventFriendsFactory', '$locat
   $scope.user;
   var loginId = $cookies.get('loginId')
   $scope.loginId = loginId
-  $scope.photo1 = true;
+
 
 
   $scope.uploadPic = function(image) {
@@ -34,8 +34,8 @@ myApp.controller('editUserController', ['$scope', 'eventFriendsFactory', '$locat
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getOneUser($routeParams.id, function(data){
       $scope.user = data.data
-      if(!data.data.Photo.file.name) {
-        $scope.photo1 = false;
+      if(!$scope.user.userPicUrl) {
+        $scope.user.userPicUrl = '/dbx2nglsgn8-swaraj-tiwari.jpg'
       }
     })
   })

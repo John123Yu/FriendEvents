@@ -1,0 +1,38 @@
+{
+  "name": "angular-reverse-geocode",
+  "version": "1.0.1",
+  "authors": [
+    "Guilherme Assemany <guilhermeassemany@hotmail.com> (http://assemany.com)"
+  ],
+  "description": "AngularJS directive for google maps reverse GeoCode",
+  "main": "dist/angular-reverse-geocode.min.js",
+  "keywords": [
+    "AngularJS",
+    "Reverse Geocode",
+    "Google Maps",
+    "Javascript",
+    "ngMap"
+  ],
+  "license": "MIT",
+  "homepage": "http://assemany.com/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.0"
+  },
+  "_release": "1.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.1",
+    "commit": "c66e09e5bd08735c8b2758f91cf061f7cfe61356"
+  },
+  "_source": "https://github.com/guiassemany/angular-reverse-geocode.git",
+  "_target": "^1.0.1",
+  "_originalSource": "assemany-angular-reverse-geocode",
+  "_direct": true
+}

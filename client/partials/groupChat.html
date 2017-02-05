@@ -37,7 +37,7 @@
     <h4>{{eventInfo.description}}</h4>
     <div id = "chat" class = "col-sm-12">
       <ul class = "list" ng-repeat="post in eventInfo.posts track by $index">
-          <li class = ""> <a href="#!/user/{{post._user._id}}">{{post._user.firstName}} {{post._user.lastName}}:</a></li>
+          <li class = ""> <a href="#!/user/{{post._user}}">{{post.userFullName}}:</a></li>
           <li>{{post.created_at | date:'short'}}</li>
           <li class = "">{{ post.post }}</li>
       </ul>

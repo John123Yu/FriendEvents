@@ -4,16 +4,19 @@ var Event = mongoose.model('Event');
 var UserEvent = mongoose.model('UserEvent');
 var Posts = mongoose.model('Posts');
 var Private = mongoose.model('Private');
-var LastUser = mongoose.model('LastUser');
+var EventPosts = mongoose.model('EventPosts');
+var AllEvents = mongoose.model('AllEvents');
 var multiparty = require('multiparty');
 var uuid = require('uuid');
 var s3 = require('s3fs');
 var fs = require('fs');
-var lastUser;
 var app = require('express')();
 var mailer = require('express-mailer');
 var jade = require('jade');
 var dateNow = new Date();
+global.fetch = require('node-fetch') 
+var Client = require('predicthq')
+var phq = new Client.Client({access_token: "Eh0f8e0q1dcMTp6ZWQVNXire1bN7pV"})
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -26,19 +29,20 @@ mailer.extend(app, {
   transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
   auth: {
     user: 'friendevents1@gmail.com',
-    pass: ''
+    pass: 'P82ke57y'
   }
 });
 
 var s3Impl = new s3('friendevents', {
-    accessKeyId: '',
-    secretAccessKey: ''
+    accessKeyId: 'AKIAJNYQVRBWC4DYMD3A',
+    secretAccessKey: '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'
 });
 
 module.exports = {
 	create: function(req, res){
       var passcode = ("a" + Math.floor(Math.random() * 10))+ (Math.floor(Math.random() * 10)) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
       var user = new User(req.body);
+      console.log(req.body.birthday)
       if(user.email) {
         user.email = user.email.toLowerCase();
       }
@@ -142,15 +146,19 @@ module.exports = {
     })
   },
   addEvent: function(req, res){
-      User.findOne({_id: req.body.creater}, function(err, user) { var event = new Event(req.body);
-        event.date = new Date(req.body.date)
+    User.findOne({_id: req.body.creater}, function(err, user) { 
+      var event = new Event(req.body);
+      event.date = new Date(req.body.date)
       event.save(function(err, event) {
       if(err) {
         console.log('Error with registering new event');
         return res.json(err)
       } else {
         console.log('successfully registered a new event!');
-        // return res.json(context)
+        var eventPost = new EventPosts();
+        eventPost._event = event._id
+        eventPost.save()
+        event._eventPost = eventPost._id
         var userEvent = new UserEvent();
         userEvent._user = user._id;
         userEvent._event = event._id;
@@ -172,7 +180,7 @@ module.exports = {
                  if(err) {
                       console.log('Error with saving event with userevents');
                  } else {
-                      console.log("Event Saved with userEvent")
+                    console.log("Event Saved with userEvent")
                     return res.json(event)
                  }
             })
@@ -366,7 +374,7 @@ module.exports = {
     })
   },
   getEventPosts: function (req, res) {
-    Event.findOne({_id: req.params.id}, null, {sort: 'created_at'}).populate({path: 'posts', populate: {path: '_user'}}).exec( function(err, context) {
+    EventPosts.findOne({_event: req.params.id}, null, {sort: 'created_at'}).populate({path: 'posts'}).exec( function(err, context) {
       if(context) {
         console.log('success getting event posts')
         return res.json(context)
@@ -378,7 +386,7 @@ module.exports = {
     })
   },
   gChatPosts: function (req, res) {
-    Event.findOne({_id: req.body.eventId}, null, {sort: 'created_at'}).exec( function(err, context) {
+    EventPosts.findOne({_event: req.body.eventId}, null, {sort: 'created_at'}).exec( function(err, context) {
       if(context) {
         context.pushId(req.body.userId)
         console.log('success updating group notifications')
@@ -390,15 +398,18 @@ module.exports = {
       }
     })
   },
-  newPost: function (req, res) {
+  postGroupChat: function (req, res) {
     User.findOne({_id : req.body.userId}, function(err, user) {    
-      Event.findOne({_id : req.body.eventId}, function(err, event) {
+      EventPosts.findOne({_id : req.body.eventId}, function(err, event) {
+        console.log("hree")
+        console.log(event)
       if(event == null) {
         return res.json({gone: "event has been deleted"})
       }
       var post = new Posts({post: req.body.post})
       post._user = req.body.userId;
-      post._event= req.body.eventId;
+      post.userFullName = user.firstName + " " + user.lastName
+      post._eventPost = event._id;
       post.save(function(err) {
         if(err) {
           console.log(err)
@@ -457,7 +468,7 @@ module.exports = {
   })
   },
   getPrivatePosts: function (req, res) {
-    Private.findOne({_id: req.body.id}, null, {sort: 'created_at'}).populate({path: 'posts', populate: {path: '_user'}}).exec( function(err, context) {
+    Private.findOne({_id: req.body.id}, null, {sort: 'created_at'}).populate({path: 'posts'}).exec( function(err, context) {
       if(context == null) {
         return res.json({nothing: 'nothingdata'})
       }
@@ -483,6 +494,7 @@ module.exports = {
       }
       User.findOne({_id : req.body.userId}, function(err, user) { 
       var post = new Posts({post: req.body.post})
+      post.userFullName = user.firstName + " " + user.lastName
       post._private = privateChat._id;
       post._user = user._id;
       post.save(function(err) {
@@ -498,6 +510,7 @@ module.exports = {
               console.log('Error with saving privatechat after saving post')
             } else {
               console.log('privatechat saved after saving post')
+              privateChat.popId(user._id)
               return res.json({he:"hi"})
             }
           })
@@ -530,6 +543,7 @@ module.exports = {
       }
     })
   },
+  // do i need to populate user and friend?
   getChatLists: function (req, res) {
     Private.find({_user : req.body.id}, null, {sort: 'created_at'}).populate('_user').populate('_friend').exec( function(err, context) {
       if(context) {
@@ -575,33 +589,21 @@ module.exports = {
       }
     })
   },
-  updateDistance2: function(req,res) {
-    Event.find({}, null, {sort: 'created_at'}).exec( function(err, context) {
-      if(context[0]) {
-        for(item in context) {
-          context[item].calcDistance2(req.body.location, req.body.userId)
-        }
-        console.log('success updating event distances')
-        return res.json(context)
-      }
-      else {
-        console.log('no events yet')
-        return res.json(context)
-      }
-    })
-  },
   getEvents: function (req, res) {
-    var userId = req.body.userId
-    console.log(userId)
-    var distanceFrom = Number(req.body.distance)
-    Event.find({ userDist5 :{$elemMatch: {_id: userId, distance: {$lte: distanceFrom}}}, date: {$gte: dateNow}}, null, {sort: 'created_at'}).exec( function(err, context) {
-      if(context[0]) {
-        console.log('success getting events')
-        return res.json(context)
-      }
-      else {
-        console.log('no events yet')
-        return res.json(context)
+    var maxLat = parseFloat(req.body.lat + req.body.latDif)
+    var minLat = parseFloat(req.body.lat - req.body.latDif)
+    var maxLon = parseFloat(req.body.lng + req.body.lonDif)
+    var minLon = parseFloat(req.body.lng - req.body.lonDif)
+    console.log("maxLat", maxLat)
+    console.log("minLat", minLat)
+    console.log("maxLon", maxLon)
+    console.log("minLon", minLon)
+    Event.find({ $and: [{ lati: {$gte: minLat, $lte: maxLat}, longi: {$gte: minLon, $lte: maxLon} }]}).exec( function(err, events) {
+      if(err) {
+        console.log(err)
+      } else {
+        console.log(events)
+        return res.json(events)
       }
     })
   },
@@ -617,7 +619,7 @@ module.exports = {
     })
   },
   getAllEvents: function(req, res) {
-    Event.find({}, function(err, events) { 
+    Event.find({}, null, {sort: 'date'}).exec(function(err, events) { 
       if(err) {
         console.log(err)
         console.log('something went wrong find all events')
@@ -689,58 +691,141 @@ module.exports = {
     })
   },
   deletePast: function(req, res){
-    Event.remove({date: {$lte: dateNow}}, function(err, event) {
+    AllEvents.find({}, function(err, allEvents) {
+      allEvents[0].allEvents = []
+      allEvents[0].save();
+    })
+
+    Event.remove({}, function(err, event) {
         if(err) {
           console.log(err)
           console.log('something went wrong removing past events');
         } else {
+          console.log(event)
           console.log('successfully removed past events!');
+          UserEvent.remove({})
+          User.findOne({email:"friendevents1@gmail.com"}, function(err, user) {
+            user.userEvents = [];
+            console.log(user)
+            user.save();
+          })
           return res.json(event)
         }
     })
   },
-  lastUpdate: function(req, res){
-    User.findOne({_id: req.body.userId}, function(err, user) {
-        if(err) {
-          console.log(err)
-          console.log('last update could not find user');
-        } else {
-          console.log('user found for last update');
-          // console.log(user.lastUpdate)
-          // console.log(dateNow)
-          if(user == null) {
-            user = {};
-            user.lastLocation = 1;
-            console.log("user is null for last update")
-            return res.json({hi: 'hi'})
+  getEventsAPI: function(req, res){
+  var count = 0;
+  dateNow = new Date()
+  var EventNames = []
+  if(dateNow.getMonth() < 9){
+    var dateMonth = "0" + (dateNow.getMonth() + 1)
+    // console.log(dateMonth)
+  } else {
+    var dateMonth = String(dateNow.getMonth() + 1)
+  }
+  var newDate = dateNow.getFullYear() + "-" + dateMonth + "-" + dateNow.getDate()
+
+// var newAllEvents = new AllEvents();
+// newAllEvents.save();
+AllEvents.find({}, function(err, allEvents) {
+  // console.log(allEvents[0])
+  User.findOne({email:"friendevents1@gmail.com"}, function(err, user) {
+    phq.events.search({ limit: 10, sort:'rank', within: '100km@38.9072,-77.0369',  'start.gte':newDate, rank_level:'3,4,5', category: ['expos', 'festivals', 'community', 'performing-arts']  })
+      .then(function(results){
+        console.log(results.result.count)
+          var events = results.toArray()
+          for(var i=0; i < events.length; i++) {
+            if(!allEvents[0].allEvents.includes(events[i].title)) {
+              allEvents[0].allEvents.push(events[i].title)
+              // allEvents[0].save();
+              // console.info(events[i].rank, events[i].category, events[i].title, events[i].start, events[i].location[0])
+              if(!events[i].description) {
+                events[i].description = "There is currently no description for this event."
+              }
+              if(events[i].category == 'observances') {
+                events[i].category = 'Observance'
+              }
+              if(events[i].category == 'expos') {
+                events[i].category = 'Expos'
+              }
+              if(events[i].category == 'festivals') {
+                events[i].category = 'Festival'
+              }
+              if(events[i].category == 'community') {
+                events[i].category = 'Community Event'
+              }
+              if(events[i].category == 'performing-arts') {
+                events[i].category = 'Performing-arts'
+              }
+              var newEvent = new Event({title:events[i].title, description:events[i].description, date: events[i].start, streetAddress:" ", city: " ", state: " ", zipcode: " ", category:events[i].category, lati:events[i].location[1], longi:events[i].location[0], participants:100, creater: user._id});
+              var eventPost = new EventPosts();
+              eventPost._event = newEvent._id
+              newEvent._eventPost = eventPost._id
+              eventPost.save()
+              newEvent.save(function(err, event){
+                console.log(err)
+              })
+            }
           }
-          if(!user.lastLocation) {
-            user.lastLocation = req.body.location
-            user.save()
-            console.log("user location updated")
-            return res.json({data: "true"})
-          } 
-          else if(user.calcDistanceDif(req.body.location)) {
-            user.lastLocation = req.body.location
-            user.save()
-            console.log("user location has changed and is updated")
-            return res.json({data: "true"})
-          } 
-          if(user.lastUpdate == null) {
-            user.lastUpdate =  dateNow 
-            user.save()
-            console.log("user lastupdate is null for lastupdate")
-            return res.json({data: "true"})
-          } else if( dateNow.getTime() > (user.lastUpdate.getTime() + 3600000)) {
-            user.lastUpdate =  dateNow 
-            user.save()
-            console.log("last update updated")
-            return res.json({data: "true"})
-          } else {
-            console.log('no last update')
-            return res.json({data: "false"})
+      allEvents[0].save();
+      }).catch(function (err) {
+        console.log(err)
+        console.log("Promise Rejected");
+      })
+
+    phq.events.search({ limit: 10, sort:'rank', within: '100km@38.9072,-77.0369', 'start.gte':newDate, rank_level:'4,5', category: ['sports', 'concerts']  })
+      .then(function(results){
+        console.log(results.result.count)
+          var events = results.toArray()
+          for(var i=0; i < events.length; i++) {
+              if(!allEvents[0].allEvents.includes(events[i].title)) {
+              allEvents[0].allEvents.push(events[i].title)
+              // allEvents[0].save();
+              console.info(events[i].rank, events[i].category, events[i].title, events[i].start, events[i].location)
+              if(!events[i].description) {
+                events[i].description = "There is currently no description for this event."
+              }
+              if(events[i].category == 'sports') {
+                events[i].category = 'Sports'
+              }
+              if(events[i].category == 'concerts') {
+                events[i].category = 'Concert'
+              }
+              var newEvent = new Event({title:events[i].title, description:events[i].description, date: events[i].start, streetAddress:" ", city: " ", state: " ", zipcode: " ", category:events[i].category, lati:events[i].location[1], longi:events[i].location[0], participants:100, creater: user._id});
+              var eventPost = new EventPosts();
+              eventPost._event = newEvent._id
+              newEvent._eventPost = eventPost._id
+              eventPost.save()
+              newEvent.save(function(err, event){
+                console.log(err)
+              })
+            }
           }
-        }
+      allEvents[0].save();
+      console.log(allEvents[0])
+      return res.json({data:"data"})
+      }).catch(function (err) {
+        console.log(err)
+        console.log("Promise Rejected");
+      })
+  // allEvents[0].save(function(err, allEventsSave) {
+  //   return res.json({data:"data"})
+  // });
+  })
+})
+  },
+    saveAddress: function (req, res) {
+      console.log(req.body)
+    Event.update({_id: req.body._id}, { $set: { fullAddress: req.body.address }}).exec( function(err, context) {
+      if(context) {
+        console.log('success find event for saving address')
+        console.log(context)
+        return res.json(context)
+      }
+      else {
+        console.log('could not find event for saving address')
+        return res.json(context)
+      }
     })
   },
 };

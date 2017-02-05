@@ -14,11 +14,9 @@
       <h1>{{user.firstName}} {{user.lastName}}</h1>  
       <div class = "container-fluid">
       <div class = "col-sm-4 col-sm-offset-1 col-xs-8 col-xs-offset-2">
-        <!-- /Users/john123yu/Documents/MEAN/FriendEvents -->
         <img ng-show = "photo1" src="{{user.userPicUrl}}" style="width:100%"/>
-        <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
-        <form ng-if="loginId == user._id"ng-app="fileUpload" width = "90%" name="form">
-          <input class = "btn-primary btn" type="file" ngf-select ng-model="picFile" name="file"  width = "90%" accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
+        <form ng-if="loginId == user._id" ng-app="fileUpload" width = "90%" name="form">
+          <input class = "chooseFile" type="file" ngf-select ng-model="picFile" name="file"  width = "90%" accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
           <br>
           <button type="submit" class = "btn submit button btn-primary" ng-click="uploadPic(picFile)">submit</button>
       </form>
@@ -55,7 +53,7 @@
 
       <button ng-if="loginId != user._id" ng-click = "createPrivate()" class = "btn button btn-warning">Chat</button>
       <button ng-if="loginId != user._id" ng-click = "likeUser()" class = "btn button btn-success">Like User!</button>
-      <a ng-if="loginId == user._id"class = "btn edit button btn-warning" href="#!/editUser/{{user._id}}">Edit</a>
+      <a ng-if="loginId == user._id"class = "btn edit button btn-primary" href="#!/editUser/{{user._id}}">Edit</a>
     </div>
   </div>
 </div>

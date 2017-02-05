@@ -23,12 +23,13 @@
 </style>
 <div ng-controller='oneEventController'>
       <div class = "container-fluid">
-      <h1><a href="">{{eventInfo.title}}</h1></a>
-      <button class = "btn btn-success"  ng-click = "joinEvent()">Join!</button>
+      <h1><a href= "" >{{eventInfo.title}}</h1></a>
+      <a target= "_blank" href="https://www.google.com/search?q={{eventInfo.title}}" class = "btn btn-danger">Google Search </a>
+      <button class = "btn btn-success"  ng-click = "joinEvent()">Join</button>
       <!-- ng-if="eventInfo.creater[0]._id == loginId  -->
       <a  ng-if="eventInfo.creater[0]._id == loginId" class = "btn btn-warning"  href="#!/event/{{eventInfo._id}}">Edit</a>
-      <h4><a href="">Description: {{eventInfo.description}}</a></h4>
-      <table class = "table ">
+      <h4 class = "description1"><a class = "description" href=""> {{eventInfo.description}}</a></h4>
+      <table class = "table">
         <tr class = "">
           <th>Event Host</th>
           <th>Date</th>
@@ -40,7 +41,7 @@
         <tr class = "thin">
           <td><a class = "btn btn-warning host" href="#!/user/{{eventInfo.creater[0]._id}}">{{eventInfo.creater[0].firstName}} {{eventInfo.creater[0].lastName}}</a></td>
           <td>{{eventInfo.date | date:'short'}}</td>
-          <td>{{eventInfo.streetAddress}} {{eventInfo.city}}, {{eventInfo.state}}. {{eventInfo.zipcode}}</td>
+          <td>{{eventInfo.fullAddress}}</td>
           <td>{{eventInfo.category}}</td>
           <td>{{eventInfo.participants}}</td>
           <td><span>{{distance | number: 0}} miles</span></td>

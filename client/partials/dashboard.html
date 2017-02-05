@@ -18,30 +18,30 @@
     color: black;
     /*margin-left: 0px;*/
   }
+  .toast {
+  }
 </style>
 <div ng-controller='dashboardController'>
       <div class = "container-fluid">
       <div class = "col-sm-12">
-      <h1><a href="#!/showEvent/{{event._id}}">{{ event.title }}</a></h1>
-      <h4><a href="#!/showEvent/{{event._id}}">{{ event.description }}<a></h4>
+      <h1><a class = "dashboardTitle" href="#!/showEvent/{{event._id}}">{{ event.title }}</a></h1>
+      <!-- <h4><a href="#!/showEvent/{{event._id}}">{{ event.description }}<a></h4> -->
       <table class = "table ">
         <tr>
+          <th>Category</th>
           <th>Date</th>
           <th>Location</th>
-          <th>Category</th>
-          <th>Desired Number</th>
           <th>Distance</th>
-          <th>Max ({{distanceSetting.distance}} mi.)</th>
+          <th class = "Max">Max ({{distanceSetting.distance}} mi.)</th>
         </tr>
         <tr>
+          <td>{{event.category}}</td>
           <td>{{ event.date | date: 'short' }}</td>
-          <td>{{ event.streetAddress }} {{event.city}}, {{event.state}}. {{event.zipcode}}</td>
-          <td>{{ event.category }}</td>
-          <td>{{ event.participants }}</td>
+          <td>{{ event.fullAddress }}</td>
           <td>{{ distance | number:0 }} miles</td>
-          <td><form class = "form-horizontal">
+          <td data-toggle="tooltip" title="Use this to change distance of events" class= "Max"><form class = "form-dorizontal distanceForm">
             <input type = "number" ng-model = "setting.distance" style="width:30%">
-            <button ng-click = "setDistance()" class = "btn btn-primary" >Distance</button>
+            <button ng-click = "setDistance()" class = "btn btn-primary distanceInput" >Set Max Distance</button>
           </form></td>
         </tr>
       </table>

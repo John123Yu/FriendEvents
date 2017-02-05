@@ -1,4 +1,4 @@
-myApp.controller('privateChatController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval',  function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval ){
+ myApp.controller('privateChatController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$interval', 'toaster', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $interval, toaster ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
@@ -15,7 +15,7 @@ myApp.controller('privateChatController', ['$scope', 'eventFriendsFactory', '$lo
   $routeParams.userId = loginId
   eventFriendsFactory.getPrivatePosts($routeParams, function(data){
     if(data.data.block) {
-      alert(data.data.block)
+      toaster.pop('error', "", 'This chat has been blocked');
       $location.url('/chatLists')
     }
     $scope.privateChats = data.data;
@@ -46,7 +46,7 @@ myApp.controller('privateChatController', ['$scope', 'eventFriendsFactory', '$lo
       eventFriendsFactory.privatePost($scope.privateChat, function(data) {
       $scope.check = data
       if(data.data.noChat) {
-        alert('Chat has been deleted')
+        toaster.pop('error', "", 'This chat has been deleted');
         $location.url('/chatLists')
       }
       $scope.privateChat.post = ""
@@ -63,7 +63,7 @@ myApp.controller('privateChatController', ['$scope', 'eventFriendsFactory', '$lo
       $scope.check = data
       console.log(data)
       if(data.data.noChat) {
-        alert('Chat has been deleted')
+        toaster.pop('error', "", 'This chat has been deleted');
         $location.url('/chatLists')
       }
       $scope.privateChat.post = ""

@@ -78,6 +78,7 @@
             <option>Commercial</option>
             <option>Celebration</option>
             <option>Company</option>
+            <option>Concert</option>
             <option>Dance</option>
             <option>Dating</option>
             <option>Entertainment</option>
@@ -97,7 +98,8 @@
           </select>
           <br>
         <input type='submit' value='Update' class = "btn btn-primary last-btn">
-        <button class = "btn btn-danger" ng-click = "removeEvent()">Delete</button>
+         <button ng-show="eventInfo.creater[0].admin == 'true'" class = "btn btn-warning" ng-click = "getAddress($event)">Get Address</button>
+         <button class = "btn btn-danger" ng-click = "removeEvent($event)">Delete</button>
         </div>
       </div>
     </form>
@@ -127,6 +129,5 @@
       <button type="submit" class = "btn upload btn-primary" ng-click="uploadEventPic2(picFile)">Upload Picture 2</button>
   </form>
   </div>
-
 </div>
 </div>

@@ -8,10 +8,9 @@
  <h1>{{user.firstName}} {{user.lastName}}</h1>
  <br>
   <div class = "col-sm-4 col-sm-offset-1 col-xs-8 col-xs-offset-2">
-    <img ng-show= "photo1" src="{{user.userPicUrl}}" style="width:100%"/>
-    <img ng-hide = "photo1" class = "photo" src="/Upload.png" width="50%">
+    <img src="{{user.userPicUrl}}" style="width:100%"/>
     <form ng-app="fileUpload" name="form">
-      <input class = "btn btn-primary" type="file" ngf-select ng-model="picFile" name="file" 
+      <input class = "" type="file" ngf-select ng-model="picFile" name="file" 
       accept="image/*" ngf-max-size="2MB" required ngf-model-invalid="errorFile">
       <br>
       <button type="submit" class = "btn upload btn-primary" ng-click="uploadPic(picFile)">submit</button>

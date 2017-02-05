@@ -1,4 +1,4 @@
-myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload ){
+myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$location', '$cookies', '$routeParams', '$http', 'NgMap', 'Upload', 'toaster', function ($scope, eventFriendsFactory, $location, $cookies, $routeParams, $http, NgMap, Upload, toaster ){
 
   if(!$cookies.get('loginId')) {
     $location.url('/login')
@@ -30,12 +30,30 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
   $scope.$watch('check', function(newValue, oldValue) {
     eventFriendsFactory.getOneEvent($routeParams.id, function(data){
       $scope.eventInfo = data.data 
-      if(!data.data.Photo1.file.name) {
-        $scope.photo1 = false;
-                }
-      if(!data.data.Photo2.file.name) {
-        $scope.photo2 = false;
+      if(!$scope.eventInfo.fullAddress) {
+        $scope.eventInfo.fullAddress = $scope.eventInfo.streetAddress + ", " + $scope.eventInfo.city + " " +  $scope.eventInfo.state + ". " +  $scope.eventInfo.zipcode
       }
+      console.log($scope.eventInfo = data.data)
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Concert") {
+        $scope.eventInfo.event1Url = "/mrxd-j9-4ps-daniel-robert.jpg"
+        $scope.eventInfo.event2Url = "/cushbgbdxc0-desi-mendoza.jpg"
+      }
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Sports") {
+        $scope.eventInfo.event2Url = "/ae4kypxwhr8-joshua-peacock.jpg"
+        $scope.eventInfo.event1Url = "/m6owr3op4do-rob-bye.jpg"
+      }
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Performing-arts") {
+        $scope.eventInfo.event1Url = "/xxa8ptuld1y-neal-kharawala.jpg"
+        $scope.eventInfo.event2Url = "/7o3swrbqhws-ron-sartini.jpg"
+      }
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Community Event") {
+        $scope.eventInfo.event1Url = "/poxhu0uedcg-aranxa-esteve.jpg"
+        $scope.eventInfo.event2Url = "/ds0zia5gzc4-nina-strehl.jpg"
+      }
+      if(!$scope.eventInfo.event1Url && $scope.eventInfo.category == "Festival") {
+          $scope.eventInfo.event1Url = "/festival6.jpg"
+          $scope.eventInfo.event2Url = "/festival2.jpg"
+        }
     })
   })
 
@@ -44,22 +62,9 @@ myApp.controller('oneEventController', ['$scope', 'eventFriendsFactory', '$locat
     eventFriendsFactory.joinEvent($scope.eventInfo, function(data) {
       if(data.data.already){
       } else {
-        alert("You've joined! Chat with other users!")
+        toaster.pop('success', "", "You've joined this event. Make sure to check out the group chat");
       }
     }); 
   }
 
 }])
-// .directive('ngPlaceholder', function($document) {
-//   return {
-//     restrict: 'A',
-//     scope: {
-//       placeholder: '=ngPlaceholder'
-//     },
-//     link: function(scope, elem, attr) {
-//       scope.$watch('placeholder',function() {
-//         elem[0].placeholder = scope.placeholder;
-//       });
-//     }
-//   }
-// });

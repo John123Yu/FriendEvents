@@ -139,7 +139,7 @@ var eventSchema = new mongoose.Schema({
   description : {
     type: String,
     required: [true, 'Description is required'],
-    maxlength: [800, 'Description must be less than 800 characters'],
+    // maxlength: [800, 'Description must be less than 800 characters'],
     trim: true
   },
   date : {
@@ -163,6 +163,9 @@ var eventSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Zipcode is required']
   },
+  fullAddress: {
+    type: String,
+  },
   participants: {
     type: Number,
     required: [true, 'Participants is required']
@@ -174,7 +177,7 @@ var eventSchema = new mongoose.Schema({
   lati: Number,
   longi: Number,
   userEvents: [{type: Schema.Types.ObjectId, ref: 'UserEvent'}],
-  posts: [{type: Schema.Types.ObjectId, ref: 'Posts'}],
+  _eventPost: {type: Schema.Types.ObjectId, ref: 'EventPosts'},
   news: [],
   confirm: { type: String, default: "true" },
   creater: [{type: Schema.Types.ObjectId, ref: 'User'}],
@@ -185,11 +188,6 @@ var eventSchema = new mongoose.Schema({
   event2Url: String,
    });
 
-// eventSchema.methods.calcDistance = function(location) {
-//   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
-//   this.distance = distanceCalc.dist(location, eventLocation)
-//   this.save()
-// }
 eventSchema.methods.calcDistance2 = function(location, userId) {
   var eventLocation = new distanceCalc.Loc(this.lati, this.longi)
   var distance = distanceCalc.dist(location, eventLocation)
@@ -203,38 +201,18 @@ eventSchema.methods.calcDistance2 = function(location, userId) {
     }
     return false
   }
-  if(!lookup(userId, this.userDist5)) {
+  if(!lookup(userId, this.userDist5) && distance < 100) {
     this.userDist5.push({
       _id: userId,
       distance: distance
     });
   }
-  console.log(this.userDist5)
   this.save()
-}
-eventSchema.methods.pushId = function(id) {
-  if (this.news.indexOf(id) > -1) {
-  } else {
-    this.news.push(id)
-    this.save()
-  }
-  console.log('insert')
-  console.log(this.news)
-}
-eventSchema.methods.popId = function(id) {
-  console.log(id)
-  for(var i = 0; i < this.news.length; i++) {
-    if(this.news[i] != id) {
-      this.news.splice(i, 1)
-      this.save()
-    }
-  }
-  console.log('pop')
-  console.log(this.news)
 }
 mongoose.model('Event', eventSchema);
 
 var userEventSchema = new mongoose.Schema({
+  date: Date,
   _event: {type: Schema.Types.ObjectId, ref: 'Event'},
   _user: {type: Schema.Types.ObjectId, ref: 'User'},
  });
@@ -247,8 +225,9 @@ var postSchema = new mongoose.Schema({
     required: true
   },
   created_at: { type : Date, default: Date.now },
+  userFullName: String,
   _user: {type: Schema.Types.ObjectId, ref: 'User'},
-  _event: {type: Schema.Types.ObjectId, ref: 'Event'},
+  _eventPost: {type: Schema.Types.ObjectId, ref: 'EventPosts'},
   _private: {type: Schema.Types.ObjectId, ref: 'Private'}
  });
 mongoose.model('Posts', postSchema);
@@ -282,23 +261,36 @@ privateSchema.methods.popId = function(id) {
 }
 mongoose.model('Private', privateSchema);
 
-var lastUserSchema = new mongoose.Schema({
-    id : String
- });
-lastUserSchema.methods.updateLast = function(id) {
-  this.id = id;
-  this.save()
+var eventPostsSchema = new mongoose.Schema({
+  created_at: { type : Date, default: Date.now },
+  _event: {type: Schema.Types.ObjectId, ref: 'Event'},
+  posts: [{type: Schema.Types.ObjectId, ref: 'Posts'}],
+  news: []
+});
+eventPostsSchema.methods.pushId = function(id) {
+  if (this.news.indexOf(id) > -1) {
+  } else {
+    this.news.push(id)
+    this.save()
+  }
+  console.log('inserted')
+  console.log(this.news)
 }
-mongoose.model('LastUser', lastUserSchema);
+eventPostsSchema.methods.popId = function(id) {
+  for(var i = 0; i < this.news.length; i++) {
+    if(this.news[i] != id) {
+      this.news.splice(i, 1)
+      this.save()
+    }
+  }
+  console.log('popped')
+  console.log(this.news)
+}
+mongoose.model('EventPosts', eventPostsSchema);
 
-// var userLikeSchema = new mongoose.Schema({
-//     id : String,
-//     _user: {type: Schema.Types.ObjectId, ref: 'User'},
-//     likes: [],
-//     likeCount: Number
-//  });
-// userLikeSchema.methods.likeCount = function(id) {
-//   this.likeCount = this.likes.length;
-//   this.save()
-// }
-// mongoose.model('UserLike', lastUserSchema);
+var allEventsSchema = new mongoose.Schema({
+    allEvents : []
+ });
+
+mongoose.model('AllEvents', allEventsSchema);
+

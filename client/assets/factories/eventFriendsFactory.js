@@ -66,7 +66,7 @@
     factory.removeEvent = function(id, callback){
       $http.delete('/removeEvent/' + id).then(function(data){
         console.log("success removing event");
-        callback(data);
+        callback("dummyData");
       })
     }
     factory.removeUser = function(id, callback){
@@ -89,9 +89,6 @@
     factory.joinEvent = function(event, callback) {
       $http.post('/joinEvent', event).then(function(data){
         console.log("event joined")
-        if(data.data.already) {
-          alert('You"ve already joined the event')
-        }
         callback(data);
       })
     }
@@ -101,9 +98,9 @@
         callback(data);
       })
     }
-    factory.post = function(newpost, callback) {
-      $http.post('/newPost', newpost).then(function(data) {
-        console.log('post successful')
+    factory.postGroupChat = function(newpost, callback) {
+      $http.post('/postGroupChat', newpost).then(function(data) {
+        console.log('group chat post successful')
         callback(data)
       })
     }
@@ -142,7 +139,6 @@
         callback(data)
       })
     }
-
     factory.blockUser = function(chatId, callback) {
       $http.post('/blockUser', chatId).then(function(data) {
         console.log('block successful')
@@ -161,31 +157,12 @@
         callback(data);
       })
     }
-
     factory.getChatList2 = function(userId, callback) {
       $http.post('/getChatLists2', userId).then(function(data) {
         console.log('got Chat Lists2')
         callback(data);
       })
     }
-    // factory.updateDistance = function(location, callback) {
-    //   $http.post('/updateDistance', location).then(function(data) {
-    //     console.log('distances updated')
-    //     callback(data)
-    //   })
-    // }
-    factory.updateDistance2 = function(location, callback) {
-      $http.post('/updateDistance2', location).then(function(data) {
-        console.log('distance 2 updated')
-        callback(data)
-      })
-    }
-    // factory.setUserLoc = function(location, callback) {
-    //   $http.post('/setUserLoc', location).then(function(data) {
-    //     console.log('user loc updated')
-    //     callback(data)
-    //   })
-    // }
     factory.getAllUsers = function(callback) {
       $http.get('/getAllUsers/').then(function(data) {
         console.log('got all users')
@@ -225,6 +202,18 @@
     factory.lastUpdate = function(userId, callback) {
       $http.post('/lastUpdate', userId).then(function(data) {
         console.log('last update updated!')
+        callback(data)
+      })
+    }
+    factory.getEventsAPI = function( callback) {
+      $http.post('/getEventsAPI').then(function(data) {
+        console.log('got api events!')
+        callback(data) 
+      })
+    }
+    factory.saveAddress = function(routeParams, callback) {
+      $http.post('/saveAddress', routeParams).then(function(data) {
+        console.log('saved address through coordinates!')
         callback(data)
       })
     }
