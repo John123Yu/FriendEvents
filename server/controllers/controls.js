@@ -46,40 +46,18 @@ var s3Impl = new s3('friendevents', {
 
 module.exports = {
 	create: function(req, res){
-      var passcode = ("a" + Math.floor(Math.random() * 10))+ (Math.floor(Math.random() * 10)) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
       var user = new User(req.body);
-      // if(req.body.confirmPassword != req.body.password) {
-      //   console.log("passwords not matching")
-      //   return res.json({'error': "Confirm passcode must match passcode"})
-      // }
       if(user.email) {
         user.email = user.email.toLowerCase();
       }
-      if(!user.confirmPasscode){
-        user.confirm = "false";
-        user.confirmPasscode = passcode
-      }
+      user.confirm = "true";
       user.save(function(err, context) {
 	    if(err) {
 	      console.log('Error with registering new user');
-        console.log(err)
         return res.json(err)
 	    } else {
 	      console.log('successfully registered a new user!');
-        app.mailer.send( 'confirmEmail', {
-            to: req.body.email, 
-            subject: 'Friend Events Confirm Email',
-            text: passcode
-          }, function (err) {
-            if (err) {
-              console.log(err);
-              return res.json({error: 'There was an error sending the confirm email'});
-            } else {
-              console.log("confirm email sent") 
-              return res.json(user)
-            }
-          })
-	    }
+      }
   	})
   },
   confirmEmail: function(req, res) {
@@ -103,14 +81,7 @@ module.exports = {
         console.log("no email found")
         return res.json({noEmail: "No such email in database"})
       }
-      if(context[0].confirm == "false") {
-        console.log('user not confirmed yet!')
-        return res.json({notConfirmed: "Not confirmed"})
-      }
       if(context[0]) {
-        // if(context[0].email == "friendevents1@gmail.com") {
-        //   context[0].addAdmin();
-        // }
         console.log('success finding email')
         if(context[0].validPassword(req.body.passwordLogin)) {
           return res.json({_id:context[0]._id})
